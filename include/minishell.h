@@ -6,14 +6,14 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/13 14:46:30 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:11:58 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "../libs/libft/libft.h"
 
 # include <stdlib.h>     // Standard C Library
 # include <stdio.h>      // Standard C Library
