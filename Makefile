@@ -6,14 +6,14 @@
 #    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/13 15:13:30 by mokutucu         ###   ########.fr        #
+#    Updated: 2024/05/13 15:36:47 by mokutucu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 LIBDIR	= libs/libft/libft.a
 CC		= cc
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -lreadline
 RM		= rm -rf
 SRC_DIR = src
 
