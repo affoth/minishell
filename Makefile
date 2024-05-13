@@ -6,24 +6,30 @@
 #    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/13 15:36:47 by mokutucu         ###   ########.fr        #
+#    Updated: 2024/05/13 15:42:01 by mokutucu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
-LIBDIR	= libs/libft/libft.a
-CC		= cc
-CFLAGS	= -Wall -Wextra -Werror -lreadline
-RM		= rm -rf
-SRC_DIR = src
 
+LIBDIR	= libs/libft/libft.a
+
+CC		= cc
+
+CFLAGS	= -Wall -Wextra -Werror
+LDFLAGS	= -lreadline
+
+RM		= rm -rf
+
+SRC_DIR = src
 SRCS	= src/main.c
+
 OBJS	= $(SRCS:.c=.o)
 
 all:	$(NAME)
 
 $(NAME): $(OBJS) $(LIBDIR)
-	$(CC) $(OBJS) $(LIBDIR) -o $(NAME) $(CFLAGS)
+	$(CC) $(OBJS) $(LIBDIR) -o $(NAME) $(CFLAGS) $(LDFLAGS)
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
