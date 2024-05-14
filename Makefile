@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
+#    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/13 15:42:01 by mokutucu         ###   ########.fr        #
+#    Updated: 2024/05/14 14:25:23 by afoth            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(LIBDIR):
-	@make -C libs/libft/
+	@make -s -C libs/libft/
 	@echo "compiled libft.a\n"
 
 clean:
