@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/22 17:30:32 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/22 17:56:23 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ typedef struct s_arg
 	char *arg;
 	struct s_arg *prev;
 	struct s_arg *next;
+	bool is_double_quoted;
 } t_arg;
 
 int ft_input_check(char *line)
@@ -47,10 +48,18 @@ int ft_input_check(char *line)
 //populate the arguments into the list, could also consider dummy node as head with no arg
 void put_args(t_arg *args, char **split_args)
 {
-	int i = 0;
+	int i;
+
+	i = 0;
 
 	while (split_args[i] != NULL)
 	{
+		//check is double quoted
+		if (split_args[i][0] == '"' || split_args[i][ft_strlen(split_args[i]) - 1] == '"') {
+			args[i].is_double_quoted = true;
+		} else {
+			args[i].is_double_quoted = false;
+		}
 		args[i].arg = strdup(split_args[i]);
 		if (i > 0) {
 			args[i].prev = &args[i - 1];
@@ -95,13 +104,14 @@ t_arg *create_list_of_args(char *line)
 	return args;
 }
 
+//test list
 void print_args(t_arg *args) {
 	int i;
-
+	bool is_double_quoted = false; // or true, depending on your needs
 	i = 0;
 	while (args[i].arg != NULL)
 	{
-		printf("args[%d]: %s, next: %p, prev: %p\n", i, args[i].arg, (void *)args[i].next, (void *)args[i].prev);
+		printf("args[%d]: %s, next: %p, prev: %p\n, double_quote: %s \n", i, args[i].arg, (void *)args[i].next, (void *)args[i].prev, is_double_quoted ? "true" : "false");
 		i++;
 	}
 }
