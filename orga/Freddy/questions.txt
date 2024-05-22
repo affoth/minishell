@@ -15,6 +15,11 @@ What is the best way to split it?
 Handle pipes with no spaces
 What are escaping Characters?
 What is the difference between '' "" and $?
+	-Enclosing characters in single quotes (‘'’)
+	preserves the literal value of each character within the quotes.
+	A single quote may not occur between single quotes,
+	even when preceded by a backslash.
+	
 Do I have handle empty quotes?
 If the quotes are not closse how do the shell react?
 
