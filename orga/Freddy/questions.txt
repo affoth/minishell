@@ -1,0 +1,45 @@
+Zusammenarbeit
+Was ist dir wichtig bei der Zusammemarbeit?
+Was stoert dich?
+Wie moechtest du gerne arbeiten?
+Haben wir einen gemeinsamen Code?
+
+
+Basic Shell Framework
+How do I set up basic signal handling?
+How does the signals have to handled?
+What signals need to be handled?
+
+Parser
+What is the best way to split it?
+Handle pipes with no spaces
+What are escaping Characters?
+What is the difference between '' "" and $?
+	-Enclosing characters in single quotes (‘'’)
+	preserves the literal value of each character within the quotes.
+	A single quote may not occur between single quotes,
+	even when preceded by a backslash.
+	
+Do I have handle empty quotes?
+If the quotes are not closse how do the shell react?
+
+Command execution
+what is execve?
+How does it work?
+What are and what is the difference between absolute and relative path?
+
+What does that warning mean?
+Be careful. This global variable cannot provide any other
+information or data access than the number of a received signal.
+Therefore, using "norm" type structures in the global scope is
+forbidden.
+
+Redirection and Pipes
+Can I reuse the code of redirection for pipes?
+
+Environment Variables
+What are environment variables?
+
+Error handling
+Who are errors supposed to be handled?
+

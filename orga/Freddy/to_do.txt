@@ -1,0 +1,51 @@
+1. Basic Shell Framework
+ Implement the main loop to read commands.
+ Set up basic signal handling (e.g., SIGINT, SIGQUIT).
+
+2. Input Handling
+ Integrate the readline library.
+ Handle history capabilities with readline.
+
+3. Parsing
+ Develop a parser to separate the command and its arguments.
+ Handle quoting and escaping characters.
+
+4. Command Execution
+ Implement execution of simple commands using execve.
+ Support absolute and relative paths for commands.
+
+5. Redirections and Pipes
+ Implement input redirection (<).
+ Implement <<.
+ Implement output redirection (> and >>).
+ Set up piping between commands (|).
+
+6. Environment Variables
+ Handle setting and unsetting environment variables.
+ Expand environment variables in commands.
+
+7. Builtins
+ Implement echo with -n option.
+ Implement cd command.
+ Implement pwd command.
+ Implement export and unset commands.
+ Implement env command.
+ Implement exit command.
+
+8. Error Handling
+ Manage errors and command not found scenarios.
+ Ensure no memory leaks or undefined behaviors.
+
+9. Testing
+ Develop unit tests for each component.
+ Create integration tests to simulate user interaction.
+ Use tools like Valgrind to check for memory leaks.
+
+10. Documentation and Submission
+ Document each function and module.
+ Prepare for submission: ensure all files are named correctly and the repository is organized.
+ Perform final peer reviews to get feedback.
+
+11. Peer Evaluation Preparation
+ Prepare to explain your code and decisions.
+ Review common evaluation questions and ensure you can demonstrate your project.
