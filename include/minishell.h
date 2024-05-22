@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/13 15:11:58 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/22 17:10:46 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,9 @@
 # include <readline/history.h>   // GNU Readline Library
 
 # include <termios.h>    // POSIX Terminal I/O Library
+
+
+int		ft_input_check(char *line);
+void	parser(char *line);
 
 #endif

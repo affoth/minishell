@@ -3,35 +3,34 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
+#    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/14 14:25:23 by afoth            ###   ########.fr        #
+#    Updated: 2024/05/22 15:57:00 by mokutucu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= minishell
+NAME    = minishell
 
-LIBDIR	= libs/libft/libft.a
+LIBDIR  = libs/libft/libft.a
 
-CC		= cc
+CC      = cc
 
-CFLAGS	= -Wall -Wextra -Werror
-LDFLAGS	= -lreadline
+CFLAGS  = -Wall -Wextra -Werror
+LDFLAGS = -lreadline
 
-RM		= rm -rf
+RM      = rm -rf
 
 SRC_DIR = src
-SRCS	= src/main.c
+SRCS    = $(wildcard $(SRC_DIR)/**/*.c) $(wildcard $(SRC_DIR)/*.c)
+OBJS    = $(patsubst %.c,%.o,$(SRCS))
 
-OBJS	= $(SRCS:.c=.o)
-
-all:	$(NAME)
+all:    $(NAME)
 
 $(NAME): $(OBJS) $(LIBDIR)
 	$(CC) $(OBJS) $(LIBDIR) -o $(NAME) $(CFLAGS) $(LDFLAGS)
 
-$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
+%.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(LIBDIR):
