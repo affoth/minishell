@@ -5,10 +5,13 @@
 2. Input Handling
  Integrate the readline library.
  Handle history capabilities with readline.
+ Free history?
 
 3. Parsing
  Develop a parser to separate the command and its arguments.
  Handle quoting and escaping characters.
+ Handle .
+ out and input?
 
 4. Command Execution
  Implement execution of simple commands using execve.

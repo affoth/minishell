@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/14 17:09:24 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/22 14:55:25 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,17 @@ int	main()
 		line = readline("minishell$ ");
 		if (!line)
 			break ;
-		ft_input_check(line);
+		//ft_input_check(line);
 		add_history(line);
 		free(line);
+		rl_clear_history();
 	}
 	return (0);
 }
 
-//input check
-//DEL erstmal um zu sehen ob die anfuehrungszeichen geschlossen sind
-//DEL needs testing
+// input check
+// DEL erstmal um zu sehen ob die anfuehrungszeichen geschlossen sind
+// DEL needs testing
 void	ft_input_check(char *line)
 {
 	int	i;
