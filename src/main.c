@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/22 14:55:25 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/22 17:10:48 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 //main minishell
-
 int	main()
 {
 	char	*line;
@@ -23,7 +22,8 @@ int	main()
 		line = readline("minishell$ ");
 		if (!line)
 			break ;
-		//ft_input_check(line);
+		if (!ft_input_check(line))
+			parser(line);
 		add_history(line);
 		free(line);
 		rl_clear_history();
@@ -58,4 +58,5 @@ void	ft_input_check(char *line)
 		exit (1);
 	}
 }
+
 
