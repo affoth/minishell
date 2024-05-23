@@ -6,16 +6,28 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/22 17:56:23 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/23 17:23:38 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../include/minishell.h"
 
+typedef enum TokenType
+{
+	STRING,
+	REDIRECTION_OUT,
+	REDIRECTION_IN,
+	PIPE,
+	SEMICOLON,
+	END
+} type;
+
+
 typedef struct s_arg
 {
 	char *arg;
+	enum TokenType type;
 	struct s_arg *prev;
 	struct s_arg *next;
 	bool is_double_quoted;
