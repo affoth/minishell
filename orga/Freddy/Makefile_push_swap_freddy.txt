@@ -1,0 +1,50 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile_push_swap_freddy.txt                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/15 14:48:44 by afoth             #+#    #+#              #
+#    Updated: 2024/05/23 15:09:44 by afoth            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME			= push_swap
+CC				= cc
+CFLAGS			= -Wall -Wextra -Werror
+LEAKFLAGS		= -fsanitize=leak -fsanitize=address
+LIBFT			= libft/libft.a
+SRCS			= list_init.c operations_a.c input.c helper_ft.c error.c \
+				 operations_ab.c operations_b.c index.c algorythm.c push_swap.c \
+				 pushing_to_b.c pushing_to_b_helper.c
+
+OBJDIR = obj/
+OBJS=			$(addprefix $(OBJDIR), $(SRCS:.c=.o))
+
+all: $(NAME)
+$(NAME): $(LIBFT) $(SRCS)
+		$(MAKE) -s $(OBJS)
+		$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LIBFLAGS)
+
+#$(OBJS): | $(OBJDIR)
+$(OBJDIR)%.o: %.c
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+	
+$(LIBFT):
+	$(MAKE) -s -C libft all
+
+clean:
+	@rm -rf $(OBJDIR)
+	@$(MAKE) -s -C libft clean
+
+fclean: clean
+	@rm -f $(NAME)
+	@$(MAKE) -s -C libft fclean
+re: fclean all
+leaks:
+	$(MAKE) fclean
+	$(MAKE) all CFLAGS="$(CFLAGS) $(LEAKFLAGS)"
+.PHONY: all clean fclean re leaks
+

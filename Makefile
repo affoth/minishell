@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
+#    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/22 15:57:00 by mokutucu         ###   ########.fr        #
+#    Updated: 2024/05/23 15:18:21 by afoth            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME    = minishell
 
 LIBDIR  = libs/libft/libft.a
-
+OBJDIR  = obj/
 CC      = cc
 
 CFLAGS  = -Wall -Wextra -Werror
@@ -23,22 +23,25 @@ RM      = rm -rf
 
 SRC_DIR = src
 SRCS    = $(wildcard $(SRC_DIR)/**/*.c) $(wildcard $(SRC_DIR)/*.c)
-OBJS    = $(patsubst %.c,%.o,$(SRCS))
+OBJS    = $(patsubst $(SRC_DIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
 all:    $(NAME)
 
 $(NAME): $(OBJS) $(LIBDIR)
 	$(CC) $(OBJS) $(LIBDIR) -o $(NAME) $(CFLAGS) $(LDFLAGS)
 
-%.o: %.c
-	$(CC) -c $< -o $@ $(CFLAGS)
+
+
+$(OBJDIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBDIR):
 	@make -s -C libs/libft/
 	@echo "compiled libft.a\n"
 
 clean:
-	$(RM) $(OBJS)
+	@rm -rf $(OBJDIR)
 	@make clean -C libs/libft/
 
 fclean: clean
