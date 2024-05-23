@@ -6,7 +6,7 @@
 #    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/23 15:18:21 by afoth            ###   ########.fr        #
+#    Updated: 2024/05/23 19:52:56 by afoth            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ NAME    = minishell
 
 LIBDIR  = libs/libft/libft.a
 OBJDIR  = obj/
-CC      = cc
+CC      = gcc
 
-CFLAGS  = -Wall -Wextra -Werror
+CFLAGS  = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline
 
 RM      = rm -rf

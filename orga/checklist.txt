@@ -1,0 +1,9 @@
+
+
+
+
+Evaluation
+- delete orga
+- delete .vscode
+- delete gcc and -g flags in makefile
+- delete Reademe

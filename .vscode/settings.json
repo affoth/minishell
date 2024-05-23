@@ -1,0 +1,16 @@
+{
+	"files.associations": {
+		"push_swap.h": "c",
+		"unistd.h": "c",
+		"variant": "c",
+		"chrono": "c",
+		"random": "c",
+		"array": "c",
+		"*.tcc": "c",
+		"bitset": "c",
+		"functional": "c",
+		"mutex": "c",
+		"regex": "c",
+		"tuple": "c"
+	}
+}
