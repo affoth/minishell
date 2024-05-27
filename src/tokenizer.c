@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/27 17:08:50 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:29:10 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@ typedef enum TokenType
     REDIRECTION_APPEND,  // >>
     HEREDOC,             // <<
     PIPE,                // |
-    SEMICOLON,           // ;
     AND,                 // &&
     OR,                  // ||
     OPEN_PAREN,          // (
     CLOSE_PAREN,         // )
     DOUBLE_QUOTED_STRING, // Double-quoted string
     SINGLE_QUOTED_STRING, // Single-quoted string
-    ENV_VARIABLE,        // Environment variable (e.g., $HOME)
+    ENV_VARIABLE,        // Environment variable (like $HOME)
     END                  // End of input
 } TokenType;
 
@@ -47,11 +46,10 @@ typedef struct {
     TokenType type;
 } Token;
 
-// Mapping struct for token types
+// Mapping struct for token types that are required by subject pdf
 const Token typeMap[] = 
 {
 	{"|", PIPE},
-	{";", SEMICOLON},
 	{"&&", AND},
 	{"||", OR},
 	{"(", OPEN_PAREN},
@@ -100,24 +98,24 @@ TokenType get_token_type(char *arg)
 {
 	int i;
 
-    // Trim leading spaces
-    while (ft_isspace(*arg)) 
-	{
-        arg++;
-    }
+    // // POSSIBLE TO TRIM WHITESPACES BEFORE AND AFTER THE ARGUMENT IF NEEDED
+    // while (ft_isspace(*arg)) 
+	// {
+    //     arg++;
+    // }
 
-    // Trim trailing spaces
-    char *end;
+    // // Trim trailing spaces
+    // char *end;
     
-    end = arg + ft_strlen(arg) - 1;
-    while (end > arg && ft_isspace(*end)) 
-	{
-        end--;
-    }
-    end[1] = '\0'; // Null-terminate the trimmed string
+    // end = arg + ft_strlen(arg) - 1;
+    // while (end > arg && ft_isspace(*end)) 
+	// {
+    //     end--;
+    // }
+    // end[1] = '\0'; // Null-terminate the trimmed string
 
-    // Debug print to check the trimmed argument
-    ft_printf("Trimmed arg: '%s'\n", arg);
+    // // Debug print to check the trimmed argument
+    // ft_printf("Trimmed arg: '%s'\n", arg);
 
     // Iterate through the typeMap array checking if the token string is a substring of the argument
 	i = 0;
