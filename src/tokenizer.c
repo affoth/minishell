@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/27 16:47:36 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:08:50 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ void free_arg_list(t_arg *head)
     }
 }
 
-void parser(char *line) 
+void tokenizer(char *line) 
 {
     char **split_args = ft_split(line, ' ');
     if (!split_args) 

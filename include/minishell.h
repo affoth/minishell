@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/22 17:10:46 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:09:34 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@
 
 
 int		ft_input_check(char *line);
-void	parser(char *line);
+void	tokenizer(char *line);
 
 #endif
