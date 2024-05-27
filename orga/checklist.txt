@@ -1,4 +1,9 @@
+4 parts
 
+1. Parser
+2. Executor
+3. Shell
+4. Subsystems
 
 
 

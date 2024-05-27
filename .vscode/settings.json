@@ -11,6 +11,7 @@
 		"functional": "c",
 		"mutex": "c",
 		"regex": "c",
-		"tuple": "c"
+		"tuple": "c",
+		"ctype.h": "c"
 	}
 }

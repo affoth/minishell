@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
+#    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/23 19:52:56 by afoth            ###   ########.fr        #
+#    Updated: 2024/05/27 16:37:40 by mokutucu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME    = minishell
 
 LIBDIR  = libs/libft/libft.a
 OBJDIR  = obj/
-CC      = gcc
+CC      = cc
 
 CFLAGS  = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline

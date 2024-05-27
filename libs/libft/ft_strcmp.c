@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/27 16:38:40 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/05/27 16:22:48 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/05/27 16:25:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "libft.h"
 
-//main minishell
-int	main()
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*line;
+    size_t			i;
+    unsigned char	*b1;
+    unsigned char	*b2;
 
-	while (1)
-	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		parser(line);
-		add_history(line);
-		free(line);
-		rl_clear_history();
-	}
-	return (0);
+    b1 = (unsigned char *) s1;
+    b2 = (unsigned char *) s2;
+    i = 0;
+    while (b1[i] != '\0' || b2[i] != '\0')
+    {
+        if (b1[i] != b2[i])
+            return (b1[i] - b2[i]);
+        i++;
+    }
+    return (0);
 }
-
-
-

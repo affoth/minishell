@@ -3,144 +3,221 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/23 19:56:46 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/27 16:47:36 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../include/minishell.h"
 
-typedef enum TokenType
+typedef enum TokenType 
 {
-	STRING,
-	REDIRECTION_OUT,
-	REDIRECTION_IN,
-	PIPE,
-	SEMICOLON,
-	END
-} type;
+    WORD,                // Generic word (command or argument)
+    REDIRECTION_OUT,     // >
+    REDIRECTION_IN,      // <
+    REDIRECTION_APPEND,  // >>
+    HEREDOC,             // <<
+    PIPE,                // |
+    SEMICOLON,           // ;
+    AND,                 // &&
+    OR,                  // ||
+    OPEN_PAREN,          // (
+    CLOSE_PAREN,         // )
+    DOUBLE_QUOTED_STRING, // Double-quoted string
+    SINGLE_QUOTED_STRING, // Single-quoted string
+    ENV_VARIABLE,        // Environment variable (e.g., $HOME)
+    END                  // End of input
+} TokenType;
 
-
-typedef struct s_arg
+// Argument struct
+typedef struct s_arg 
 {
-	char *arg;
-	enum TokenType type;
-	struct s_arg *prev;
-	struct s_arg *next;
-	bool is_double_quoted;
+    char *arg;
+    enum TokenType type;
+    struct s_arg *prev;
+    struct s_arg *next;
 } t_arg;
 
-int ft_input_check(char *line)
+// Token struct
+typedef struct {
+    char *arg;
+    TokenType type;
+} Token;
+
+// Mapping struct for token types
+const Token typeMap[] = 
 {
-	int i;
-	int single_quotes;
-	int double_quotes;
+	{"|", PIPE},
+	{";", SEMICOLON},
+	{"&&", AND},
+	{"||", OR},
+	{"(", OPEN_PAREN},
+	{")", CLOSE_PAREN},
+	{">", REDIRECTION_OUT},
+	{"<", REDIRECTION_IN},
+	{">>", REDIRECTION_APPEND},
+	{"<<", HEREDOC},
+	{"\"", DOUBLE_QUOTED_STRING},
+	{"'", SINGLE_QUOTED_STRING},
+	{"$", ENV_VARIABLE},
+	{NULL, WORD}
+};
 
-	i = 0;
-	single_quotes = 0;
-	double_quotes = 0;
+// int ft_input_check(char *line) 
+// {
+//     int i;
+//     int single_quotes;
+//     int double_quotes;
 
-	while (line[i] != '\0') {
-		if (line[i] == '\'')
-			single_quotes++;
-		if (line[i] == '"')
-			double_quotes++;
-		i++;
-	}
-	if (single_quotes % 2 != 0 || double_quotes % 2 != 0) {
-		perror("Quotations not closed");
-		return (1);
-	}
-	return (0);
+//     i = 0;
+//     single_quotes = 0;
+//     double_quotes = 0;
+
+//     while (line[i] != '\0') 
+// 	{
+//         if (line[i] == '\'')
+//             single_quotes++;
+//         if (line[i] == '"')
+//             double_quotes++;
+//         i++;
+//     }
+//     if (single_quotes % 2 != 0 || double_quotes % 2 != 0) 
+// 	{
+//         perror("Quotations not closed");
+//         return (1);
+//     }
+//     return (0);
+// }
+
+int ft_isspace(int c) {
+    return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
 }
 
-//populate the arguments into the list, could also consider dummy node as head with no arg
-void put_args(t_arg *args, char **split_args)
+TokenType get_token_type(char *arg) 
 {
 	int i;
 
-	i = 0;
-
-	while (split_args[i] != NULL)
+    // Trim leading spaces
+    while (ft_isspace(*arg)) 
 	{
-		//check is double quoted
-		if (split_args[i][0] == '"' || split_args[i][ft_strlen(split_args[i]) - 1] == '"') {
-			args[i].is_double_quoted = true;
-		} else {
-			args[i].is_double_quoted = false;
+        arg++;
+    }
+
+    // Trim trailing spaces
+    char *end;
+    
+    end = arg + ft_strlen(arg) - 1;
+    while (end > arg && ft_isspace(*end)) 
+	{
+        end--;
+    }
+    end[1] = '\0'; // Null-terminate the trimmed string
+
+    // Debug print to check the trimmed argument
+    ft_printf("Trimmed arg: '%s'\n", arg);
+
+    // Iterate through the typeMap array checking if the token string is a substring of the argument
+	i = 0;
+    while (typeMap[i].arg != NULL)
+    {
+        // Check if the token string is a substring of the argument
+        if (ft_strnstr(arg, typeMap[i].arg, ft_strlen(arg)) != NULL)
+		{
+			return typeMap[i].type;
 		}
-		args[i].arg = strdup(split_args[i]);
-		if (i > 0) {
-			args[i].prev = &args[i - 1];
-			args[i - 1].next = &args[i];
-		} else {
-			args[i].prev = NULL;
-		}
 		i++;
-	}
-	args[i].arg = NULL;
-	args[i].next = NULL;
+    }
+    // Default to WORD if no other type matches
+    return WORD;
 }
 
-t_arg *create_list_of_args(char *line)
+
+// ADD the arguments with type information into a list
+t_arg *create_arg_node(char *arg) 
 {
-	t_arg *args;
-	char **split_args;
-	int count;
-	int i;
-	count = 0;
-	i = 0;
-
-	split_args = ft_split(line, ' ');
-	while (split_args[count] != NULL)
-		count++;
-
-	//allocate memory for each argument
-	args = (t_arg *)malloc(sizeof(t_arg) * (count + 1));
-	if (!args) {
-		perror("Malloc failed");
-		exit(1);
-	}
-	put_args(args, split_args);
-
-	while (split_args[i] != NULL)
+    t_arg *node = (t_arg *)malloc(sizeof(t_arg));
+    if (node == NULL) 
 	{
-		free(split_args[i]);
-		i++;
-	}
-	free(split_args);
-
-	return args;
-}
-
-//test list
-void print_args(t_arg *args) {
-	int i;
-	bool is_double_quoted = false; // or true, depending on your needs
-	i = 0;
-	while (args[i].arg != NULL)
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    node->arg = ft_strdup(arg);
+    if (node->arg == NULL) 
 	{
-		printf("args[%d]: %s, next: %p, prev: %p\n, double_quote: %s \n", i, args[i].arg, (void *)args[i].next, (void *)args[i].prev, is_double_quoted ? "true" : "false");
-		i++;
-	}
+        perror("Memory allocation failed");
+        free(node);
+        exit(EXIT_FAILURE);
+    }
+    node->type = get_token_type(arg);
+    node->prev = NULL;
+    node->next = NULL;
+    return node;
 }
 
-void free_args(t_arg *args) {
-	int i = 0;
-	while (args[i].arg != NULL) {
-		free(args[i].arg);
-		i++;
-	}
-	free(args);
+// Create a double linked list of arguments
+void add_arg_to_list(t_arg **head, char *arg) 
+{
+    t_arg *new_node = create_arg_node(arg);
+    if (*head == NULL) {
+        *head = new_node;
+        return;
+    }
+    t_arg *current_node = *head;
+    while (current_node->next != NULL) {
+        current_node = current_node->next;
+    }
+    current_node->next = new_node;
+    new_node->prev = current_node;
 }
 
-void parser(char *line) {
-	t_arg *args;
-
-	args = create_list_of_args(line);
-	print_args(args);
-	free_args(args);
+// Print list from head to end to check if arguments are added correctly
+void print_args(t_arg *head) 
+{
+    t_arg *current_node = head;
+    while (current_node != NULL) 
+	{
+        ft_printf("Argument: %s, Type: %d\n", current_node->arg, current_node->type);
+        current_node = current_node->next;
+    }
 }
+
+// Free the memory allocated for the list
+void free_arg_list(t_arg *head) 
+{
+    t_arg *current_node = head;
+    while (current_node != NULL) {
+        t_arg *temp_node = current_node;
+        current_node = current_node->next;
+        free(temp_node->arg);
+        free(temp_node);
+    }
+}
+
+void parser(char *line) 
+{
+    char **split_args = ft_split(line, ' ');
+    if (!split_args) 
+	{
+        perror("Split failed");
+        exit(EXIT_FAILURE);
+    }
+
+    t_arg *args_head = NULL;
+	int i;
+
+	i = 0;
+    while (split_args[i] != NULL) 
+	{
+        add_arg_to_list(&args_head, split_args[i]);
+        i++;
+    }
+
+    print_args(args_head);
+    free_arg_list(args_head);
+    free(split_args);
+}
+
+
