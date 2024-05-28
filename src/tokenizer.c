@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/28 21:26:29 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/28 21:30:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@
 // } Token;
 
 // Mapping struct for token types that are required by subject pdf
-const Token typeMap[] =
 const Token typeMap[] =
 {
 	{"|", PIPE},
@@ -96,7 +95,6 @@ int ft_isspace(int c) {
 }
 
 TokenType get_token_type(char *arg)
-TokenType get_token_type(char *arg)
 {
 	int i;
 
@@ -142,18 +140,10 @@ TokenType get_token_type(char *arg)
 
 // ADD the arguments with type information into a list
 t_arg *create_arg_node(char *arg)
-t_arg *create_arg_node(char *arg)
 {
-    t_arg *node = (t_arg *)malloc(sizeof(t_arg));
-    if (node == NULL)
 	t_arg *node = (t_arg *)malloc(sizeof(t_arg));
 	if (node == NULL)
 	{
-        perror("Memory allocation failed");
-        exit(EXIT_FAILURE);
-    }
-    node->arg = ft_strdup(arg);
-    if (node->arg == NULL)
 		perror("Memory allocation failed");
 		exit(EXIT_FAILURE);
 	}
@@ -172,7 +162,6 @@ t_arg *create_arg_node(char *arg)
 
 // Create a double linked list of arguments
 void add_arg_to_list(t_arg **head, char *arg)
-void add_arg_to_list(t_arg **head, char *arg)
 {
 	t_arg *new_node = create_arg_node(arg);
 	if (*head == NULL) {
@@ -189,10 +178,7 @@ void add_arg_to_list(t_arg **head, char *arg)
 
 // Print list from head to end to check if arguments are added correctly
 void print_args(t_arg *head)
-void print_args(t_arg *head)
 {
-    t_arg *current_node = head;
-    while (current_node != NULL)
 	t_arg *current_node = head;
 	while (current_node != NULL)
 	{
@@ -202,7 +188,6 @@ void print_args(t_arg *head)
 }
 
 // Free the memory allocated for the list
-void free_arg_list(t_arg *head)
 void free_arg_list(t_arg *head)
 {
 	t_arg *current_node = head;
@@ -215,10 +200,7 @@ void free_arg_list(t_arg *head)
 }
 
 void tokenizer(char *line)
-void tokenizer(char *line)
 {
-    char **split_args = ft_split(line, ' ');
-    if (!split_args)
 	char **split_args = ft_split(line, ' ');
 	if (!split_args)
 	{
@@ -230,7 +212,6 @@ void tokenizer(char *line)
 	int i;
 
 	i = 0;
-    while (split_args[i] != NULL)
 	while (split_args[i] != NULL)
 	{
 		add_arg_to_list(&args_head, split_args[i]);
