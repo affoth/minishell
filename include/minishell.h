@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/27 17:09:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:13:49 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,44 @@
 
 # include <termios.h>    // POSIX Terminal I/O Library
 
+typedef enum TokenType
+{
+    WORD,                // Generic word (command or argument)
+    REDIRECTION_OUT,     // >
+    REDIRECTION_IN,      // <
+    REDIRECTION_APPEND,  // >>
+    HEREDOC,             // <<
+    PIPE,                // |
+    AND,                 // &&
+    OR,                  // ||
+    OPEN_PAREN,          // (
+    CLOSE_PAREN,         // )
+    DOUBLE_QUOTED_STRING, // Double-quoted string
+    SINGLE_QUOTED_STRING, // Single-quoted string
+    ENV_VARIABLE,        // Environment variable (like $HOME)
+    END                  // End of input
+} TokenType;
 
-int		ft_input_check(char *line);
+// Argument struct
+typedef struct s_arg
+{
+    char *arg;
+    enum TokenType type;
+    struct s_arg *prev;
+    struct s_arg *next;
+} t_arg;
+
+// Token struct
+typedef struct {
+    char *arg;
+    TokenType type;
+} Token;
+
+int		logical_syntax(t_arg	*head);
+int 	pipe_syntax(t_arg *head);
+int		redirection_syntax(t_arg *head);
+int		ft_isoperator(TokenType type);
+int		syntax_checker(t_arg *head);
 void	tokenizer(char *line);
 
 #endif

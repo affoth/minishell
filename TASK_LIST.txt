@@ -1,0 +1,28 @@
+	1.General Tokenization:
+		Split the input line into individual tokens.
+		Handle special characters and operators correctly.
+		Ensure proper handling of whitespace characters.
+
+	2.Quoted Strings:
+		Identify and handle quoted strings (single and double quotes).
+		Interpret escape characters within quoted strings.
+
+	3.Special Characters:
+		Handle special characters like redirection symbols (>, <, >>) and pipe (|) appropriately.
+		Recognize and tokenize environment variables (e.g., $HOME).
+
+	4.Nested Structures:
+		Support nested structures like parentheses and nested quoted strings.
+		Ensure proper nesting and matching of opening and closing characters.
+
+	5.Error Handling:
+		Detect and report syntax errors accurately.
+		Provide clear and informative error messages for better user experience.
+
+	6.Testing:
+		Thoroughly test the tokenizer with various inputs, including valid commands and syntax errors.
+		Verify correct behavior under different scenarios and edge cases.
+
+	7.Performance:
+		Optimize the tokenizer for performance, especially for large inputs or complex syntax rules.
+		Consider efficiency in tokenization algorithms and data structures.

@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pipe_syntax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/28 20:20:45 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/05/28 18:55:31 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/05/28 21:03:20 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-//main minishell
-int	main()
+int pipe_syntax(t_arg *head)
 {
-	char	*line;
+	t_arg *tmp;
 
-	while (1)
+	tmp = head;
+	while (tmp)
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		add_history(line);
-
-		tokenizer(line);
-
-		free(line);
+		if (tmp->type == PIPE)
+		{
+			if (!tmp->next || !tmp->prev)
+			{
+				ft_printf("pipe error: no arguments before or after pipe %s'\n", tmp->arg);
+				return (1);
+			}
+		}
+		tmp = tmp->next;
 	}
-	rl_clear_history();
 	return (0);
 }
-
-
-
