@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/28 21:04:26 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/28 21:26:29 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@
 
 // Mapping struct for token types that are required by subject pdf
 const Token typeMap[] =
+const Token typeMap[] =
 {
 	{"|", PIPE},
 	{"&&", AND},
@@ -64,10 +65,37 @@ const Token typeMap[] =
 	{NULL, WORD}
 };
 
+// int ft_input_check(char *line)
+// {
+//     int i;
+//     int single_quotes;
+//     int double_quotes;
+
+//     i = 0;
+//     single_quotes = 0;
+//     double_quotes = 0;
+
+//     while (line[i] != '\0')
+// 	{
+//         if (line[i] == '\'')
+//             single_quotes++;
+//         if (line[i] == '"')
+//             double_quotes++;
+//         i++;
+//     }
+//     if (single_quotes % 2 != 0 || double_quotes % 2 != 0)
+// 	{
+//         perror("Quotations not closed");
+//         return (1);
+//     }
+//     return (0);
+// }
+
 int ft_isspace(int c) {
 	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
 }
 
+TokenType get_token_type(char *arg)
 TokenType get_token_type(char *arg)
 {
 	int i;
@@ -78,6 +106,11 @@ TokenType get_token_type(char *arg)
 	//     arg++;
 	// }
 
+    // // Trim trailing spaces
+    // char *end;
+
+    // end = arg + ft_strlen(arg) - 1;
+    // while (end > arg && ft_isspace(*end))
 	// // Trim trailing spaces
 	// char *end;
 
@@ -109,10 +142,18 @@ TokenType get_token_type(char *arg)
 
 // ADD the arguments with type information into a list
 t_arg *create_arg_node(char *arg)
+t_arg *create_arg_node(char *arg)
 {
+    t_arg *node = (t_arg *)malloc(sizeof(t_arg));
+    if (node == NULL)
 	t_arg *node = (t_arg *)malloc(sizeof(t_arg));
 	if (node == NULL)
 	{
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    node->arg = ft_strdup(arg);
+    if (node->arg == NULL)
 		perror("Memory allocation failed");
 		exit(EXIT_FAILURE);
 	}
@@ -131,6 +172,7 @@ t_arg *create_arg_node(char *arg)
 
 // Create a double linked list of arguments
 void add_arg_to_list(t_arg **head, char *arg)
+void add_arg_to_list(t_arg **head, char *arg)
 {
 	t_arg *new_node = create_arg_node(arg);
 	if (*head == NULL) {
@@ -147,7 +189,10 @@ void add_arg_to_list(t_arg **head, char *arg)
 
 // Print list from head to end to check if arguments are added correctly
 void print_args(t_arg *head)
+void print_args(t_arg *head)
 {
+    t_arg *current_node = head;
+    while (current_node != NULL)
 	t_arg *current_node = head;
 	while (current_node != NULL)
 	{
@@ -157,6 +202,7 @@ void print_args(t_arg *head)
 }
 
 // Free the memory allocated for the list
+void free_arg_list(t_arg *head)
 void free_arg_list(t_arg *head)
 {
 	t_arg *current_node = head;
@@ -169,7 +215,10 @@ void free_arg_list(t_arg *head)
 }
 
 void tokenizer(char *line)
+void tokenizer(char *line)
 {
+    char **split_args = ft_split(line, ' ');
+    if (!split_args)
 	char **split_args = ft_split(line, ' ');
 	if (!split_args)
 	{
@@ -181,6 +230,7 @@ void tokenizer(char *line)
 	int i;
 
 	i = 0;
+    while (split_args[i] != NULL)
 	while (split_args[i] != NULL)
 	{
 		add_arg_to_list(&args_head, split_args[i]);
@@ -200,5 +250,3 @@ void tokenizer(char *line)
 	free_arg_list(args_head);
 	free(split_args);
 }
-
-

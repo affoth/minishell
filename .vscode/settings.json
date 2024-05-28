@@ -12,6 +12,8 @@
 		"mutex": "c",
 		"regex": "c",
 		"tuple": "c",
-		"ctype.h": "c"
+		"ctype.h": "c",
+		"stdbool.h": "c",
+		"minishell.h": "c"
 	}
 }
