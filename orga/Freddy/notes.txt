@@ -14,3 +14,6 @@ Performs the various shell expansions (see Shell Expansions), breaking the expan
 Performs any necessary redirections (see Redirections) and removes the redirection operators and their operands from the argument list.
 Executes the command (see Executing Commands).
 Optionally waits for the command to complete and collects its exit status (see Exit Status).
+
+
+git checkout -b new-branch-name

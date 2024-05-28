@@ -8,3 +8,6 @@ world"
 Pipes:
 hello|world
 
+<<
+if the input containts quotes the behaviour with expandables change
+

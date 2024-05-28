@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/27 18:29:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:01:13 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../include/minishell.h"
 
-typedef enum TokenType 
+typedef enum TokenType
 {
     WORD,                // Generic word (command or argument)
     REDIRECTION_OUT,     // >
@@ -32,7 +32,7 @@ typedef enum TokenType
 } TokenType;
 
 // Argument struct
-typedef struct s_arg 
+typedef struct s_arg
 {
     char *arg;
     enum TokenType type;
@@ -47,7 +47,7 @@ typedef struct {
 } Token;
 
 // Mapping struct for token types that are required by subject pdf
-const Token typeMap[] = 
+const Token typeMap[] =
 {
 	{"|", PIPE},
 	{"&&", AND},
@@ -64,7 +64,7 @@ const Token typeMap[] =
 	{NULL, WORD}
 };
 
-// int ft_input_check(char *line) 
+// int ft_input_check(char *line)
 // {
 //     int i;
 //     int single_quotes;
@@ -74,7 +74,7 @@ const Token typeMap[] =
 //     single_quotes = 0;
 //     double_quotes = 0;
 
-//     while (line[i] != '\0') 
+//     while (line[i] != '\0')
 // 	{
 //         if (line[i] == '\'')
 //             single_quotes++;
@@ -82,7 +82,7 @@ const Token typeMap[] =
 //             double_quotes++;
 //         i++;
 //     }
-//     if (single_quotes % 2 != 0 || double_quotes % 2 != 0) 
+//     if (single_quotes % 2 != 0 || double_quotes % 2 != 0)
 // 	{
 //         perror("Quotations not closed");
 //         return (1);
@@ -94,21 +94,21 @@ int ft_isspace(int c) {
     return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
 }
 
-TokenType get_token_type(char *arg) 
+TokenType get_token_type(char *arg)
 {
 	int i;
 
-    // // POSSIBLE TO TRIM WHITESPACES BEFORE AND AFTER THE ARGUMENT IF NEEDED
-    // while (ft_isspace(*arg)) 
+    // // POSSIBLE TO TRIM/OR KEEP WHITESPACES BEFORE AND AFTER THE ARGUMENT IF NEEDED
+    // while (ft_isspace(*arg))
 	// {
     //     arg++;
     // }
 
     // // Trim trailing spaces
     // char *end;
-    
+
     // end = arg + ft_strlen(arg) - 1;
-    // while (end > arg && ft_isspace(*end)) 
+    // while (end > arg && ft_isspace(*end))
 	// {
     //     end--;
     // }
@@ -134,16 +134,16 @@ TokenType get_token_type(char *arg)
 
 
 // ADD the arguments with type information into a list
-t_arg *create_arg_node(char *arg) 
+t_arg *create_arg_node(char *arg)
 {
     t_arg *node = (t_arg *)malloc(sizeof(t_arg));
-    if (node == NULL) 
+    if (node == NULL)
 	{
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
     node->arg = ft_strdup(arg);
-    if (node->arg == NULL) 
+    if (node->arg == NULL)
 	{
         perror("Memory allocation failed");
         free(node);
@@ -156,7 +156,7 @@ t_arg *create_arg_node(char *arg)
 }
 
 // Create a double linked list of arguments
-void add_arg_to_list(t_arg **head, char *arg) 
+void add_arg_to_list(t_arg **head, char *arg)
 {
     t_arg *new_node = create_arg_node(arg);
     if (*head == NULL) {
@@ -172,10 +172,10 @@ void add_arg_to_list(t_arg **head, char *arg)
 }
 
 // Print list from head to end to check if arguments are added correctly
-void print_args(t_arg *head) 
+void print_args(t_arg *head)
 {
     t_arg *current_node = head;
-    while (current_node != NULL) 
+    while (current_node != NULL)
 	{
         ft_printf("Argument: %s, Type: %d\n", current_node->arg, current_node->type);
         current_node = current_node->next;
@@ -183,7 +183,7 @@ void print_args(t_arg *head)
 }
 
 // Free the memory allocated for the list
-void free_arg_list(t_arg *head) 
+void free_arg_list(t_arg *head)
 {
     t_arg *current_node = head;
     while (current_node != NULL) {
@@ -194,10 +194,10 @@ void free_arg_list(t_arg *head)
     }
 }
 
-void tokenizer(char *line) 
+void tokenizer(char *line)
 {
     char **split_args = ft_split(line, ' ');
-    if (!split_args) 
+    if (!split_args)
 	{
         perror("Split failed");
         exit(EXIT_FAILURE);
@@ -207,7 +207,7 @@ void tokenizer(char *line)
 	int i;
 
 	i = 0;
-    while (split_args[i] != NULL) 
+    while (split_args[i] != NULL)
 	{
         add_arg_to_list(&args_head, split_args[i]);
         i++;
@@ -217,5 +217,3 @@ void tokenizer(char *line)
     free_arg_list(args_head);
     free(split_args);
 }
-
-

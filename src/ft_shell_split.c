@@ -1,47 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_shell_split.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/28 16:06:37 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/28 20:55:59 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/minishell.h"
 
 static size_t	ft_words(char const *s, char c)
 {
 	size_t	count;
+	bool	quote;
+	char	quote_char;
 
 	count = 0;
+	quote = false;
 	while (*s)
 	{
-		while (*s == c)
+		while (*s == c && !quote)
 			s++;
-		if (*s)
+		handle_quote_wordcount(&s, &quote, &quote_char);
+		if (*s && (quote || *s != c))
+		{
 			count++;
-		while (*s && *s != c)
-			s++;
+			while (*s && (quote || *s != c))
+			{
+				if (*s == quote_char)
+					quote = !quote;
+				s++;
+			}
+		}
 	}
 	return (count);
 }
-
-/*static void	ft_free(char **array)
-{
-	size_t	i;
-
-	i = 0;
-	while (array[i] != NULL)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-	return (NULL);
-}*/
 
 static void	*ft_allocate(const char *s, int start, int end)
 {
@@ -50,17 +46,12 @@ static void	*ft_allocate(const char *s, int start, int end)
 
 	i = 0;
 	word = malloc((end - start + 1) * sizeof(char));
+	if (!word)
+		return (NULL);
 	while (start < end)
 		word[i++] = s[start++];
 	word[i] = '\0';
 	return (word);
-}
-
-static void	assign(size_t *i, size_t *j, int *index)
-{
-	*i = 0;
-	*j = 0;
-	*index = -1;
 }
 
 char	**ft_split(const char *s, char c)
@@ -68,17 +59,20 @@ char	**ft_split(const char *s, char c)
 	char	**array;
 	size_t	i;
 	size_t	j;
+	bool	quote;
 	int		index;
 
 	array = malloc((ft_words(s, c) + 1) * sizeof(char *));
 	if (!s || !array)
 		return (NULL);
-	assign(&i, &j, &index);
+	assign(&i, &j, &index, &quote);
 	while (i <= ft_strlen(s))
 	{
-		if (s[i] != c && index < 0)
+		handle_quote_split(s, i, &quote);
+		if ((s[i] != c || quote == true) && index < 0)
 			index = i;
-		else if ((s[i] == c || i == ft_strlen(s)) && index >= 0)
+		else if (((s[i] == c && quote == false) || \
+		i == ft_strlen(s)) && index >= 0)
 		{
 			array[j++] = ft_allocate(s, index, i);
 			index = -1;

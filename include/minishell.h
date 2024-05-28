@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/27 17:09:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:55:48 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>      // Standard C Library
 # include <errno.h>      // Standard C Library
 # include <string.h>     // Standard C Library
+# include <stdbool.h>    // Standard C Library
 
 # include <unistd.h>     // POSIX Library
 # include <sys/types.h>  // POSIX Library

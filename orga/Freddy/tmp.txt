@@ -1,0 +1,13 @@
+echo "This is a 'test'"
+echo 'This is a "test"'
+echo 'This is a '"'"'test'"'"''
+echo "This is a \"test\""
+
+test_strings = [
+    'This is a "test string"',
+    "This is a 'test string'",
+    'This is a "test\'s string"',
+    "This is a 'test\"s string'",
+    'This is a "test with \\"escaped\\" quotes"',
+    "This is a 'test with \\'escaped\\' quotes'"
+]
