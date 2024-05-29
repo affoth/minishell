@@ -1,39 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 20:30:49 by afoth            ###   ########.fr       */
+/*   Created: 2024/05/29 20:25:57 by afoth             #+#    #+#             */
+/*   Updated: 2024/05/29 20:27:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-//main minishell
-int	main()
+char	*ft_strdup(const char *s1)
 {
-	char	*line;
+	char	*dest;
+	size_t	i;
 
-	while (1)
+	dest = (char *) ft_gc_malloc(ft_strlen(s1) + 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (s1[i])
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		add_history(line);
-
-		tokenizer(line);
-
-		// free garbage collector);
-		ft_gc_free();
-		free(line);
+		dest[i] = s1[i];
+		i++;
 	}
-	ft_gc_free();
-	rl_clear_history();
-	return (0);
+	dest[i] = 0;
+	return (dest);
 }
-
-
-

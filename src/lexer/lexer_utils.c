@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_shell_split_utils.c                             :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 20:53:40 by afoth             #+#    #+#             */
-/*   Updated: 2024/05/29 19:58:43 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:19:10 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,26 +50,26 @@ void	assign(size_t *i, size_t *j, int *index, bool *quote)
 
 int ft_quotes_not_closed(char *line)
 {
-    int i;
-    int single_quotes;
-    int double_quotes;
+	int i;
+	int single_quotes;
+	int double_quotes;
 
-    i = 0;
-    single_quotes = 0;
-    double_quotes = 0;
+	i = 0;
+	single_quotes = 0;
+	double_quotes = 0;
 
-    while (line[i] != '\0')
+	while (line[i] != '\0')
 	{
-        if (line[i] == '\'')
-            single_quotes++;
-        if (line[i] == '"')
-            double_quotes++;
-        i++;
-    }
-    if (single_quotes % 2 != 0 || double_quotes % 2 != 0)
+		if (line[i] == '\'')
+			single_quotes++;
+		if (line[i] == '"')
+			double_quotes++;
+		i++;
+	}
+	if (single_quotes % 2 != 0 || double_quotes % 2 != 0)
 	{
-        ft_printf("Quotations not closed\n");
-        return (1);
-    }
-    return (0);
+		ft_printf("Quotations not closed\n");
+		return (1);
+	}
+	return (0);
 }
