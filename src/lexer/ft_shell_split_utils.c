@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell_split_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 20:53:40 by afoth             #+#    #+#             */
-/*   Updated: 2024/05/28 20:55:20 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/29 15:11:44 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	handle_quote_split(const char *s, size_t i, bool *quote)
 {

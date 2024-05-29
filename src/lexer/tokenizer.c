@@ -6,12 +6,12 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/28 21:30:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:11:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 // typedef enum TokenType
 // {
