@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 19:59:32 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:37:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,15 +89,14 @@ char	**ft_shell_split(char const *s, char c);
 int		ft_quotes_not_closed(char *line);
 
 //lexer
+char	*ft_shell_strdup(const char *s1);
 void	tokenizer(char *line);
-
 //syntax
-int     word_syntax(t_arg *head);
+int		word_syntax(t_arg *head);
 int		logical_syntax(t_arg	*head);
-int 	pipe_syntax(t_arg *head);
+int		pipe_syntax(t_arg *head);
 int		redirection_syntax(t_arg *head);
 int		ft_isoperator(TokenType type);
 int		syntax_checker(t_arg *head);
-
 
 #endif

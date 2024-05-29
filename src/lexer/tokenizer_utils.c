@@ -6,13 +6,13 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:57 by afoth             #+#    #+#             */
-/*   Updated: 2024/05/29 20:27:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/29 20:36:47 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_shell_strdup(const char *s1)
 {
 	char	*dest;
 	size_t	i;
