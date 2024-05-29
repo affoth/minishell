@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_gc_malloc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 16:46:15 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/05/29 16:50:04 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/05/29 16:55:58 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-//main minishell
-int	main()
+// Malloc with garbage collector
+void *ft_gc_malloc(size_t size)
 {
-	char	*line;
+	void *ptr;
 
-	while (1)
-	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		add_history(line);
-
-		tokenizer(line);
-
-		// garbage collector
-
-	}
-	rl_clear_history();
-	return (0);
+	ptr = malloc(size);
+	if (!ptr)
+		return (NULL);
+	ft_gc_add(ptr);
+	return (ptr);
 }
 
+// Add pointer to garbage collector
+void ft_gc_add(void *ptr)
+{
+	t_garbage *new;
 
-
+	new = malloc(sizeof(t_garbage));
+	if (!new)
+		return ;
+	new->ptr = ptr;
+	new->next = g_head;
+	g_head = new;
+}

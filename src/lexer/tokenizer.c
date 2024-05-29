@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 15:11:55 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:28:21 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void free_arg_list(t_arg *head)
 
 void tokenizer(char *line)
 {
-	char **split_args = ft_split(line, ' ');
+	char **split_args = ft_shell_split(line, ' ');
 	if (!split_args)
 	{
 		perror("Split failed");

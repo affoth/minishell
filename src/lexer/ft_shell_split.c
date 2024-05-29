@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 15:11:48 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:46:40 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@ static size_t	ft_words(char const *s, char c)
 	bool	quote;
 	char	quote_char;
 
+	quote_char = 0;
 	count = 0;
 	quote = false;
 	while (*s)
 	{
 		while (*s == c && !quote)
 			s++;
-		handle_quote_wordcount(&s, &quote, &quote_char);
+		skip_quoted_string(&s, &quote, &quote_char);
 		if (*s && (quote || *s != c))
 		{
 			count++;
@@ -54,7 +55,7 @@ static void	*ft_allocate(const char *s, int start, int end)
 	return (word);
 }
 
-char	**ft_split(const char *s, char c)
+char	**ft_shell_split(const char *s, char c)
 {
 	char	**array;
 	size_t	i;

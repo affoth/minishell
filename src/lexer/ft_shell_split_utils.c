@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 20:53:40 by afoth             #+#    #+#             */
-/*   Updated: 2024/05/29 15:11:44 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:56:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	handle_quote_split(const char *s, size_t i, bool *quote)
 {
 	char	quote_char;
 
+	if (i == 0)
+		quote_char = 0;
 	if (s[i] == '\'' || s[i] == '\"')
 	{
 		if (*quote == false)
@@ -26,9 +28,10 @@ void	handle_quote_split(const char *s, size_t i, bool *quote)
 		else if (*quote == true && s[i] == quote_char)
 			*quote = false;
 	}
+
 }
 
-void	handle_quote_wordcount(const char **s, bool *quote, char *quote_char)
+void	skip_quoted_string(const char **s, bool *quote, char *quote_char)
 {
 	if (**s == '\'' || **s == '\"')
 	{

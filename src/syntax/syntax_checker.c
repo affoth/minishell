@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 18:09:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/28 21:19:32 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:14:44 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int syntax_checker(t_arg *head)
 				return (1);
 		}
 		// operator specific syntax checks
-		if (pipe_syntax(head) || redirection_syntax(head) || logical_syntax(head))
+		if (pipe_syntax(head) || redirection_syntax(head) || logical_syntax(head) || word_syntax(head))
 		{
 			return (1);
 		}

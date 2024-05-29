@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_gc_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 16:46:15 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/05/29 16:51:00 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/05/29 16:56:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-//main minishell
-int	main()
+// Free all pointers in garbage collector
+void ft_gc_free(void)
 {
-	char	*line;
+	t_garbage *tmp;
 
-	while (1)
+	while (g_head)
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		add_history(line);
-
-		tokenizer(line);
-
-		// garbage collector
-
+		tmp = g_head;
+		g_head = g_head->next;
+		free(tmp->ptr);
+		free(tmp);
 	}
-	rl_clear_history();
-	return (0);
 }
-
-
-

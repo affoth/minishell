@@ -1,37 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   word_syntax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 16:46:15 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/05/29 15:13:40 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/05/29 15:14:13 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-//main minishell
-int	main()
+//check if WORD is not empty and valid
+
+int word_syntax(t_arg *head)
 {
-	char	*line;
+	t_arg *tmp;
 
-	while (1)
+	tmp = head;
+	while (tmp)
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		add_history(line);
-
-		tokenizer(line);
-
-		// garbage collector
-
+		if (tmp->type == WORD)
+		{
+			if (tmp->arg[0] == '\0')
+			{
+				ft_printf("word error: empty word\n");
+				return (1);
+			}
+		}
+		tmp = tmp->next;
 	}
-	rl_clear_history();
 	return (0);
 }
-
-
-
