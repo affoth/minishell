@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 16:46:40 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 19:42:59 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	*ft_allocate(const char *s, int start, int end)
 	int		i;
 
 	i = 0;
-	word = malloc((end - start + 1) * sizeof(char));
+	word = ft_gc_malloc((end - start + 1) * sizeof(char));
 	if (!word)
 		return (NULL);
 	while (start < end)
@@ -63,7 +63,7 @@ char	**ft_shell_split(const char *s, char c)
 	bool	quote;
 	int		index;
 
-	array = malloc((ft_words(s, c) + 1) * sizeof(char *));
+	array = ft_gc_malloc((ft_words(s, c) + 1) * sizeof(char *));
 	if (!s || !array)
 		return (NULL);
 	assign(&i, &j, &index, &quote);

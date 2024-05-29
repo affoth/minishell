@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 15:28:21 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:04:01 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,32 +64,6 @@ const Token typeMap[] =
 	{NULL, WORD}
 };
 
-// int ft_input_check(char *line)
-// {
-//     int i;
-//     int single_quotes;
-//     int double_quotes;
-
-//     i = 0;
-//     single_quotes = 0;
-//     double_quotes = 0;
-
-//     while (line[i] != '\0')
-// 	{
-//         if (line[i] == '\'')
-//             single_quotes++;
-//         if (line[i] == '"')
-//             double_quotes++;
-//         i++;
-//     }
-//     if (single_quotes % 2 != 0 || double_quotes % 2 != 0)
-// 	{
-//         perror("Quotations not closed");
-//         return (1);
-//     }
-//     return (0);
-// }
-
 int ft_isspace(int c) {
 	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
 }
@@ -141,7 +115,7 @@ TokenType get_token_type(char *arg)
 // ADD the arguments with type information into a list
 t_arg *create_arg_node(char *arg)
 {
-	t_arg *node = (t_arg *)malloc(sizeof(t_arg));
+	t_arg *node = (t_arg *)ft_gc_malloc(sizeof(t_arg));
 	if (node == NULL)
 	{
 		perror("Memory allocation failed");
@@ -151,7 +125,7 @@ t_arg *create_arg_node(char *arg)
 	if (node->arg == NULL)
 	{
 		perror("Memory allocation failed");
-		free(node);
+		ft_gc_free();
 		exit(EXIT_FAILURE);
 	}
 	node->type = get_token_type(arg);
@@ -187,20 +161,24 @@ void print_args(t_arg *head)
 	}
 }
 
-// Free the memory allocated for the list
-void free_arg_list(t_arg *head)
-{
-	t_arg *current_node = head;
-	while (current_node != NULL) {
-		t_arg *temp_node = current_node;
-		current_node = current_node->next;
-		free(temp_node->arg);
-		free(temp_node);
-	}
-}
+// // Free the memory allocated for the list
+// void free_arg_list(t_arg *head)
+// {
+// 	t_arg *current_node = head;
+// 	while (current_node != NULL) {
+// 		t_arg *temp_node = current_node;
+// 		current_node = current_node->next;
+// 		free(temp_node->arg);
+// 		free(temp_node);
+// 	}
+// }
 
 void tokenizer(char *line)
 {
+	if(ft_quotes_not_closed(line))
+	{
+		return;
+	}
 	char **split_args = ft_shell_split(line, ' ');
 	if (!split_args)
 	{
@@ -222,12 +200,7 @@ void tokenizer(char *line)
 	if (syntax_checker(args_head) == 1)
 	{
 		ft_printf("Syntax checker not passed\n");
-		free_arg_list(args_head);
-		free(split_args);
 		return;
 	}
-
 	print_args(args_head);
-	free_arg_list(args_head);
-	free(split_args);
 }

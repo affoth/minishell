@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 16:46:15 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:04:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	main()
 
 		tokenizer(line);
 
-		// garbage collector
-
+		// free garbage collector
+		ft_gc_free();
 	}
 	rl_clear_history();
 	return (0);

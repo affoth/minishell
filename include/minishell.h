@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 16:55:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/29 19:59:32 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,6 @@ typedef struct s_garbage
 	struct s_garbage *next;
 } t_garbage;
 
-// Garbage collector head
-t_garbage *g_head = NULL;
-
 //garbage collector
 void    *ft_gc_malloc(size_t size);
 void    ft_gc_free(void);
@@ -89,6 +86,10 @@ void	handle_quote_split(const char *s, size_t i, bool *quote);
 void	skip_quoted_string(const char **s, bool *quote, char *quote_char);
 void	assign(size_t *i, size_t *j, int *index, bool *quote);
 char	**ft_shell_split(char const *s, char c);
+int		ft_quotes_not_closed(char *line);
+
+//lexer
+void	tokenizer(char *line);
 
 //syntax
 int     word_syntax(t_arg *head);
@@ -98,7 +99,5 @@ int		redirection_syntax(t_arg *head);
 int		ft_isoperator(TokenType type);
 int		syntax_checker(t_arg *head);
 
-//lexer
-void	tokenizer(char *line);
 
 #endif
