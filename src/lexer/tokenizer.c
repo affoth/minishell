@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 20:42:59 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/30 15:25:36 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,4 +203,54 @@ void tokenizer(char *line)
 		return;
 	}
 	print_args(args_head);
+	handle_args(args_head);
 }
+
+//freeing arg
+void	handle_args(t_arg *head)
+{
+	char	*temp;
+
+	temp = NULL;
+	if (head == NULL)
+		return ;
+	while (head != NULL)
+	{
+		if (head->type == ENV_VARIABLE)
+		{
+			temp = head->arg;
+			temp = ft_substr(temp, 1, ft_strlen(temp) - 1);
+			head->arg = ft_expand_env(temp);
+			if (head->arg == 0)
+			{
+				free(temp);
+				return ;
+			}
+			free(temp);
+		}
+		head = head->next;
+	}
+}
+
+char	*ft_expand_env(char *env)
+{
+	char	*path;
+	char	*temp;
+
+	//printf("env: %s\n", env);
+	// if (env == "?")
+	// 	exit_status(); //DEL needs to be implemented should return the exit status of the last command
+	temp = getenv(env);
+	//printf("getenv: %s\n", temp);
+	if (temp != NULL)
+	{
+		path = ft_shell_strdup(temp);
+		return (path);
+	}
+	else
+	{
+		printf("The %s environment variable is not set.\n", env);
+	}
+	return (0);
+}
+

@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 20:37:58 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:48:12 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,9 @@ int		pipe_syntax(t_arg *head);
 int		redirection_syntax(t_arg *head);
 int		ft_isoperator(TokenType type);
 int		syntax_checker(t_arg *head);
+
+//added by afoth
+char	*ft_expand_env(char *env);
+void	handle_args(t_arg *head);
 
 #endif
