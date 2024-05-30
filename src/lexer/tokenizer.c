@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/30 15:25:36 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:28:26 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,11 +203,57 @@ void tokenizer(char *line)
 		return;
 	}
 	print_args(args_head);
-	handle_args(args_head);
+	handle_expansions(args_head);
 }
 
-//freeing arg
-void	handle_args(t_arg *head)
+
+
+
+//added by afoth
+// int	find_end_of_env_in_quotes(char *arg, int i)
+// {
+// 	int		j;
+
+// 	j = i;
+// 	while (arg[j] != '\0')
+// 	{
+// 		if (arg[j] == ' ' || arg[j] == '\0' || arg[j] == '$')
+// 			return (j);
+// 		j++;
+// 	}
+// 	return (j);
+// }
+
+//DEL NOT FINISHED, needs work
+/* void handle_expansions_in_quotes(t_arg *head)
+{
+	int		i;
+	char	*temp;
+
+	temp = NULL;
+	i = 0;
+	temp = head->arg;
+	while (head->arg[i] != '\0')
+	{
+		if (head->arg[i] == '$')
+		{
+			temp = ft_substr(temp, i + 1, find_end_of_env_in_quotes(head->arg, i));
+			if (temp == NULL)
+				memory_error();
+			head->arg = ft_expand_env(temp);
+			if (head->arg == 0)
+			{
+				free(temp);
+				return ;
+			}
+			free(temp);
+		}
+		i++;
+	}
+} */
+
+
+void	handle_expansions(t_arg *head)
 {
 	char	*temp;
 
@@ -220,7 +266,10 @@ void	handle_args(t_arg *head)
 		{
 			temp = head->arg;
 			temp = ft_substr(temp, 1, ft_strlen(temp) - 1);
+			if (temp == NULL)
+				memory_error();
 			head->arg = ft_expand_env(temp);
+			printf("head->arg: %s\n", head->arg);//DEL
 			if (head->arg == 0)
 			{
 				free(temp);
@@ -228,9 +277,15 @@ void	handle_args(t_arg *head)
 			}
 			free(temp);
 		}
+		//NOT FINISHED
+		// else if (head->type == DOUBLE_QUOTED_STRING)
+		// {
+		// 	handle_expansions_in_quotes();
+		// }
 		head = head->next;
 	}
 }
+
 
 char	*ft_expand_env(char *env)
 {
