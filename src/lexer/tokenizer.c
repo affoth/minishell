@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 20:42:59 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:48:00 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,11 @@ void print_args(t_arg *head)
 // 	}
 // }
 
-void tokenizer(char *line)
+t_arg *tokenizer(char *line)
 {
 	if(ft_quotes_not_closed(line))
 	{
-		return;
+		return NULL;
 	}
 	char **split_args = ft_shell_split(line, ' ');
 	if (!split_args)
@@ -185,10 +185,10 @@ void tokenizer(char *line)
 		perror("Split failed");
 		exit(EXIT_FAILURE);
 	}
-
-	t_arg *args_head = NULL;
 	int i;
-
+	
+	t_arg *args_head = NULL;
+	
 	i = 0;
 	while (split_args[i] != NULL)
 	{
@@ -200,7 +200,8 @@ void tokenizer(char *line)
 	if (syntax_checker(args_head) == 1)
 	{
 		ft_printf("Syntax checker not passed\n");
-		return;
+		return NULL;
 	}
 	print_args(args_head);
+	return 	args_head;
 }
