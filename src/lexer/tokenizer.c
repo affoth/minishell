@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/30 17:28:26 by afoth            ###   ########.fr       */
+/*   Updated: 2024/05/31 13:56:03 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,22 +210,22 @@ void tokenizer(char *line)
 
 
 //added by afoth
-// int	find_end_of_env_in_quotes(char *arg, int i)
-// {
-// 	int		j;
+int	find_end_of_env_in_quotes(char *arg, int i)
+{
+	int		j;
 
-// 	j = i;
-// 	while (arg[j] != '\0')
-// 	{
-// 		if (arg[j] == ' ' || arg[j] == '\0' || arg[j] == '$')
-// 			return (j);
-// 		j++;
-// 	}
-// 	return (j);
-// }
+	j = i + 1;
+	while (arg[j] != '\0')
+	{
+		if (arg[j] == ' ' || arg[j] == '\0' || arg[j] == '$' || arg[j] == 34)
+			return (j - 2);
+		j++;
+	}
+	return (-1);
+}
 
 //DEL NOT FINISHED, needs work
-/* void handle_expansions_in_quotes(t_arg *head)
+void handle_expansions_in_quotes(t_arg *head)
 {
 	int		i;
 	char	*temp;
@@ -237,10 +237,13 @@ void tokenizer(char *line)
 	{
 		if (head->arg[i] == '$')
 		{
+			printf("i: %d, find_end_of_env_in_quotes: %d\n", i, find_end_of_env_in_quotes(head->arg, i));//DEL
 			temp = ft_substr(temp, i + 1, find_end_of_env_in_quotes(head->arg, i));
+			printf("temp: %s\n", temp);//DEL
 			if (temp == NULL)
 				memory_error();
 			head->arg = ft_expand_env(temp);
+			printf("head->arg: %s\n", head->arg);//DEL
 			if (head->arg == 0)
 			{
 				free(temp);
@@ -250,7 +253,7 @@ void tokenizer(char *line)
 		}
 		i++;
 	}
-} */
+}
 
 
 void	handle_expansions(t_arg *head)
@@ -278,10 +281,10 @@ void	handle_expansions(t_arg *head)
 			free(temp);
 		}
 		//NOT FINISHED
-		// else if (head->type == DOUBLE_QUOTED_STRING)
-		// {
-		// 	handle_expansions_in_quotes();
-		// }
+		else if (head->type == DOUBLE_QUOTED_STRING)
+		{
+			handle_expansions_in_quotes(head);
+		}
 		head = head->next;
 	}
 }
