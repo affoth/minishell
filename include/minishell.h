@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/30 16:42:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:42:19 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <unistd.h>     // POSIX Library
 # include <sys/types.h>  // POSIX Library
 # include <sys/stat.h>   // POSIX Library
+# include <sys/wait.h>   // POSIX Library
 # include <fcntl.h>      // POSIX Library
 # include <signal.h>     // POSIX Library
 # include <dirent.h>     // POSIX Library
@@ -101,7 +102,11 @@ int		ft_isoperator(TokenType type);
 int		syntax_checker(t_arg *head);
 
 //built_ins
-void exec_built_ins(t_arg *args_head);
-void built_in_cd(t_arg *args_head);
+void	exec_built_ins(t_arg *args_head);
+void	built_in_cd(t_arg *args_head);
+
+//execve
+void execve_args(t_arg *args_head);
+
 
 #endif

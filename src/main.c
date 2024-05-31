@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/30 16:54:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:47:56 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	main()
 		add_history(line);
 
 		args_head = tokenizer(line);
-		if (args_head == NULL) 
-			continue;
+
 		exec_built_ins(args_head);
+		execve_args(args_head);
 		// free garbage collector);
 		ft_gc_free();
 		free(line);
