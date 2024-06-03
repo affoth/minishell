@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/03 14:21:59 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:58:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ void	skip_quoted_string(const char **s, bool *quote, char *quote_char);
 void	assign(size_t *i, size_t *j, int *index, bool *quote);
 char	**ft_shell_split(char const *s, char c);
 int		ft_quotes_not_closed(char *line);
+
+//expansion
+char *expand_string(char *input);
 
 //lexer
 char	*ft_shell_strdup(const char *s1);

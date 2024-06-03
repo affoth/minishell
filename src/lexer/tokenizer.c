@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/30 17:48:00 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:52:40 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,9 +186,9 @@ t_arg *tokenizer(char *line)
 		exit(EXIT_FAILURE);
 	}
 	int i;
-	
+
 	t_arg *args_head = NULL;
-	
+
 	i = 0;
 	while (split_args[i] != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/31 19:47:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/03 16:15:42 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 int	main()
 {
 	char	*line;
+	char	*expanded;
 	t_arg	*args_head; // Declare args_head here
 
 	while (1)
@@ -25,12 +26,12 @@ int	main()
 			break ;
 		add_history(line);
 
-		args_head = tokenizer(line);
+		expanded = expand_string(line);
+		ft_printf("Expanded: %s\n", expanded);
+		args_head = tokenizer(expanded);
 
-		exec_built_ins(args_head);
+		//exec_built_ins(args_head);
 		execve_args(args_head);
-		// free garbage collector);
-		ft_gc_free();
 		free(line);
 	}
 	ft_gc_free();
