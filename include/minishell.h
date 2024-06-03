@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/03 14:58:02 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/03 20:07:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ typedef struct s_garbage
 } t_garbage;
 
 //garbage collector
-void    *ft_gc_malloc(size_t size);
-void    ft_gc_free(void);
+void	*ft_gc_malloc(size_t size);
+void	ft_gc_free(void);
 
 //split
 void	handle_quote_split(const char *s, size_t i, bool *quote);
@@ -90,7 +90,7 @@ char	**ft_shell_split(char const *s, char c);
 int		ft_quotes_not_closed(char *line);
 
 //expansion
-char *expand_string(char *input);
+char	*expand_string(char *input);
 
 //lexer
 char	*ft_shell_strdup(const char *s1);
@@ -107,9 +107,14 @@ int		syntax_checker(t_arg *head);
 //built_ins
 void	exec_built_ins(t_arg *args_head);
 void	built_in_cd(t_arg *args_head);
+void	built_in_pwd(void);
+void	built_in_env(char **env);
+void	built_in_echo(t_arg *args_head);
+void	built_in_export(t_arg *args_head, char ***env);
+
 
 //execve
-void execve_args(t_arg *args_head);
+void	execve_args(t_arg *args_head);
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/03 16:40:39 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/03 18:57:45 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main()
 		ft_printf("Expanded: %s\n", expanded);
 		args_head = tokenizer(expanded);
 
-		//exec_built_ins(args_head);
+		exec_built_ins(args_head);
 		execve_args(args_head);
 		free(line);
 	}
