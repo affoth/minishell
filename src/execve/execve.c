@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/03 16:16:46 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/03 17:00:19 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ char *ft_shell_strjoin(char *s1, char *s2)
 char *get_path(char *cmd)
 {
 	char *path;
+	char *path_tmp;
 	char *path_env;
 	char **path_split;
 	int i;
@@ -45,8 +46,8 @@ char *get_path(char *cmd)
 	i = 0;
 	while (path_split[i])
 	{
-		path = ft_shell_strjoin(path_split[i], "/");
-		path = ft_shell_strjoin(path, cmd);
+		path_tmp = ft_shell_strjoin(path_split[i], "/");
+		path = ft_shell_strjoin(path_tmp, cmd);
 		if (access(path, F_OK) == 0)
 		{
 			ft_printf("path: %s\n", path);
@@ -56,6 +57,15 @@ char *get_path(char *cmd)
 	}
 	return (NULL);
 }
+// Function to count the number of arguments in args_head
+int count_arguments(t_arg *args_head) {
+    int count = 0;
+    while (args_head) {
+        count++;
+        args_head = args_head->next;
+    }
+    return count;
+}
 
 // fork and execve
 void execve_args(t_arg *args_head)
@@ -64,17 +74,24 @@ void execve_args(t_arg *args_head)
 	char *path;
 	char **args;
 	int i;
+	int argc;
 
+	argc = count_arguments(args_head);
 	i = 0;
-	args = (char **)ft_gc_malloc(sizeof(char *) * (ft_lstsize((t_list *)args_head) + 1));
+	args = (char **)ft_gc_malloc(sizeof(char *) * (argc + 1));
 	while (args_head)
 	{
-		args[i] = args_head->arg;
+		args[i] = ft_shell_strdup(args_head->arg);
 		args_head = args_head->next;
 		i++;
 	}
 	args[i] = NULL;
 	path = get_path(args[0]);
+	if (!path)
+	{
+		ft_printf("NO EXECVE COMMAND FOUND\n");
+		return;
+	}
 	pid = fork();
 	if (pid == 0)
 	{
