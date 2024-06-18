@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 20:25:57 by afoth             #+#    #+#             */
-/*   Updated: 2024/05/29 20:36:47 by afoth            ###   ########.fr       */
+/*   Created: 2024/06/03 19:05:32 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/06/03 19:58:42 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_shell_strdup(const char *s1)
+void built_in_pwd(void)
 {
-	char	*dest;
-	size_t	i;
+	char *current_dir;
 
-	dest = (char *) ft_gc_malloc(ft_strlen(s1) + 1);
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (s1[i])
+	current_dir = getcwd(NULL, 0);
+	if (!current_dir)
 	{
-		dest[i] = s1[i];
-		i++;
+		ft_printf("Error getting current directory\n");
+		return;
 	}
-	dest[i] = 0;
-	return (dest);
+	ft_printf("%s\n", current_dir);
+	free(current_dir);
 }

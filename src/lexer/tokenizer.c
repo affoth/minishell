@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/31 19:13:50 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/18 18:47:56 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,11 @@ void print_args(t_arg *head)
 // 	}
 // }
 
-void tokenizer(char *line)
+t_arg *tokenizer(char *line)
 {
 	if(ft_quotes_not_closed(line))
 	{
-		return;
+		return NULL;
 	}
 	char **split_args = ft_shell_split(line, ' ');
 	if (!split_args)
@@ -185,9 +185,9 @@ void tokenizer(char *line)
 		perror("Split failed");
 		exit(EXIT_FAILURE);
 	}
+	int i;
 
 	t_arg *args_head = NULL;
-	int i;
 
 	i = 0;
 	while (split_args[i] != NULL)
@@ -200,8 +200,9 @@ void tokenizer(char *line)
 	if (syntax_checker(args_head) == 1)
 	{
 		ft_printf("Syntax checker not passed\n");
-		return;
+		return NULL;
 	}
 	print_args(args_head);
 	handle_expansions(args_head);//DEL
+	return 	args_head;
 }

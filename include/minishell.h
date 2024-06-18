@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/31 19:23:50 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/18 18:46:36 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <unistd.h>     // POSIX Library
 # include <sys/types.h>  // POSIX Library
 # include <sys/stat.h>   // POSIX Library
+# include <sys/wait.h>   // POSIX Library
 # include <fcntl.h>      // POSIX Library
 # include <signal.h>     // POSIX Library
 # include <dirent.h>     // POSIX Library
@@ -78,8 +79,8 @@ typedef struct s_garbage
 } t_garbage;
 
 //garbage collector
-void    *ft_gc_malloc(size_t size);
-void    ft_gc_free(void);
+void	*ft_gc_malloc(size_t size);
+void	ft_gc_free(void);
 
 //split
 void	handle_quote_split(const char *s, size_t i, bool *quote);
@@ -88,9 +89,13 @@ void	assign(size_t *i, size_t *j, int *index, bool *quote);
 char	**ft_shell_split(char const *s, char c);
 int		ft_quotes_not_closed(char *line);
 
+//expansion
+char	*expand_string(char *input);
+
 //lexer
 char	*ft_shell_strdup(const char *s1);
-void	tokenizer(char *line);
+t_arg	*tokenizer(char *line);
+
 //syntax
 int		word_syntax(t_arg *head);
 int		logical_syntax(t_arg	*head);

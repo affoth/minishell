@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 17:16:01 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/18 18:47:02 by afoth            ###   ########.fr       */
+/*   Created: 2024/06/03 19:43:12 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/06/03 19:56:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	memory_error(void)
+// Function to print environment variables
+void built_in_env(char **env)
 {
-	perror("Memory allocation failed");
-	ft_gc_free();
-	exit(EXIT_FAILURE);
+    while (*env)
+	{
+        printf("%s\n", *env);
+        env++;
+    }
 }

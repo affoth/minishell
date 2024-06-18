@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 17:16:01 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/18 18:47:02 by afoth            ###   ########.fr       */
+/*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/06/18 18:22:47 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	memory_error(void)
+void built_in_export(t_arg *args_head, char ***env)
 {
-	perror("Memory allocation failed");
-	ft_gc_free();
-	exit(EXIT_FAILURE);
+	t_arg *tmp;
+
+	tmp = args_head;
+	while (tmp)
+	{
+		if(ft_strchr(tmp->arg, '='))
+		{
+			
+		}
+
+		tmp = tmp->next;
+	}
 }

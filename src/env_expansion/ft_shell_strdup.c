@@ -1,20 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   ft_shell_strdup.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 17:16:01 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/18 18:47:02 by afoth            ###   ########.fr       */
+/*   Created: 2024/06/03 14:20:34 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/06/03 14:20:36 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../../include/minishell.h"
 
-void	memory_error(void)
+char	*ft_shell_strdup(const char *s1)
 {
-	perror("Memory allocation failed");
-	ft_gc_free();
-	exit(EXIT_FAILURE);
+	char	*dest;
+	size_t	i;
+
+	dest = (char *) ft_gc_malloc(ft_strlen(s1) + 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	dest[i] = 0;
+	return (dest);
 }
