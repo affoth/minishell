@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:25:37 by afoth             #+#    #+#             */
-/*   Updated: 2024/05/31 22:10:52 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/18 19:57:44 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,24 @@ char	*ft_expand_env(char *env)
 	}
 	return (0);
 }
+
+// char *ft_expand_env(char *env)
+// {
+// 	char *temp;
+
+// 	temp = getenv(env);
+// 	if (temp != NULL)
+// 	{
+// 		return ft_shell_strdup(temp);
+// 	}
+// 	else
+// 	{
+// 		return ft_shell_strdup(""); // Return an empty string if the variable is not set
+// 	}
+// }
+//DEL two definitions of ft_expand_env
+
+
 
 char	*ft_shell_strjoin(char *s1, char *s2)
 {

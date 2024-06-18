@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/18 18:46:36 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/18 20:05:50 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,18 @@ int		find_end_of_env_in_quotes(char *arg, int i);
 char	*ft_shell_strjoin(char *s1, char *s2);
 char	*ft_shell_substr(const char *s, unsigned int start, size_t len);
 void	*ft_shell_calloc(size_t count, size_t size);
+//redirections and pipes
+void	handle_redirections_and_pipes(t_arg *head);
+void	input_redirection(t_arg *head);
+void	check_file_readable(const char *filepath);
+void	output_redirection(t_arg *head);
+void	append_redirection(t_arg *head);
+void	heredoc(t_arg *head);
+void	pipe_redirection(t_arg *head);
+
+//execve
+void	execve_args(t_arg *args_head);
+char	*get_path(char *cmd);
+int		count_arguments(t_arg *args_head);
+
 #endif

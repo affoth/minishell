@@ -70,12 +70,8 @@ int	redirection_syntax(t_arg *head)
 		}
 		if (tmp->type == REDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
 		{
-			// check for no arguments before or after redirection
-			if (!tmp->next || !tmp->prev)
-			{
-				ft_printf("redirection error: no arguments before or after redirection `%s'\n", tmp->arg);
-				return (1);
-			}
+			// check for no arguments before or after redirectionEDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
+		{
 			// check for valid file name
 			if (tmp->next->type != WORD)
 			{

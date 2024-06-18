@@ -6,11 +6,11 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/18 18:36:47 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/18 19:06:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 
 void	handle_redirections_and_pipes(t_arg *head)
