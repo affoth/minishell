@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:28:26 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/16 13:31:23 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/18 15:13:45 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 // Check if -n flag is present in arguments
 bool	suppress_n_flag(t_arg *args_head)
 {
-	t_arg *tmp = args_head;
+	t_arg *tmp;
+
+	tmp = args_head;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->arg, "-n") == 0)
@@ -28,7 +30,9 @@ bool	suppress_n_flag(t_arg *args_head)
 // Print the arguments, excluding -n if present
 void	print_echo_arguments(t_arg *args_head)
 {
-	t_arg *tmp = args_head;
+	t_arg *tmp;
+
+	tmp = args_head;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->arg, "-n") != 0)
