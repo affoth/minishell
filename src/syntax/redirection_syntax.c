@@ -30,6 +30,31 @@ int is_valid_filename(const char *filename)
 	return 1;
 }
 
+int	redirection_input_syntax_check(t_arg *tmp)
+{
+	if (!tmp->next || !tmp->prev)
+	{
+		printf("redirection input error: no arguments before or after redirection `%s'\n", tmp->arg);
+		return (1);
+	}
+	if (tmp->next->type != WORD)
+	{
+		printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
+		return (1);
+	}
+	if (access(tmp->next->arg, F_OK) != 0)
+	{
+		printf("redirection input error: file `%s' does not exist\n", tmp->next->arg);
+		return (1);
+	}
+	if (tmp->prev->type != WORD)
+	{
+		printf("redirection input error: no valid file name before redirection `%s'\n", tmp->arg);
+		return (1);
+	}
+	return (0);
+}
+
 // check for syntax errors in redirections
 int	redirection_syntax(t_arg *head)
 {
@@ -38,7 +63,12 @@ int	redirection_syntax(t_arg *head)
 	tmp = head;
 	while (tmp)
 	{
-		if (tmp->type == REDIRECTION_OUT || tmp->type == REDIRECTION_IN || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
+		if (tmp->type == REDIRECTION_IN)
+		{
+			if (redirection_input_syntax_check(tmp))
+				return (1);
+		}
+		if (tmp->type == REDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
 		{
 			// check for no arguments before or after redirection
 			if (!tmp->next || !tmp->prev)
@@ -57,3 +87,4 @@ int	redirection_syntax(t_arg *head)
 	}
 	return (0);
 }
+
