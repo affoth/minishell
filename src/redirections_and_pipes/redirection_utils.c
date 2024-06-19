@@ -6,12 +6,22 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/18 20:00:44 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/19 14:31:11 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+int	find_redirections_and_pipes(t_arg *head)
+{
+	while (head != NULL)
+	{
+		if (head->type == REDIRECTION_IN || head->type == REDIRECTION_OUT || head->type == REDIRECTION_APPEND || head->type == HEREDOC || head->type == PIPE)
+			return (1);
+		head = head->next;
+	}
+	return (0);
+}
 // void check_file_access(const char *filepath) {
 //     if (access(filepath, F_OK) == 0) {
 //         printf("File exists.\n");

@@ -71,7 +71,7 @@ int	redirection_syntax(t_arg *head)
 		if (tmp->type == REDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
 		{
 			// check for no arguments before or after redirectionEDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
-		{
+		
 			// check for valid file name
 			if (tmp->next->type != WORD)
 			{

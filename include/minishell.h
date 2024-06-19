@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/18 20:05:50 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/19 14:33:30 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ void	output_redirection(t_arg *head);
 void	append_redirection(t_arg *head);
 void	heredoc(t_arg *head);
 void	pipe_redirection(t_arg *head);
+int		find_redirections_and_pipes(t_arg *head);
+
 
 //execve
 void	execve_args(t_arg *args_head);
