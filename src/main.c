@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 20:30:49 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/03 18:57:45 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 int	main()
 {
 	char	*line;
+	char	*expanded;
+	t_arg	*args_head; // Declare args_head here
 
 	while (1)
 	{
@@ -24,10 +26,12 @@ int	main()
 			break ;
 		add_history(line);
 
-		tokenizer(line);
+		expanded = expand_string(line);
+		ft_printf("Expanded: %s\n", expanded);
+		args_head = tokenizer(expanded);
 
-		// free garbage collector);
-		ft_gc_free();
+		exec_built_ins(args_head);
+		execve_args(args_head);
 		free(line);
 	}
 	ft_gc_free();

@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 20:25:57 by afoth             #+#    #+#             */
-/*   Updated: 2024/05/29 20:36:47 by afoth            ###   ########.fr       */
+/*   Created: 2024/06/03 19:43:12 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/06/20 19:46:49 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_shell_strdup(const char *s1)
+// Function to print environment variables
+void built_in_env(char **env)
 {
-	char	*dest;
-	size_t	i;
-
-	dest = (char *) ft_gc_malloc(ft_strlen(s1) + 1);
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (s1[i])
+	while (*env)
 	{
-		dest[i] = s1[i];
-		i++;
+		ft_printf("%s\n", *env);
+		env++;
 	}
-	dest[i] = 0;
-	return (dest);
 }

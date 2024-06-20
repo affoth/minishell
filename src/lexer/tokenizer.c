@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/30 17:28:26 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 22:51:07 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,11 @@ void print_args(t_arg *head)
 // 	}
 // }
 
-void tokenizer(char *line)
+t_arg *tokenizer(char *line)
 {
 	if(ft_quotes_not_closed(line))
 	{
-		return;
+		return NULL;
 	}
 	char **split_args = ft_shell_split(line, ' ');
 	if (!split_args)
@@ -185,9 +185,9 @@ void tokenizer(char *line)
 		perror("Split failed");
 		exit(EXIT_FAILURE);
 	}
+	int i;
 
 	t_arg *args_head = NULL;
-	int i;
 
 	i = 0;
 	while (split_args[i] != NULL)
@@ -200,112 +200,8 @@ void tokenizer(char *line)
 	if (syntax_checker(args_head) == 1)
 	{
 		ft_printf("Syntax checker not passed\n");
-		return;
+		return NULL;
 	}
 	print_args(args_head);
-	handle_expansions(args_head);
+	return 	args_head;
 }
-
-
-
-
-//added by afoth
-// int	find_end_of_env_in_quotes(char *arg, int i)
-// {
-// 	int		j;
-
-// 	j = i;
-// 	while (arg[j] != '\0')
-// 	{
-// 		if (arg[j] == ' ' || arg[j] == '\0' || arg[j] == '$')
-// 			return (j);
-// 		j++;
-// 	}
-// 	return (j);
-// }
-
-//DEL NOT FINISHED, needs work
-/* void handle_expansions_in_quotes(t_arg *head)
-{
-	int		i;
-	char	*temp;
-
-	temp = NULL;
-	i = 0;
-	temp = head->arg;
-	while (head->arg[i] != '\0')
-	{
-		if (head->arg[i] == '$')
-		{
-			temp = ft_substr(temp, i + 1, find_end_of_env_in_quotes(head->arg, i));
-			if (temp == NULL)
-				memory_error();
-			head->arg = ft_expand_env(temp);
-			if (head->arg == 0)
-			{
-				free(temp);
-				return ;
-			}
-			free(temp);
-		}
-		i++;
-	}
-} */
-
-
-void	handle_expansions(t_arg *head)
-{
-	char	*temp;
-
-	temp = NULL;
-	if (head == NULL)
-		return ;
-	while (head != NULL)
-	{
-		if (head->type == ENV_VARIABLE)
-		{
-			temp = head->arg;
-			temp = ft_substr(temp, 1, ft_strlen(temp) - 1);
-			if (temp == NULL)
-				memory_error();
-			head->arg = ft_expand_env(temp);
-			printf("head->arg: %s\n", head->arg);//DEL
-			if (head->arg == 0)
-			{
-				free(temp);
-				return ;
-			}
-			free(temp);
-		}
-		//NOT FINISHED
-		// else if (head->type == DOUBLE_QUOTED_STRING)
-		// {
-		// 	handle_expansions_in_quotes();
-		// }
-		head = head->next;
-	}
-}
-
-
-char	*ft_expand_env(char *env)
-{
-	char	*path;
-	char	*temp;
-
-	//printf("env: %s\n", env);
-	// if (env == "?")
-	// 	exit_status(); //DEL needs to be implemented should return the exit status of the last command
-	temp = getenv(env);
-	//printf("getenv: %s\n", temp);
-	if (temp != NULL)
-	{
-		path = ft_shell_strdup(temp);
-		return (path);
-	}
-	else
-	{
-		printf("The %s environment variable is not set.\n", env);
-	}
-	return (0);
-}
-

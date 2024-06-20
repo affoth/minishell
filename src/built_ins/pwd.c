@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 19:11:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/31 19:35:14 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/06/03 19:05:32 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/06/20 21:52:40 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../include/minishell.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+
+void built_in_pwd(void)
 {
-	char	*newstr;
-	int		i;
-	int		j;
+	char *current_dir;
 
-	i = 0;
-	j = 0;
-	newstr = (char *) malloc ((ft_strlen(s1)
-				+ ft_strlen(s2) + 1) * sizeof(char));
-	if (!newstr)
-		return (NULL);
-	while (s1[i])
-		newstr[j++] = s1[i++];
-	i = 0;
-	while (s2[i])
-		newstr[j++] = s2[i++];
-	newstr[j] = '\0';
-	return (newstr);
+	current_dir = getcwd(NULL, 0);
+	if (!current_dir)
+	{
+		ft_printf("Error getting current directory\n");
+		return;
+	}
+	ft_printf("%s\n", current_dir);
+	free(current_dir);
 }
