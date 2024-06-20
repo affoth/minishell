@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 21:48:09 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 22:31:56 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ char *get_path(char *cmd)
 	int i;
 
 	if (!cmd)
+	{
+		printf("in get_path: NO COMMAND FOUND\n");
 		return (NULL);
+	}
 	path_env = getenv("PATH");
 	path_split = ft_shell_split(path_env, ':');
 	i = 0;

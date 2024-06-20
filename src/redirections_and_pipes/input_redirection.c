@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/20 17:53:51 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 22:38:28 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	input_redirection(t_arg *head, t_arg *tmp)
 		ft_gc_free();
 		exit(EXIT_FAILURE);
 	}
+	int stdin_save = dup(STDIN_FILENO);
 	dup2_check = dup2(fd, STDIN_FILENO);
 	if (dup2_check == -1)
 	{
@@ -71,6 +72,8 @@ void	input_redirection(t_arg *head, t_arg *tmp)
 	printf("STDIN_FILENO: %d\n\n", STDIN_FILENO);
 	//Execute command
 	redirect_execve_args(tmp);
+	dup2(stdin_save, STDIN_FILENO);
+	close(stdin_save);
 	// close(fd);
 }
 

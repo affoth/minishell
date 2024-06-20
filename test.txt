@@ -1,1 +1,4 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, velit id aliquet tincidunt, nunc nisl ultricies nisl, id tincidunt nunc nisl id nunc. Nullam euismod, nunc id aliquet tincidunt, nisl nisl ultricies nisl, id tincidunt nunc nisl id nunc. Sed euismod, velit id aliquet tincidunt, nunc nisl ultricies nisl, id tincidunt nunc nisl id nunc. Nullam euismod, nunc id aliquet tincidunt, nisl nisl ultricies nisl, id tincidunt nunc nisl id nunc.
+Output redirection: test.txt
+fd: 3
+STDOUT_FILENO: 1
+NO EXECVE COMMAND FOUND

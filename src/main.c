@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 21:41:58 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 22:02:18 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main()
 		add_history(line);
 		expanded = expand_string(line);
 		ft_printf("Expanded: %s\n", expanded);
+
 		args_head = tokenizer(expanded);
 		if (find_redirections_and_pipes(args_head))
 			handle_redirections_and_pipes(args_head);

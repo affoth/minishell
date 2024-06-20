@@ -43,6 +43,7 @@ int	redirection_input_syntax_check(t_arg *tmp)
 		printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
 		return (1);
 	}
+	if (access(tmp->next->arg, F_OK) != 0)
 	{
 		printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
 		return (1);
@@ -74,7 +75,6 @@ int	redirection_output_syntax_check(t_arg *tmp)
 		return (1);
 	}
 	if (tmp->prev->type != WORD && tmp->prev->type != DOUBLE_QUOTED_STRING)
-	
 	{
 		printf("redirection output error: no argument before redirection `%s'\n", tmp->arg);
 		return (1);
