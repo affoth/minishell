@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:37:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/18 17:27:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/20 21:53:40 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern char **environ;
 void exec_built_ins(t_arg *args_head)
 {
     if (ft_strcmp(args_head->arg, "cd") == 0)
-        built_in_cd(args_head);
+        built_in_cd(args_head, &environ);
     if (ft_strcmp(args_head->arg, "echo") == 0)
         built_in_echo(args_head);
     if (ft_strcmp(args_head->arg, "pwd") == 0)
@@ -26,4 +26,8 @@ void exec_built_ins(t_arg *args_head)
         built_in_env(environ);
     if (ft_strcmp(args_head->arg, "export") == 0)
         built_in_export(args_head, &environ);
+    if (ft_strcmp(args_head->arg, "unset") == 0)
+        built_in_unset(args_head, &environ);
+    if (ft_strcmp(args_head->arg, "exit") == 0)
+        built_in_exit(args_head);
 }

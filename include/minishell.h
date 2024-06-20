@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/18 17:27:05 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/20 22:04:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ char	*expand_string(char *input);
 
 //lexer
 char	*ft_shell_strdup(const char *s1);
+char	*ft_shell_strndup(const char *s1, size_t n);
+char	*ft_shell_strjoin(char *s1, char *s2);
 t_arg	*tokenizer(char *line);
 
 //syntax
@@ -106,11 +108,18 @@ int		syntax_checker(t_arg *head);
 
 //built_ins
 void	exec_built_ins(t_arg *args_head);
-void	built_in_cd(t_arg *args_head);
+void	built_in_cd(t_arg *args_head, char ***env);
 void	built_in_pwd(void);
 void	built_in_env(char **env);
 void	built_in_echo(t_arg *args_head);
+int		ft_env_len(char **env);
+char	*find_variable(const char *arg);
+int		find_var_in_env(char **env, const char *var_name);
+char	**add_env_var(char *arg, char **env, int env_len);
+char	**change_or_add_env_var(char *arg, char **env);
 void	built_in_export(t_arg *args_head, char ***env);
+void	built_in_unset(t_arg *args_head, char ***env);
+void	built_in_exit(t_arg *args_head);
 
 
 //execve

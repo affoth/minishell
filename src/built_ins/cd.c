@@ -6,16 +6,22 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/03 19:11:51 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/20 22:23:37 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void built_in_cd(t_arg *args_head)
+// Update environment variable PWD
+
+
+// Function to change directory
+void built_in_cd(t_arg *args_head, char ***env)
 {
 	char *target_dir;
+	char *oldpwd;;
 
+	oldpwd = getcwd(NULL, 0);
 	target_dir = NULL;
 	// Determine the target directory based on the argument
 	if (args_head->next)
@@ -38,4 +44,7 @@ void built_in_cd(t_arg *args_head)
 		// Print error message along with the target directory and error details
 		ft_printf("Error changing directory to %s\n", target_dir);
 	}
+
+	// update oldpwd
+	*env = change_or_add_env_var(ft_strjoin("OLDPWD=", oldpwd), *env);
 }
