@@ -16,4 +16,44 @@ Executes the command (see Executing Commands).
 Optionally waits for the command to complete and collects its exit status (see Exit Status).
 
 
+
+You basically add a flag when running valgrind
+valgrind --suppressions=readline.supp ./minishell
+(I think the .supp extension is just a convention) (edited)
+
+
+And then in that file readline.supp (which again can be called anything) you plop this:
+{
+    leak readline
+    Memcheck:Leak
+    ...
+    fun:readline
+}
+{
+    leak add_history
+    Memcheck:Leak
+    ...
+    fun:add_history
+}
+
+
+
+I'm noticing that I've written "and then". This wasn't meant to signify the chronology, sorry if that was confusing.
+You first create that file. Then you run Valgrind with the flag.
+
+	{"|", PIPE},
+	{"&&", AND},
+	{"||", OR},
+	{"(", OPEN_PAREN},
+	{")", CLOSE_PAREN},
+	{">", REDIRECTION_OUT},
+	{"<", REDIRECTION_IN},
+	{">>", REDIRECTION_APPEND},
+	{"<<", HEREDOC},
+	{"\"", DOUBLE_QUOTED_STRING},
+	{"'", SINGLE_QUOTED_STRING},
+	{"$", ENV_VARIABLE},
+	{NULL, WORD}
+
+
 git checkout -b new-branch-name

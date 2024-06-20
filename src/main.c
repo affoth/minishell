@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/03 18:57:45 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/20 22:02:18 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@ int	main()
 		if (!line)
 			break ;
 		add_history(line);
-
 		expanded = expand_string(line);
 		ft_printf("Expanded: %s\n", expanded);
-		args_head = tokenizer(expanded);
 
-		exec_built_ins(args_head);
-		execve_args(args_head);
+		args_head = tokenizer(expanded);
+		if (find_redirections_and_pipes(args_head))
+			handle_redirections_and_pipes(args_head);
+
+		else// exec_built_ins(args_head);
+			execve_args(args_head);
 		free(line);
 	}
 	ft_gc_free();

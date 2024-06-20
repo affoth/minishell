@@ -1,0 +1,15 @@
+total 228
+-rw-rw-rw-   1 codespace root        1597 Jun 20 22:45 Makefile
+-rw-rw-rw-   1 codespace root        3938 Jun 20 22:45 OPERATOR_LIST.txt
+-rw-rw-rw-   1 codespace root          14 Jun 20 22:45 README.md
+-rw-rw-rw-   1 codespace root        1160 Jun 20 22:45 TASK_LIST.txt
+-rwxrwxrwx   1 codespace codespace      9 Jun 20 22:48 createdbymini.txt
+drwxrwxrwx+  2 codespace root        4096 Jun 20 22:48 include
+drwxrwxrwx+  2 codespace root        4096 Jun 20 22:45 libft copy
+drwxrwxrwx+  3 codespace root        4096 Jun 20 22:45 libs
+-rwxrwxrwx   1 codespace codespace 180448 Jun 20 22:55 minishell
+drwxrwxrwx+ 11 codespace codespace   4096 Jun 20 22:55 obj
+drwxrwxrwx+  4 codespace root        4096 Jun 20 22:48 orga
+-rw-rw-rw-   1 codespace codespace      0 Jun 20 23:02 output.txt
+drwxrwxrwx+ 11 codespace root        4096 Jun 20 22:48 src
+-rw-rw-rw-   1 codespace codespace     76 Jun 20 22:48 test.txt
