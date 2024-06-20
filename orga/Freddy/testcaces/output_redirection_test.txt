@@ -1,0 +1,19 @@
+echo "Hello, World!" > output.txt
+
+ls -l > directory_listing.txt
+
+ps aux > processes.txt
+
+df -h > disk_usage.txt
+
+grep "pattern" file.txt > matches.txt
+
+date > current_date.txt
+
+hostname > hostname.txt
+
+uname -a > system_info.txt
+
+free -m > memory_usage.txt
+
+ifconfig > network_info.txt

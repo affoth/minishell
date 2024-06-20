@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:25:37 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/20 21:45:14 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 22:55:27 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void handle_expansions_in_quotes(t_arg *head)
 {
 	int		i;
 	int		end_of_env;
-	char	*temp;
+	//char	*temp;
 	//char	*string;
 	char	*env;
 
@@ -44,7 +44,7 @@ void handle_expansions_in_quotes(t_arg *head)
 
 	i = 0;
 	end_of_env = 0;
-	temp = head->arg;
+	//temp = head->arg;
 	while (head->arg[i] != '\0')
 	{
 		if (head->arg[i] == '$')
@@ -70,7 +70,7 @@ void handle_expansions_in_quotes(t_arg *head)
 			head->arg = ft_shell_strjoin(head->arg, after_env);
 			//ft_printf("string: %s\n", string);
 			printf("\nhead->arg: %s\n\n", head->arg);//DEL
-			temp = NULL;
+			//temp = NULL;
 			before_env = NULL;
 			after_env = NULL;
 			i = 0;
