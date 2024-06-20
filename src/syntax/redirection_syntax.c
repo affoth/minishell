@@ -11,7 +11,7 @@ int is_valid_char(char c)
 }
 
 // Function to check if a filename is valid
-int is_valid_filename(const char *filename)
+/* int is_valid_filename(const char *filename)
 {
 	if (filename == NULL || filename[0] == '\0')
 	{
@@ -28,8 +28,9 @@ int is_valid_filename(const char *filename)
 	}
 
 	return 1;
-}
+} */
 
+//check flag!!
 int	redirection_input_syntax_check(t_arg *tmp)
 {
 	if (!tmp->next || !tmp->prev)
@@ -37,7 +38,11 @@ int	redirection_input_syntax_check(t_arg *tmp)
 		printf("redirection input error: no arguments before or after redirection `%s'\n", tmp->arg);
 		return (1);
 	}
-	if (tmp->next->type != WORD)
+	if (tmp->next->type != WORD && tmp->next->type != DOUBLE_QUOTED_STRING)
+	{
+		printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
+		return (1);
+	}
 	{
 		printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
 		return (1);
@@ -49,7 +54,29 @@ int	redirection_input_syntax_check(t_arg *tmp)
 	}
 	if (tmp->prev->type != WORD)
 	{
-		printf("redirection input error: no valid file name before redirection `%s'\n", tmp->arg);
+		printf("redirection input error: no valid argument before redirection `%s'\n", tmp->arg);
+		return (1);
+	}
+	return (0);
+}
+
+//check flag!!
+int	redirection_output_syntax_check(t_arg *tmp)
+{
+	if (!tmp->next || !tmp->prev)
+	{
+		printf("redirection output error: no arguments before or after redirection `%s'\n", tmp->arg);
+		return (1);
+	}
+	if (tmp->next->type != WORD)
+	{
+		printf("redirection output error: no valid file name after redirection `%s'\n", tmp->arg);
+		return (1);
+	}
+	if (tmp->prev->type != WORD && tmp->prev->type != DOUBLE_QUOTED_STRING)
+	
+	{
+		printf("redirection output error: no argument before redirection `%s'\n", tmp->arg);
 		return (1);
 	}
 	return (0);
@@ -68,10 +95,16 @@ int	redirection_syntax(t_arg *head)
 			if (redirection_input_syntax_check(tmp))
 				return (1);
 		}
-		if (tmp->type == REDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
+		if (tmp->type == REDIRECTION_OUT)
+		{
+			if (redirection_output_syntax_check(tmp))
+				return (1);
+		}
+
+		if (tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
 		{
 			// check for no arguments before or after redirectionEDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC)
-		
+
 			// check for valid file name
 			if (tmp->next->type != WORD)
 			{

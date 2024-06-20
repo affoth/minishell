@@ -1,0 +1,19 @@
+cat < input.txt
+
+sort < unsorted.txt
+
+grep "pattern" < file.txt
+
+awk '{print $1}' < data.txt
+
+head -n 5 < largefile.txt
+
+tail -n 10 < logfile.txt
+
+wc -l < textfile.txt
+
+tr 'a-z' 'A-Z' < lowercase.txt
+
+cut -d',' -f1 < csvfile.txt
+
+uniq < duplicate.txt

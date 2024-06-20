@@ -1,0 +1,4 @@
+Output redirection: output.txt
+fd: 3
+STDOUT_FILENO: 1
+NO EXECVE COMMAND FOUND

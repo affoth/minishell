@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/19 14:22:14 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 17:53:51 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,21 @@
 
 void	handle_redirections_and_pipes(t_arg *head)
 {
+	t_arg *tmp;
+
+	tmp = head;
 	if (head == NULL)
 		return ;
 	while (head != NULL)
 	{
 		if (head->type == REDIRECTION_IN)
 		{
-			input_redirection(head);
+			input_redirection(head, tmp);
 		}
-		// else if (head->type == REDIRECTION_OUT)
-		// {
-
-		// }
+		else if (head->type == REDIRECTION_OUT)
+		{
+			output_redirection(head, tmp);
+		}
 		// else if (head->type == REDIRECTION_APPEND)
 		// {
 
@@ -43,9 +46,10 @@ void	handle_redirections_and_pipes(t_arg *head)
 	}
 }
 
-void	input_redirection(t_arg *head)
+void	input_redirection(t_arg *head, t_arg *tmp)
 {
 	int	fd;
+	int	dup2_check;
 
 	check_file_readable(head->next->arg);
 	fd = open(head->next->arg, O_RDONLY);
@@ -55,18 +59,23 @@ void	input_redirection(t_arg *head)
 		ft_gc_free();
 		exit(EXIT_FAILURE);
 	}
-	if (dup2(fd, STDIN_FILENO) == -1)
+	dup2_check = dup2(fd, STDIN_FILENO);
+	if (dup2_check == -1)
 	{
 		perror("dup2");
 		ft_gc_free();
 		exit(EXIT_FAILURE);
 	}
-	printf("Input redirection: %s\n", head->next->arg);
+	printf("\nInput redirection: %s\n", head->next->arg);
 	printf("fd: %d\n", fd);
-	printf("STDIN_FILENO: %d\n", STDIN_FILENO);
+	printf("STDIN_FILENO: %d\n\n", STDIN_FILENO);
+	//Execute command
+	redirect_execve_args(tmp);
 	// close(fd);
 }
 
+//normal error Message: bash: test.txt: Permission denied
+//bash: create.txt: No such file or directory
 void	check_file_readable(const char *filepath)
 {
 	if (access(filepath, F_OK) != 0)
@@ -84,5 +93,4 @@ void	check_file_readable(const char *filepath)
 		//return (-1);
 	}
 }
-
 

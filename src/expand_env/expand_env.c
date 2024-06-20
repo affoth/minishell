@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:25:37 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/18 19:57:44 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 21:45:14 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ char	*ft_expand_env(char *env)
 //DEL two definitions of ft_expand_env
 
 
-
+//null protection
 char	*ft_shell_strjoin(char *s1, char *s2)
 {
 	char	*newstr;
@@ -163,6 +163,8 @@ char	*ft_shell_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
 	newstr = (char *) ft_gc_malloc((ft_strlen(s1)
 				+ ft_strlen(s2) + 1) * sizeof(char));
 	if (!newstr)

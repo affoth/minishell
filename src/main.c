@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/19 17:54:53 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 21:41:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	main()
 		if (find_redirections_and_pipes(args_head))
 			handle_redirections_and_pipes(args_head);
 
-		// exec_built_ins(args_head);
-		execve_args(args_head);
+		else// exec_built_ins(args_head);
+			execve_args(args_head);
 		free(line);
 	}
 	ft_gc_free();

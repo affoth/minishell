@@ -10,6 +10,17 @@ There are three basic types of redirection operators:
 
 Examples:
 - `command > output.txt`: Redirects the output of `command` to `output.txt`, overwriting the file if it exists.
+
+Syntax:
+- command > file
+
+Behavior:
+If the file specified (file) does not exist:
+Bash will create the file.
+The output of the command will be written to the newly created file.
+If the file already exists:
+Bash will truncate the file (i.e., empty its contents) and then write the output of the command to the file.
+
 - `command >> output.txt`: Redirects the output of `command` to `output.txt`, appending the output to the end of the file if it exists.
 - `command < input.txt`: Redirects the input of `command` from `input.txt`.
 
