@@ -5,10 +5,12 @@
 #                                                     +:+ +:+         +:+      #
 #    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/15 14:48:44 by afoth             #+#    #+#              #
-#    Updated: 2024/05/23 15:09:44 by afoth            ###   ########.fr        #
+#    Created: 2024/06/21 13:21:45 by afoth             #+#    #+#              #
+#    Updated: 2024/06/21 13:21:46 by afoth            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+
 
 NAME			= push_swap
 CC				= cc
@@ -31,7 +33,7 @@ $(NAME): $(LIBFT) $(SRCS)
 $(OBJDIR)%.o: %.c
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
-	
+
 $(LIBFT):
 	$(MAKE) -s -C libft all
 
