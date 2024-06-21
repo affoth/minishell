@@ -6,50 +6,40 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/18 19:59:56 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/21 16:11:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Function to expand environment variable
-// char *ft_expand_env(char *env)
-// {
-// 	char *temp;
+char *ft_expand_env(char *env)
+{
+	char *temp;
 
-// 	temp = getenv(env);
-// 	if (temp != NULL)
-// 	{
-// 		return ft_shell_strdup(temp);
-// 	}
-// 	else
-// 	{
-// 		return ft_shell_strdup(""); // Return an empty string if the variable is not set
-// 	}
-// }
-//DEL two definitions of ft_expand_env
+	temp = getenv(env);
+	if (temp != NULL)
+	{
+		return ft_shell_strdup(temp);
+	}
+	else
+	{
+		return ft_shell_strdup(""); // Return an empty string if the variable is not set
+	}
+}
 
-// Helper function to extract a substring from a string
-// char *ft_shell_substr(char const *s, unsigned int start, size_t len)
-// {
-// 	char *sub;
-// 	size_t i;
+int check_if_in_single_quote(char *input, size_t i)
+{
+	size_t j = 0;
 
-// 	if (!s)
-// 		return (NULL);
-// 	if (start >= ft_strlen(s))
-// 		return (ft_shell_strdup(""));
-// 	if (!(sub = (char *)ft_gc_malloc(sizeof(char) * (len + 1))))
-// 		return (NULL);
-// 	i = 0;
-// 	while (i < len && s[start + i])
-// 	{
-// 		sub[i] = s[start + i];
-// 		i++;
-// 	}
-// 	sub[i] = '\0';
-// 	return (sub);
-// }
+	while (j < i)
+	{
+		if (input[j] == '\'')
+			return (1);
+		j++;
+	}
+	return (0);
+}
 
 // Function to calculate the length of the expanded string
 size_t calculate_expanded_length(char *input)
@@ -103,7 +93,7 @@ char *expand_string(char *input)
 	j = 0;
 	while (input[i])
 	{
-		if (input[i] == '$')
+		if (input[i] == '$' && check_if_in_single_quote(input, i) == 0)
 		{
 			size_t start = i + 1;
 			while (input[start] && (isalnum(input[start]) || input[start] == '_'))

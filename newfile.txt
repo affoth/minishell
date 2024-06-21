@@ -1,0 +1,8 @@
+Output redirection: newfile.txt
+fd: 5
+STDOUT_FILENO: 1
+args[0]: ls
+args[1]: -l
+args[2]: newfile.txt
+path: /usr/bin/ls
+-rw-r--r-- 1 afoth 2023_berlin 118 Jun 21 15:35 newfile.txt

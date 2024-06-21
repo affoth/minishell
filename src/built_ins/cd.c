@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 22:23:37 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:28:27 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,5 @@ void built_in_cd(t_arg *args_head, char ***env)
 
 	// update oldpwd
 	*env = change_or_add_env_var(ft_strjoin("OLDPWD=", oldpwd), *env);
+	*env = change_or_add_env_var(ft_strjoin("PWD=", getcwd(NULL, 0)), *env);
 }

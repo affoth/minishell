@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 23:36:27 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/21 15:40:27 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int		syntax_checker(t_arg *head);
 //added by afoth
 char	*ft_expand_env(char *env);
 void	handle_expansions(t_arg *head);
-void	memory_error(void);
+void	memory_error(char *message);
 int		find_end_of_env_in_quotes(char *arg, int i);
 char	*ft_shell_strjoin(char *s1, char *s2);
 char	*ft_shell_substr(const char *s, unsigned int start, size_t len);
