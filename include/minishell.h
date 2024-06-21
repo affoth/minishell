@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/21 15:40:27 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/21 16:30:30 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	*ft_shell_calloc(size_t count, size_t size);
 //redirections and pipes
 void	handle_redirections_and_pipes(t_arg *head);
 void	input_redirection(t_arg *head, t_arg *tmp);
-void	check_file_readable(const char *filepath);
+int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);
 void	append_redirection(t_arg *head);
 void	heredoc(t_arg *head);

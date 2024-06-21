@@ -43,16 +43,11 @@ int	redirection_input_syntax_check(t_arg *tmp)
 		printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
 		return (1);
 	}
-	if (access(tmp->next->arg, F_OK) != 0)
-	{
-		printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
-		return (1);
-	}
-	if (access(tmp->next->arg, F_OK) != 0)
-	{
-		printf("redirection input error: file `%s' does not exist\n", tmp->next->arg);
-		return (1);
-	}
+	// if (access(tmp->next->arg, F_OK) != 0)
+	// {
+	// 	printf("redirection input error: no valid file name after redirection `%s'\n", tmp->arg);
+	// 	return (1);
+	// }
 	if (tmp->prev->type != WORD)
 	{
 		printf("redirection input error: no valid argument before redirection `%s'\n", tmp->arg);

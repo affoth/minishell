@@ -1,8 +1,8 @@
 Output redirection: output.txt
-fd: 4
+fd: 3
 STDOUT_FILENO: 1
-args[0]: ls
+args[0]: wc
 args[1]: -l
 args[2]: output.txt
-path: /usr/bin/ls
--rw-r--r-- 1 afoth 2023_berlin 116 Jun 21 15:34 output.txt
+path: /usr/bin/wc
+7 output.txt
