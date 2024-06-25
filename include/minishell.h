@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/21 16:30:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/25 14:46:33 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,5 +146,9 @@ void	built_in_exit(t_arg *args_head);
 void	execve_args(t_arg *args_head);
 char	*get_path(char *cmd);
 int		count_arguments(t_arg *args_head);
+
+//signals
+void	signal_init();
+void	sigint_handler(int signal);
 
 #endif
