@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/21 16:30:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/25 23:27:42 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,16 +116,19 @@ char	*ft_shell_substr(const char *s, unsigned int start, size_t len);
 void	*ft_shell_calloc(size_t count, size_t size);
 
 //redirections and pipes
-void	handle_redirections_and_pipes(t_arg *head);
+void	handle_redirections_and_pipes(t_arg *head_position);
 void	input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);
 void	append_redirection(t_arg *head);
 void	heredoc(t_arg *head);
-void	pipe_redirection(t_arg *head);
+void	pipe_redirection(t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
 int		redirec_count_arguments(t_arg *args_head);
 void	redirect_execve_args(t_arg *args_head);
+int		count_pipes(t_arg *head);
+void	single_pipe(t_arg *head,t_arg *tmp);
+void	multiple_pipes(t_arg *head, t_arg *tmp);
 
 //built_ins
 void	exec_built_ins(t_arg *args_head);

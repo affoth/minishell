@@ -6,29 +6,29 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/21 16:41:03 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/25 23:24:50 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-void	handle_redirections_and_pipes(t_arg *head)
+void	handle_redirections_and_pipes(t_arg *head_position)
 {
-	t_arg *tmp;
+	t_arg	*head_of_struct;
 
-	tmp = head;
-	if (head == NULL)
+	head_of_struct = head_position;
+	if (head_position == NULL)
 		return ;
-	while (head != NULL)
+	while (head_position != NULL)
 	{
-		if (head->type == REDIRECTION_IN)
+		if (head_position->type == REDIRECTION_IN)
 		{
-			input_redirection(head, tmp);
+			input_redirection(head_position, head_of_struct);
 		}
-		else if (head->type == REDIRECTION_OUT)
+		else if (head_position->type == REDIRECTION_OUT)
 		{
-			output_redirection(head, tmp);
+			output_redirection(head_position, head_of_struct);
 		}
 		// else if (head->type == REDIRECTION_APPEND)
 		// {
@@ -38,11 +38,12 @@ void	handle_redirections_and_pipes(t_arg *head)
 		// {
 
 		// }
-		// else if (head->type == PIPE)
-		// {
+		else if (head_position->type == PIPE)
+		{
+			pipe_redirection(head_position, head_of_struct);
+		}
 
-		// }
-		head = head->next;
+		head_position = head_position->next;
 	}
 }
 

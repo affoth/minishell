@@ -1,0 +1,6 @@
+all the error statements are wrong and need to be fixed
+
+closing open fd
+
+https://www.youtube.com/watch?v=6xbLgZpOBi8
+
