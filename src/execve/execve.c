@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 22:31:56 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/20 23:22:42 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void execve_args(t_arg *args_head)
 	path = get_path(args[0]);
 	if (!path)
 	{
-		ft_printf("NO EXECVE COMMAND FOUND\n");
 		return;
 	}
 	pid = fork();

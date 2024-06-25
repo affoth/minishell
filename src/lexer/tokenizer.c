@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/22 17:08:45 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/18 18:47:56 by afoth            ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/06/20 23:21:59 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #include "../../include/minishell.h"
@@ -203,6 +204,5 @@ t_arg *tokenizer(char *line)
 		return NULL;
 	}
 	print_args(args_head);
-	handle_expansions(args_head);//DEL
 	return 	args_head;
 }

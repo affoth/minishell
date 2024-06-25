@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/20 22:34:15 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/21 16:59:56 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int redirect_count_arguments(t_arg *args_head)
 	int count = 0;
 	while (args_head)
 	{
-		if (args_head->type != WORD && args_head->type != DOUBLE_QUOTED_STRING && args_head->type != SINGLE_QUOTED_STRING)
+		if (args_head->type == REDIRECTION_IN || args_head->type == REDIRECTION_OUT || args_head->type == REDIRECTION_APPEND || args_head->type == HEREDOC || args_head->type == PIPE)
 			return count;
 		count++;
 		args_head = args_head->next;
@@ -41,6 +41,8 @@ void redirect_execve_args(t_arg *args_head)
 	args = (char **)ft_gc_malloc(sizeof(char *) * (argc + 1));
 	while (args_head)
 	{
+		if (args_head->type == REDIRECTION_IN || args_head->type == REDIRECTION_OUT || args_head->type == REDIRECTION_APPEND || args_head->type == HEREDOC || args_head->type == PIPE)
+			break;
 		if (args_head->type == WORD || args_head->type == DOUBLE_QUOTED_STRING || args_head->type == SINGLE_QUOTED_STRING)
 		{
 			args[i] = ft_shell_strdup(args_head->arg);

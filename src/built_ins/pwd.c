@@ -6,11 +6,12 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:05:32 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/03 19:58:42 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/20 21:52:40 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 void built_in_pwd(void)
 {
