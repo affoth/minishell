@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/26 13:49:51 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 16:31:45 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,6 @@ t_arg *tokenizer(char *line)
 		add_arg_to_list(&args_head, split_args[i]);
 		i++;
 	}
-
 	// Syntax check the list FOR OPERATORS aka. types PIPE, AND, OR, REDIRECTION_OUT, REDIRECTION_IN, REDIRECTION_APPEND, HEREDOC
 	if (syntax_checker(args_head) == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/26 15:03:16 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/26 16:39:00 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	main()
 			continue;
 		add_history(expanded);
 		args_head = tokenizer(expanded);
+		if (!args_head)
+			continue;
 		if (find_redirections_and_pipes(args_head))
 			handle_redirections_and_pipes(args_head);
 		else
