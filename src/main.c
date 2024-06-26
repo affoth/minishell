@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/21 15:44:32 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 14:54:22 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ int	main()
 
 		args_head = tokenizer(expanded);
 		if (find_redirections_and_pipes(args_head))
-			handle_redirections_and_pipes(args_head);
-		else if (args_head)
-		{
-			exec_built_ins(args_head);
-		}
+			handle_redirections_and_pipes(args_head); // rename to advanced_exec
 		else
+		{
+			exec_built_ins(args_head); // can be added into simple_exec
 			execve_args(args_head);
+		}
 		free(line);
 	}
 	ft_gc_free();

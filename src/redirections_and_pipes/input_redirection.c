@@ -6,29 +6,29 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/25 23:24:50 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 14:15:11 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-void	handle_redirections_and_pipes(t_arg *head_position)
+void	handle_redirections_and_pipes(t_arg *tmp_position)
 {
 	t_arg	*head_of_struct;
 
-	head_of_struct = head_position;
-	if (head_position == NULL)
+	head_of_struct = tmp_position;
+	if (tmp_position == NULL)
 		return ;
-	while (head_position != NULL)
+	while (tmp_position != NULL)
 	{
-		if (head_position->type == REDIRECTION_IN)
+		if (tmp_position->type == REDIRECTION_IN)
 		{
-			input_redirection(head_position, head_of_struct);
+			input_redirection(tmp_position, head_of_struct);
 		}
-		else if (head_position->type == REDIRECTION_OUT)
+		else if (tmp_position->type == REDIRECTION_OUT)
 		{
-			output_redirection(head_position, head_of_struct);
+			output_redirection(tmp_position, head_of_struct);
 		}
 		// else if (head->type == REDIRECTION_APPEND)
 		// {
@@ -38,12 +38,12 @@ void	handle_redirections_and_pipes(t_arg *head_position)
 		// {
 
 		// }
-		else if (head_position->type == PIPE)
+		else if (tmp_position->type == PIPE)
 		{
-			pipe_redirection(head_position, head_of_struct);
+			pipe_redirection(tmp_position, head_of_struct);
 		}
 
-		head_position = head_position->next;
+		tmp_position = tmp_position->next;
 	}
 }
 

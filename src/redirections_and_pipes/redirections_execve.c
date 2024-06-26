@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/21 16:59:56 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 14:37:02 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void redirect_execve_args(t_arg *args_head)
 		if (args_head->type == WORD || args_head->type == DOUBLE_QUOTED_STRING || args_head->type == SINGLE_QUOTED_STRING)
 		{
 			args[i] = ft_shell_strdup(args_head->arg);
-			printf("args[%d]: %s\n", i, args[i]);
 			i++;
 		}
 		args_head = args_head->next;
