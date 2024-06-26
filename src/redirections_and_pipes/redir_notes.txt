@@ -4,3 +4,8 @@ closing open fd
 
 https://www.youtube.com/watch?v=6xbLgZpOBi8
 
+ls | wc -l
+ls -l | grep ".txt"
+ls non_existent_directory | wc -l
+find / | head -n 10
+non_existent_command | wc -l
