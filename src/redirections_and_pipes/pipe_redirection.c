@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/26 14:45:13 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 16:48:59 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,25 @@ void single_pipe(t_arg *head, t_arg *tmp)
 	if (pid1 == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+		{
+			close(fd[0]);
+			close(fd[1]);
+			perror("dup2");
+			return ;
+		}
 		close(fd[0]);
 		close(fd[1]);
 		redirect_execve_args(tmp);
 		exit(0);
 	}
 	if (pid1 > 0)
+	{
 		printf("\nchild1\n");
+		printf("pid1: %d\n", pid1);
+	}
 	waitpid(pid1, NULL, 0);
+	close(fd[1]);
 	pid2 = fork();
 	if (pid2 == -1)
 	{
@@ -68,82 +79,25 @@ void single_pipe(t_arg *head, t_arg *tmp)
 	if (pid2 == 0)
 	{
 		dup2(fd[0], STDIN_FILENO);
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+		{
+			close(fd[0]);
+			close(fd[1]);
+			perror("dup2");
+			return ;
+		}
 		close(fd[0]);
 		close(fd[1]);
 		redirect_execve_args(head->next);
+		exit(0);
 	}
 	if (pid2 > 0)
+	{
 		printf("\nchild2\n");
+		printf("pid2: %d\n", pid2);
+	}
 	//make sure to close the pipes in the parent process
 	close(fd[0]);
-	close(fd[1]);
 	waitpid(pid2, NULL, 0);
 }
 
-/* void single_pipe(t_arg *head, t_arg *tmp)
-{
-    int     fd[2];
-    pid_t   pid1;
-    pid_t   pid2;
-
-    if (pipe(fd) == -1)
-    {
-        perror("pipe");
-        return ;
-    }
-
-    pid1 = fork();
-    if (pid1 == -1)
-    {
-        perror("fork");
-        close(fd[0]);
-        close(fd[1]);
-        return ;
-    }
-
-    if (pid1 == 0)
-    {
-        printf("\nchild1\n");
-        if (dup2(fd[1], STDOUT_FILENO) == -1)
-        {
-            perror("dup2");
-            exit(1);
-        }
-        close(fd[0]);
-        close(fd[1]);
-        redirect_execve_args(tmp);
-        perror("execve"); // In case execve fails
-        exit(1);
-    }
-
-    pid2 = fork();
-    if (pid2 == -1)
-    {
-        perror("fork");
-        close(fd[0]);
-        close(fd[1]);
-        waitpid(pid1, NULL, 0); // Clean up the first child
-        return ;
-    }
-
-    if (pid2 == 0)
-    {
-        printf("\nchild2\n");
-        if (dup2(fd[0], STDIN_FILENO) == -1)
-        {
-            perror("dup2");
-            exit(1);
-        }
-        close(fd[0]);
-        close(fd[1]);
-        redirect_execve_args(head);
-        perror("execve"); // In case execve fails
-        exit(1);
-    }
-
-    // Parent process should close pipe fds
-    close(fd[0]);
-    close(fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
-} */

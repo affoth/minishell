@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 23:22:42 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 17:13:18 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char *get_path(char *cmd)
 		path = ft_shell_strjoin(path_tmp, cmd);
 		if (access(path, F_OK) == 0)
 		{
-			ft_printf("path: %s\n", path);
+			// ft_printf("path: %s\n", path);
 			return (path);
 		}
 		i++;
