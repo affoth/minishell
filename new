@@ -1,0 +1,5 @@
+Output redirection: new
+fd: 7
+STDOUT_FILENO: 1
+args[0]: cat
+path: /usr/bin/cat

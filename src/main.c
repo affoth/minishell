@@ -3,40 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/26 14:54:22 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 15:03:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+//getting input and making sure that no input gives new prompt or exits (ctrl+d)
+char	*get_input()
+{
+	char	*line;
+
+	line = readline("minishell$ ");
+	 if (line == NULL)
+	{
+		printf("exit\n");
+		exit(0);
+	}
+	if (*line == '\0')
+	{
+		free(line);
+		return NULL;
+	}
+	return (line);
+}
 //main minishell
 int	main()
 {
-	char	*line;
+	char	*input;
 	char	*expanded;
 	t_arg	*args_head; // Declare args_head here
 
+	signal_init();
 	while (1)
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		add_history(line);
-		expanded = expand_string(line);
-		ft_printf("Expanded: %s\n", expanded);
-
+		input = get_input();
+		expanded = expand_string(input);
+		if (!expanded)
+			continue;
+		add_history(expanded);
 		args_head = tokenizer(expanded);
 		if (find_redirections_and_pipes(args_head))
-			handle_redirections_and_pipes(args_head); // rename to advanced_exec
+			handle_redirections_and_pipes(args_head);
 		else
 		{
-			exec_built_ins(args_head); // can be added into simple_exec
+			exec_built_ins(args_head);
 			execve_args(args_head);
 		}
-		free(line);
+		free(input);
+		free(expanded);
 	}
 	ft_gc_free();
 	rl_clear_history();

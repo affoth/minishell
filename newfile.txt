@@ -6,3 +6,4 @@ args[1]: -l
 args[2]: newfile.txt
 path: /usr/bin/ls
 -rw-r--r-- 1 afoth 2023_berlin 118 Jun 21 15:35 newfile.txt
+
