@@ -3,21 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 23:22:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 15:39:34 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+void	ft_swap(char **a, char **b)
+{
+	char *temp = *a;
+	*a = *b;
+	*b = temp;
+}
+void	ft_sort(char **env, int len)
+{
+	int i;
+	int j;
+	int min_idx;
+
+	i = 0;
+	while (i < len - 1)
+	{
+		min_idx = i;
+		j = i + 1;
+		while (j < len)
+		{
+			if (ft_strcmp(env[j], env[min_idx]) < 0)
+			{
+				min_idx = j;
+			}
+			j++;
+		}
+		ft_swap(&env[i], &env[min_idx]);
+		i++;
+	}
+
+}
+
 void print_export_env(char **env)
 {
-	while (*env)
+	int		env_len;
+	char	**sorted_env;
+	int		i;
+
+	env_len = ft_env_len(env);
+	sorted_env = (char **)ft_gc_malloc(sizeof(char *) * (env_len + 1));
+	i = 0;
+	while (i < env_len) {
+		sorted_env[i] = ft_strdup(env[i]);
+		i++;
+	}
+	sorted_env[env_len] = NULL; // Null-terminate the array
+
+	// Sort the sorted_env array alphabetically using selection sort
+	ft_sort(sorted_env, env_len);
+	i = 0;
+	while (i < env_len)
 	{
-		ft_printf("declare -x %s\n", *env);
-		env++;
+		ft_printf("declare -x %s\n", sorted_env[i]);
+		i++;
 	}
 }
 
