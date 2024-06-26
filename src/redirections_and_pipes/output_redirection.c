@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/20 21:31:18 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/26 17:11:14 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	output_redirection(t_arg *head, t_arg *tmp)
 	int	dup2_check;
 
 	//check_file_writable(head->next->arg);
-	printf("\n Output redirection: %s\n", head->next->arg);
 	fd = open(head->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
@@ -56,9 +55,9 @@ void	output_redirection(t_arg *head, t_arg *tmp)
 		ft_gc_free();
 		exit(EXIT_FAILURE);
 	}
-	printf("Output redirection: %s\n", head->next->arg);
-	printf("fd: %d\n", fd);
-	printf("STDOUT_FILENO: %d\n", STDOUT_FILENO);
+	// printf("Output redirection: %s\n", head->next->arg);
+	// printf("fd: %d\n", fd);
+	// printf("STDOUT_FILENO: %d\n", STDOUT_FILENO);
 	//Execute command
 	redirect_execve_args(tmp);
 	dup2(stdout_save, STDOUT_FILENO);

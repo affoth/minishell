@@ -1,21 +1,21 @@
-Makefile
-OPERATOR_LIST.txt
-README.md
-TASK_LIST.txt
 changes.patch
 createdbymini.txt
 ewetwer
 include
 libft copy
 libs
+Makefile
 minishell
 new
 newfile.txt
 obj
+OPERATOR_LIST.txt
 orga
-output.txt
 output2.txt
+output.txt
+README.md
 retrwe
 src
+TASK_LIST.txt
 tesfiles
 test.txt
