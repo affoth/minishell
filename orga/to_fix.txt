@@ -1,5 +1,4 @@
 
-IF SYNTAX CHECKER DOES NOT PASS IT SEGFAULTS
 echo "HELLO!" > outputtest.txt
 Expanded: echo "HELLO!" > outputtest.txt
 redirection output error: no argument before redirection `>'
