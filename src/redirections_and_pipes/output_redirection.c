@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/26 17:11:14 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 13:44:55 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,17 @@ void	output_redirection(t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
+	int stdout_save;
 
 	//check_file_writable(head->next->arg);
-	fd = open(head->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(head->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
 		perror("open");
 		ft_gc_free();
 		exit(EXIT_FAILURE);
 	}
-	int stdout_save = dup(STDOUT_FILENO);
+	stdout_save = dup(STDOUT_FILENO);
 	dup2_check = dup2(fd, STDOUT_FILENO);
 	if (dup2_check == -1)
 	{

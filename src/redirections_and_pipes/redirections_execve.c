@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/26 14:37:02 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 13:48:19 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void redirect_execve_args(t_arg *args_head)
 	path = get_path(args[0]);
 	if (!path)
 	{
-		ft_printf("NO EXECVE COMMAND FOUND\n");
+		perror("NO EXECVE COMMAND FOUND\n");
 		return;
 	}
 	pid = fork();

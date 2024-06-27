@@ -1,6 +1,0 @@
-
-echo "HELLO!" > outputtest.txt
-Expanded: echo "HELLO!" > outputtest.txt
-redirection output error: no argument before redirection `>'
-Syntax checker not passed
-[1]    135049 segmentation fault (core dumped)  ./minishell
