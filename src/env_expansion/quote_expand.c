@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/21 16:11:17 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 19:51:10 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,3 @@ char *expand_string(char *input)
 	result[j] = '\0';
 	return result;
 }
-

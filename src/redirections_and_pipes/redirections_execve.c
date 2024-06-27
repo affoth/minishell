@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_execve.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 13:48:19 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 19:34:42 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 // Function to count the number of arguments in args_head
 int redirect_count_arguments(t_arg *args_head)
@@ -19,7 +18,9 @@ int redirect_count_arguments(t_arg *args_head)
 	int count = 0;
 	while (args_head)
 	{
-		if (args_head->type == REDIRECTION_IN || args_head->type == REDIRECTION_OUT || args_head->type == REDIRECTION_APPEND || args_head->type == HEREDOC || args_head->type == PIPE)
+		if (args_head->type == REDIRECTION_IN || args_head->type == REDIRECTION_OUT ||
+			args_head->type == REDIRECTION_APPEND || args_head->type == HEREDOC ||
+			args_head->type == PIPE)
 			return count;
 		count++;
 		args_head = args_head->next;
@@ -37,33 +38,46 @@ void redirect_execve_args(t_arg *args_head)
 	int argc;
 
 	argc = redirect_count_arguments(args_head);
-	i = 0;
 	args = (char **)ft_gc_malloc(sizeof(char *) * (argc + 1));
-	while (args_head)
+	i = 0;
+	while (args_head && i < argc)
 	{
-		if (args_head->type == REDIRECTION_IN || args_head->type == REDIRECTION_OUT || args_head->type == REDIRECTION_APPEND || args_head->type == HEREDOC || args_head->type == PIPE)
-			break;
-		if (args_head->type == WORD || args_head->type == DOUBLE_QUOTED_STRING || args_head->type == SINGLE_QUOTED_STRING)
+		if (args_head->type == WORD || args_head->type == DOUBLE_QUOTED_STRING ||
+			args_head->type == SINGLE_QUOTED_STRING)
 		{
-			args[i] = ft_shell_strdup(args_head->arg);
+			args[i] = ft_shell_strdup(remove_quotes(args_head->arg));
 			i++;
 		}
 		args_head = args_head->next;
 	}
 	args[i] = NULL;
+
 	path = get_path(args[0]);
 	if (!path)
 	{
-		perror("NO EXECVE COMMAND FOUND\n");
+		fprintf(stderr, "Command not found: %s\n", args[0]);
 		return;
 	}
+
 	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return;
+	}
+
 	if (pid == 0)
 	{
-		execve(path, args, NULL);
+		// In child process
+		if (execve(path, args, environ) == -1) // Use 'environ' to pass environment variables
+		{
+			perror("execve");
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 	{
+		// In parent process
 		waitpid(pid, NULL, 0);
 	}
 }

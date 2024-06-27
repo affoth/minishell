@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 21:57:52 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 22:37:23 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == HEREDOC)
 		{
-			heredoc(tmp_position, head_of_struct);
+			heredoc(tmp_position);
 		}
 		else if (tmp_position->type == PIPE)
 		{

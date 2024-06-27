@@ -4,7 +4,7 @@ tr 'a-z' 'A-Z' < output.txt
 
 cat < output.txt | wc
 ls -l | grep ".txt"
-find / | head -n 10
+find / | head -n 10 BACKSLASH IS NOT REQUIRED
 non_existent_command | wc -l
 $'test\n\n\nhi'
 
