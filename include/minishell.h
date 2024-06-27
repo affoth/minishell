@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 22:32:31 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 22:42:13 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,8 @@ int		syntax_checker(t_arg *head);
 
 //added by afoth
 char	*ft_expand_env(char *env);
-void	handle_expansions(t_arg *head);
-void	memory_error(char *message);
-int		find_end_of_env_in_quotes(char *arg, int i);
 char	*ft_shell_strjoin(char *s1, char *s2);
 char	*ft_shell_substr(const char *s, unsigned int start, size_t len);
-void	*ft_shell_calloc(size_t count, size_t size);
 
 //redirections and pipes
 void	handle_redirection_or_pipe(t_arg *head_position);
@@ -124,7 +120,7 @@ void	input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);
 void	append_redirection(t_arg *head, t_arg *tmp);
-void	heredoc(t_arg *head);
+void	heredoc(t_arg *head, t_arg *tmp);
 void	pipe_redirection(t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);
