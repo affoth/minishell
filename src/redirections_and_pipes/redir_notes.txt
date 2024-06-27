@@ -9,3 +9,8 @@ ls -l | grep ".txt"
 ls non_existent_directory | wc -l
 find / | head -n 10
 non_existent_command | wc -l
+
+FAILED TEST
+ls -l | grep ".txt"
+find / | head -n 10
+non_existent_command | wc -l

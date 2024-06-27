@@ -3,49 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   input_redirection.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/26 15:04:00 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 13:31:55 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-void	handle_redirections_and_pipes(t_arg *tmp_position)
-{
-	t_arg	*head_of_struct;
 
-	head_of_struct = tmp_position;
-	if (tmp_position == NULL)
-		return ;
-	while (tmp_position != NULL)
-	{
-		if (tmp_position->type == REDIRECTION_IN)
-		{
-			input_redirection(tmp_position, head_of_struct);
-		}
-		else if (tmp_position->type == REDIRECTION_OUT)
-		{
-			output_redirection(tmp_position, head_of_struct);
-		}
-		// else if (head->type == REDIRECTION_APPEND)
-		// {
-
-		// }
-		// else if (head->type == HEREDOC)
-		// {
-
-		// }
-		else if (tmp_position->type == PIPE)
-		{
-			pipe_redirection(tmp_position, head_of_struct);
-		}
-
-		tmp_position = tmp_position->next;
-	}
-}
 
 void	input_redirection(t_arg *head, t_arg *tmp)
 {

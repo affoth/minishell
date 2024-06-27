@@ -1,21 +1,3 @@
-changes.patch
-createdbymini.txt
-ewetwer
-include
-libft copy
-libs
-Makefile
-minishell
-new
-newfile.txt
-obj
-OPERATOR_LIST.txt
-orga
-output2.txt
-output.txt
-README.md
-retrwe
-src
-TASK_LIST.txt
-tesfiles
-test.txt
+               total        used        free      shared  buff/cache   available
+Mem:        16048300     4443088     5628388      804316     5976824    10448960
+Swap:        4194300           0     4194300

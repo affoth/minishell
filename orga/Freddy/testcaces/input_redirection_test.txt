@@ -17,3 +17,8 @@ tr 'a-z' 'A-Z' < lowercase.txt
 cut -d',' -f1 < csvfile.txt
 
 uniq < duplicate.txt
+
+FAILED TEST:
+awk '{print $1}' < output.txt
+tr 'a-z' 'A-Z' < output.txt
+cat < output.txt | wc

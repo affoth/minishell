@@ -6,11 +6,45 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/25 23:04:23 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 13:46:32 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void	handle_redirections_and_pipes(t_arg *tmp_position)
+{
+	t_arg	*head_of_struct;
+
+	head_of_struct = tmp_position;
+	if (tmp_position == NULL)
+		return ;
+	while (tmp_position != NULL)
+	{
+		if (tmp_position->type == REDIRECTION_IN)
+		{
+			input_redirection(tmp_position, head_of_struct);
+		}
+		else if (tmp_position->type == REDIRECTION_OUT)
+		{
+			output_redirection(tmp_position, head_of_struct);
+		}
+		else if (tmp_position->type == REDIRECTION_APPEND)
+		{
+			append_redirection(tmp_position, head_of_struct);
+		}
+		// else if (head->type == HEREDOC)
+		// {
+
+		// }
+		else if (tmp_position->type == PIPE)
+		{
+			pipe_redirection(tmp_position, head_of_struct);
+		}
+
+		tmp_position = tmp_position->next;
+	}
+}
 
 int	find_redirections_and_pipes(t_arg *head)
 {

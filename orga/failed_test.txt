@@ -1,0 +1,12 @@
+FAILED TEST
+awk '{print $1}' < output.txt
+tr 'a-z' 'A-Z' < output.txt
+
+cat < output.txt | wc
+ls -l | grep ".txt"
+find / | head -n 10
+non_existent_command | wc -l
+$'test\n\n\nhi'
+
+var="world"
+echo $var
