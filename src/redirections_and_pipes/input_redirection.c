@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:56:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 22:10:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	input_redirection(t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
-	int stdin_save
+	int stdin_save;
 
 	if (!check_file_readable(head->next->arg))
 	{
@@ -51,6 +51,7 @@ void	input_redirection(t_arg *head, t_arg *tmp)
 		close(fd);
 	}
 }
+
 
 //normal error Message: bash: test.txt: Permission denied
 //bash: create.txt: No such file or directory

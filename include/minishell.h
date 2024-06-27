@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 20:16:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 21:57:40 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,8 @@ void	pipe_redirection(t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);
 void	redirect_execve_args(t_arg *args_head);
-int		count_pipes(t_arg *head);
-void	single_pipe(t_arg *head,t_arg *tmp);
-void	multiple_pipes(t_arg *head, t_arg *tmp);
+void	multiple_redirections(t_arg *head);
+void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg);
 
 //built_ins
 void	exec_built_ins(t_arg *args_head);

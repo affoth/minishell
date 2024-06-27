@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:59:46 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 21:56:21 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,6 @@
 
 //what return type should be?
 void	pipe_redirection(t_arg *head, t_arg *tmp)
-{
-	if (count_pipes(head) > 1)
-	{
-		//mutiple_pipes(head, tmp);
-	}
-	else
-	{
-		single_pipe(head, tmp);
-	}
-
-}
-void single_pipe(t_arg *head, t_arg *tmp)
 {
 	int		fd[2];
 	pid_t	pid1;

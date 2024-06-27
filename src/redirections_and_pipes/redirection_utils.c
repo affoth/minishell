@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 20:15:04 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 21:57:52 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,19 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 
 int	find_redirections_and_pipes(t_arg *head)
 {
+	int	count;
+
+	count = 0;
 	while (head != NULL)
 	{
 		if (head->type == REDIRECTION_IN || head->type == REDIRECTION_OUT || head->type == REDIRECTION_APPEND || head->type == HEREDOC || head->type == PIPE)
-			return (1);
+			count++;
 		head = head->next;
 	}
-	return (0);
+	return (count);
 }
 
-int	count_pipes(t_arg *head)
+/* int	count_pipes(t_arg *head)
 {
 	int	count;
 
@@ -68,7 +71,7 @@ int	count_pipes(t_arg *head)
 		head = head->next;
 	}
 	return (count);
-}
+} */
 // void check_file_access(const char *filepath) {
 //     if (access(filepath, F_OK) == 0) {
 //         printf("File exists.\n");
