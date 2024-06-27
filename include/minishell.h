@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 22:42:13 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 22:48:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	multiple_redirections(t_arg *head);
 void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg);
 
 //built_ins
-int		is_built_in(t_arg *args_head);
+int		is_built_in(char *cmd);
 void	exec_built_ins(t_arg *args_head);
 void	built_in_cd(t_arg *args_head, char ***env);
 void	built_in_pwd(void);
