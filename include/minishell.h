@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 13:46:03 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 15:54:25 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_arg
 	enum TokenType type;
 	struct s_arg *prev;
 	struct s_arg *next;
+	int exit_status;
 } t_arg;
 
 // Token struct
@@ -121,10 +122,10 @@ void	input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);
 void	append_redirection(t_arg *head, t_arg *tmp);
-void	heredoc(t_arg *head);
+void	heredoc(t_arg *head, t_arg *tmp);
 void	pipe_redirection(t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
-int		redirec_count_arguments(t_arg *args_head);
+int		redirect_count_arguments(t_arg *args_head);
 void	redirect_execve_args(t_arg *args_head);
 int		count_pipes(t_arg *head);
 void	single_pipe(t_arg *head,t_arg *tmp);

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/26 16:31:45 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 16:16:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,15 @@ TokenType get_token_type(char *arg)
 	i = 0;
 	while (typeMap[i].arg != NULL)
 	{
+		// heredoc and append redirections are special case
+		if (ft_strcmp(arg, "<<") == 0)
+		{
+			return HEREDOC;
+		}
+		if (ft_strcmp(arg, ">>") == 0)
+		{
+			return REDIRECTION_APPEND;
+		}
 		// Check if the token string is a substring of the argument
 		if (ft_strnstr(arg, typeMap[i].arg, ft_strlen(arg)) != NULL)
 		{

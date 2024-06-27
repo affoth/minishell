@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   append_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 22:59:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 13:33:32 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:11:00 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ void	append_redirection(t_arg *head, t_arg *tmp)
 	//Execute command
 	redirect_execve_args(tmp);
 	dup2(stdout_save, STDOUT_FILENO);
-	close(stdout_save);
-	// close(fd);
+	// close(stdout_save);
+	close(fd);
 }

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/26 17:22:07 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 15:39:35 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ char	*get_input()
 	char	*line;
 
 	line = readline("minishell$ ");
-	 if (line == NULL)
+	add_history(line);
+	if (line == NULL)
 	{
 		printf("exit\n");
 		exit(0);
@@ -44,7 +45,6 @@ int	main()
 		expanded = expand_string(input);
 		if (!expanded)
 			continue;
-		add_history(expanded);
 		args_head = tokenizer(expanded);
 		if (!args_head)
 			continue;
