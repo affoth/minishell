@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:06:04 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 17:18:36 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	handle_redirections_and_pipes(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == HEREDOC)
 		{
-			heredoc(tmp_position, head_of_struct);
+			heredoc(tmp_position);
 		}
 		else if (tmp_position->type == PIPE)
 		{

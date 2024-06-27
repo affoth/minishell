@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 15:54:25 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 22:26:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # include <readline/history.h>   // GNU Readline Library
 
 # include <termios.h>    // POSIX Terminal I/O Library
+
+extern char **environ;
 
 typedef enum TokenType
 {
@@ -122,7 +124,7 @@ void	input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);
 void	append_redirection(t_arg *head, t_arg *tmp);
-void	heredoc(t_arg *head, t_arg *tmp);
+void	heredoc(t_arg *head);
 void	pipe_redirection(t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);
@@ -132,6 +134,7 @@ void	single_pipe(t_arg *head,t_arg *tmp);
 void	multiple_pipes(t_arg *head, t_arg *tmp);
 
 //built_ins
+int		is_built_in(t_arg *args_head);
 void	exec_built_ins(t_arg *args_head);
 void	built_in_cd(t_arg *args_head, char ***env);
 void	built_in_pwd(void);
@@ -150,6 +153,8 @@ void	built_in_exit(t_arg *args_head);
 void	execve_args(t_arg *args_head);
 char	*get_path(char *cmd);
 int		count_arguments(t_arg *args_head);
+char	*remove_quotes(const char *str);
+
 
 //signals
 void	signal_init();

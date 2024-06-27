@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/26 16:48:59 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 19:29:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,24 @@ void single_pipe(t_arg *head, t_arg *tmp)
 
 	if (pipe(fd) == -1)
 	{
-		close(fd[0]);
-		close(fd[1]);
 		perror("pipe");
 		return ;
 	}
 	pid1 = fork();
 	if (pid1 == -1)
 	{
+		perror("fork");
 		close(fd[0]);
 		close(fd[1]);
-		perror("fork");
 		return ;
 	}
 	if (pid1 == 0)
 	{
-		dup2(fd[1], STDOUT_FILENO);
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
 		{
+			perror("dup2");
 			close(fd[0]);
 			close(fd[1]);
-			perror("dup2");
 			return ;
 		}
 		close(fd[0]);
@@ -71,14 +68,13 @@ void single_pipe(t_arg *head, t_arg *tmp)
 	pid2 = fork();
 	if (pid2 == -1)
 	{
+		perror("fork");
 		close(fd[0]);
 		close(fd[1]);
-		perror("fork");
 		return ;
 	}
 	if (pid2 == 0)
 	{
-		dup2(fd[0], STDIN_FILENO);
 		if (dup2(fd[0], STDIN_FILENO) == -1)
 		{
 			close(fd[0]);

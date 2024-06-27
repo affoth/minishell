@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 15:39:35 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 22:25:52 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,10 @@ int	main()
 			continue;
 		if (find_redirections_and_pipes(args_head))
 			handle_redirections_and_pipes(args_head);
-		else
-		{
+		else if (is_built_in(args_head))
 			exec_built_ins(args_head);
+		else
 			execve_args(args_head);
-		}
 		free(input);
 		free(expanded);
 	}
