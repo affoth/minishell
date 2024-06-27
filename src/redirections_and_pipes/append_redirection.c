@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 22:59:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:16:52 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:22:07 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ void	append_redirection(t_arg *head, t_arg *tmp)
 	//Execute command
 	redirect_execve_args(tmp);
 	dup2(stdout_save, STDOUT_FILENO);
-	close(stdout_save);
+	// close(stdout_save);
 	close(fd);
 }

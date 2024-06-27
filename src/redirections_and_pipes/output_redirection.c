@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:17:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:24:07 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	check_file_writable(const char *filepath)
 	if (access(filepath, W_OK) != 0)
 	{
 		perror("File is not writable.");
-		ft_gc_free();
-		exit(EXIT_FAILURE);
+		// ft_gc_free();
+		// exit(EXIT_FAILURE);
 		//return (-1);
 	}
 }
@@ -45,16 +45,16 @@ void	output_redirection(t_arg *head, t_arg *tmp)
 	if (fd == -1)
 	{
 		perror("open");
-		ft_gc_free();
-		exit(EXIT_FAILURE);
+		// ft_gc_free();
+		// exit(EXIT_FAILURE);
 	}
 	stdout_save = dup(STDOUT_FILENO);
 	dup2_check = dup2(fd, STDOUT_FILENO);
 	if (dup2_check == -1)
 	{
 		perror("dup2");
-		ft_gc_free();
-		exit(EXIT_FAILURE);
+		// ft_gc_free();
+		// exit(EXIT_FAILURE);
 	}
 	// printf("Output redirection: %s\n", head->next->arg);
 	// printf("fd: %d\n", fd);
