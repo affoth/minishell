@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 22:59:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:22:07 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:57:51 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,32 @@ void	append_redirection(t_arg *head, t_arg *tmp)
 		exit(EXIT_FAILURE);
 	}
 	stdout_save = dup(STDOUT_FILENO);
+	if (stdout_save == -1)
+	{
+		perror("dup");
+		// ft_gc_free();
+		// exit(EXIT_FAILURE);
+	}
 	dup2_check = dup2(fd, STDOUT_FILENO);
 	if (dup2_check == -1)
 	{
 		perror("dup2");
-		ft_gc_free();
-		exit(EXIT_FAILURE);
+		// ft_gc_free();
+		// exit(EXIT_FAILURE);
 	}
 	// printf("Output redirection: %s\n", head->next->arg);
 	// printf("fd: %d\n", fd);
 	// printf("STDOUT_FILENO: %d\n", STDOUT_FILENO);
 	//Execute command
 	redirect_execve_args(tmp);
-	dup2(stdout_save, STDOUT_FILENO);
-	// close(stdout_save);
+	//dup2(stdout_save, STDOUT_FILENO); //this is not needed ???
+	if (dup2(stdout_save, STDOUT_FILENO) == -1)
+	{
+		perror("dup2");
+		// ft_gc_free();
+		// exit(EXIT_FAILURE);
+	}
+
+	close(stdout_save);
 	close(fd);
 }

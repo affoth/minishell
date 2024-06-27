@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:06:04 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 20:15:04 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_redirections_and_pipes(t_arg *tmp_position)
+void	handle_redirection_or_pipe(t_arg *tmp_position)
 {
 	t_arg	*head_of_struct;
 
@@ -41,7 +41,6 @@ void	handle_redirections_and_pipes(t_arg *tmp_position)
 		{
 			pipe_redirection(tmp_position, head_of_struct);
 		}
-
 		tmp_position = tmp_position->next;
 	}
 }

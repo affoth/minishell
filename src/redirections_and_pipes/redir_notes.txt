@@ -14,3 +14,47 @@ FAILED TEST
 ls -l | grep ".txt"
 find / | head -n 10
 non_existent_command | wc -l
+
+command1 < inputfile | command2
+
+Pipe with Output Redirection:
+command1 | command2 > outputfile
+
+Pipe with Append Output Redirection:
+command1 | command2 >> outputfile
+
+Here Document with Output Redirection:
+command << EOF > outputfile
+input data
+EOF
+
+Here Document with Pipe:
+command << EOF | command2
+input data
+EOF
+
+Input Redirection with Output Redirection:
+command < inputfile > outputfile
+
+Input Redirection with Append Output Redirection:
+command < inputfile >> outputfile
+
+Complex Pipeline:
+command1 < inputfile | command2 | command3 > outputfile
+
+Here Document with Pipeline and Output Redirection:
+command1 << EOF | command2 > outputfile
+input data
+EOF
+
+Multiple Commands with Multiple Redirections:
+command1 < inputfile | command2 > intermediatefile
+command3 < intermediatefile >> finaloutputfile
+
+Multiple Pipes with Input and Output Redirections:
+command1 < inputfile | command2 | command3 > outputfile
+
+Here Document with Multiple Commands:
+command1 << EOF | command2 | command3 >> outputfile
+input data
+EOF

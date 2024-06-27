@@ -1,7 +1,0 @@
-Output redirection: retrwe
-fd: 3
-STDOUT_FILENO: 1
-args[0]: wc
-args[1]: retrwe
-path: /usr/bin/wc
- 6 13 96 retrwe

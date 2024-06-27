@@ -6,19 +6,17 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:23:34 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:56:30 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-
-
-
 void	input_redirection(t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
+	int stdin_save
 
 	if (!check_file_readable(head->next->arg))
 	{
@@ -29,7 +27,13 @@ void	input_redirection(t_arg *head, t_arg *tmp)
 			// ft_gc_free();
 			// exit(EXIT_FAILURE);
 		}
-		int stdin_save = dup(STDIN_FILENO);
+		stdin_save = dup(STDIN_FILENO);
+		if (stdin_save == -1)
+		{
+			perror("dup");
+			// ft_gc_free();
+			// exit(EXIT_FAILURE);
+		}
 		dup2_check = dup2(fd, STDIN_FILENO);
 		if (dup2_check == -1)
 		{
@@ -37,9 +41,9 @@ void	input_redirection(t_arg *head, t_arg *tmp)
 			// ft_gc_free();
 			// exit(EXIT_FAILURE);
 		}
-		printf("\nInput redirection: %s\n", head->next->arg);
-		printf("fd: %d\n", fd);
-		printf("STDIN_FILENO: %d\n\n", STDIN_FILENO);
+		// printf("\nInput redirection: %s\n", head->next->arg);
+		// printf("fd: %d\n", fd);
+		// printf("STDIN_FILENO: %d\n\n", STDIN_FILENO);
 		//Execute command
 		redirect_execve_args(tmp);
 		dup2(stdin_save, STDIN_FILENO);

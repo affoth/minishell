@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 15:54:25 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/06/27 20:16:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	*ft_shell_substr(const char *s, unsigned int start, size_t len);
 void	*ft_shell_calloc(size_t count, size_t size);
 
 //redirections and pipes
-void	handle_redirections_and_pipes(t_arg *head_position);
+void	handle_redirection_or_pipe(t_arg *head_position);
 void	input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);

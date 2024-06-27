@@ -10,3 +10,5 @@ $'test\n\n\nhi'
 
 var="world"
 echo $var
+
+sort < output.txt > sorted.txt
