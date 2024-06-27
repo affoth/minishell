@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 13:44:55 by afoth            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:17:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	output_redirection(t_arg *head, t_arg *tmp)
 	int stdout_save;
 
 	//check_file_writable(head->next->arg);
-	fd = open(head->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	fd = open(head->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror("open");
