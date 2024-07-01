@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 23:35:38 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:49:56 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void redirect_execve_args(t_arg *args_head)
 		// In child process
 		if (is_built_in(args[0]))
 		{
-			exec_built_ins();
+			exec_built_ins(args_head);
 			exit(0);
 		}
 		else if (execve(path, args, environ) == -1) // Use 'environ' to pass environment variables

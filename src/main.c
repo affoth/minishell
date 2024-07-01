@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 22:35:47 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:50:17 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	main()
 			multiple_redirections(args_head);
 		else if (find_redirections_and_pipes(args_head) == 1)
 			handle_redirection_or_pipe(args_head);
-		else if (is_built_in(args_head))
+		else if (is_built_in(args_head->arg))
 			exec_built_ins(args_head);
 		else
 			execve_args(args_head);
