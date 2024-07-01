@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/01 14:31:06 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/01 15:17:54 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_arg
 	struct s_arg *prev;
 	struct s_arg *next;
 	int exit_status;
-	int fd[2];
+	//int fd[2];
 } t_arg;
 
 // Token struct

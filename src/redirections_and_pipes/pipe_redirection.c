@@ -6,19 +6,28 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/01 14:31:27 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/01 15:48:43 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-void	multipipe_redirection(t_arg *head, t_arg *tmp)
+/* t_arg	*multiple_pipes(t_arg *first_arg, t_arg *second_arg)
 {
+	while (second_arg->type == PIPE || second_arg->type == WORD)
+	{
+		pipe_redirection(first_arg, second_arg->next);
+		first_arg = second_arg->next;
+		second_arg = second_arg->next;
+	}
+
+
+	int		fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
 
-	if (pipe(head->fd) == -1)
+	if (pipe(fd) == -1)
 	{
 		perror("pipe");
 		return ;
@@ -82,7 +91,7 @@ void	multipipe_redirection(t_arg *head, t_arg *tmp)
 	//make sure to close the pipes in the parent process
 	close(fd[0]);
 	waitpid(pid2, NULL, 0);
-}
+} */
 
 //what return type should be?
 void	pipe_redirection(t_arg *head, t_arg *tmp)
