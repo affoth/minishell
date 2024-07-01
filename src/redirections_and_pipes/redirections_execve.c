@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/01 15:49:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:56:36 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,11 @@ void redirect_execve_args(t_arg *args_head)
 			exec_built_ins(args_head);
 			exit(0);
 		}
-		else if (execve(path, args, environ) == -1) // Use 'environ' to pass environment variables
+		else
 		{
+			execve(path, args, environ);
 			perror("execve");
-			exit(EXIT_FAILURE);
+			exit(1);
 		}
 	}
 	else

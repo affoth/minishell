@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 22:42:48 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 16:31:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,13 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == HEREDOC)
 		{
-			heredoc(tmp_position, head_of_struct);
+			// Get the delimiter which is the next argument
+            if (tmp_position->next && (tmp_position->next->type == WORD || 
+                                        tmp_position->next->type == DOUBLE_QUOTED_STRING || 
+                                        tmp_position->next->type == SINGLE_QUOTED_STRING))
+            {
+                heredoc(tmp_position->next->arg);
+            }
 		}
 		else if (tmp_position->type == PIPE)
 		{

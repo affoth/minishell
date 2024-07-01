@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multiple_redirections.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 21:52:20 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/01 16:34:53 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,13 @@ void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg)
 	}
 	else if (second_arg->type == HEREDOC)
 	{
-		heredoc(second_arg, first_arg);
+		// Get the delimiter which is the next argument
+        if (second_arg->next && (second_arg->next->type == WORD ||
+                            second_arg->next->type == DOUBLE_QUOTED_STRING ||
+                            second_arg->next->type == SINGLE_QUOTED_STRING))
+        {
+            heredoc(second_arg->next->arg);
+        }
 	}
 	else if (second_arg->type == PIPE)
 	{

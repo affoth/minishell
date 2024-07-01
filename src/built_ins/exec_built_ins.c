@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:37:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 23:00:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:55:57 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int is_built_in(char *arg)
 // Function to execute built-in commands
 void exec_built_ins(t_arg *args_head)
 {
+	printf("exec_built_ins\n");
 	if (ft_strcmp(args_head->arg, "cd") == 0)
 		built_in_cd(args_head, &environ);
 	if (ft_strcmp(args_head->arg, "echo") == 0)

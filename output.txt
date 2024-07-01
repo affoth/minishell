@@ -1,1 +1,4 @@
-"HI"
+exec_built_ins
+"hey" >> output.txt
+exec_built_ins
+"hey" >> output.txt

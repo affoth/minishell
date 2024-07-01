@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 22:48:09 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 16:32:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);
 void	append_redirection(t_arg *head, t_arg *tmp);
-void	heredoc(t_arg *head, t_arg *tmp);
+void	heredoc(const char *delimiter);
 void	pipe_redirection(t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);
