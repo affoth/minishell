@@ -6,32 +6,46 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/01 15:48:43 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/02 18:42:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-/* t_arg	*multiple_pipes(t_arg *first_arg, t_arg *second_arg)
+/* void	multiple_pipes(t_arg *first_arg, t_arg *second_arg)
 {
-	while (second_arg->type == PIPE || second_arg->type == WORD)
-	{
-		pipe_redirection(first_arg, second_arg->next);
-		first_arg = second_arg->next;
-		second_arg = second_arg->next;
-	}
-
 
 	int		fd[2];
-	pid_t	pid1;
-	pid_t	pid2;
+	int		fd2[2];
 
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
 		return ;
 	}
+	//if (fd2[0] == -1)
+		process_left_arg(fd, first_arg);
+
+	if (redirection_ahead(second_arg) == 1)
+	{
+		if (pipe(fd2) == -1)
+		{
+			perror("pipe");
+			return ;
+		}
+		process_right_arg_with_pipes_ahead(fd, fd2, second_arg);
+	}
+	else
+	{
+		process_right_arg(fd, second_arg);
+	}
+}
+
+void	process_left_arg(int *fd, t_arg *first_arg)
+{
+	pid_t	pid1;
+
 	pid1 = fork();
 	if (pid1 == -1)
 	{
@@ -51,7 +65,7 @@
 		}
 		close(fd[0]);
 		close(fd[1]);
-		redirect_execve_args(tmp);
+		redirect_execve_args(first_arg);
 		exit(0);
 	}
 	if (pid1 > 0)
@@ -61,6 +75,25 @@
 	}
 	waitpid(pid1, NULL, 0);
 	close(fd[1]);
+}
+
+int	redirection_ahead(t_arg *second_arg)
+{
+	while (second_arg != NULL)
+	{
+		if (second_arg->type == PIPE || second_arg->type == REDIRECTION_IN || second_arg->type == REDIRECTION_OUT || second_arg->type == REDIRECTION_APPEND || second_arg->type == HEREDOC)
+		{
+			return (1);
+		}
+		second_arg = second_arg->next;
+	}
+	return (0);
+}
+
+void process_right_arg(int *fd, t_arg *second_arg)
+{
+	pid_t	pid2;
+
 	pid2 = fork();
 	if (pid2 == -1)
 	{
@@ -80,7 +113,7 @@
 		}
 		close(fd[0]);
 		close(fd[1]);
-		redirect_execve_args(head->next);
+		redirect_execve_args(second_arg);
 		exit(0);
 	}
 	if (pid2 > 0)
@@ -91,8 +124,55 @@
 	//make sure to close the pipes in the parent process
 	close(fd[0]);
 	waitpid(pid2, NULL, 0);
+}
+
+void	process_right_arg_with_pipes_ahead(int *fd, int *fd2, t_arg *second_arg)
+{
+	pid_t	pid2;
+
+	pid2 = fork();
+	if (pid2 == -1)
+	{
+		perror("fork");
+		close(fd[0]);
+		close(fd[1]);
+		return ;
+	}
+	if (pid2 == 0)
+	{
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+		{
+			close(fd[0]);
+			close(fd[1]);
+			perror("dup2");
+			return ;
+		}
+		if (dup2(fd2[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			close(fd2[0]);
+			close(fd2[1]);
+			return ;
+		}
+		close(fd[0]);
+		close(fd[1]);
+		close(fd2[0]);
+		close(fd2[1]);
+		redirect_execve_args(second_arg);
+		exit(0);
+	}
 } */
 
+
+
+
+
+
+
+
+
+
+//ORIGINAL WORKING PIPE FUNCTION
 //what return type should be?
 void	pipe_redirection(t_arg *head, t_arg *tmp)
 {

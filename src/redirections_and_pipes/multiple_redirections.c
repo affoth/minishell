@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/01 15:54:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/02 18:42:33 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	multiple_redirections(t_arg *head)
 			// if (second_arg->type == PIPE)
 			// 	second_arg = multiple_pipes(first_arg, second_arg->next);
 			// else
-				handle_multiple_redirections_and_pipes(first_arg, second_arg);
+				handle_multiple_redirections_and_pipes(first_arg, second_arg->next);
 			first_arg = second_arg->next;
 		}
 		second_arg = second_arg->next;
@@ -85,5 +85,17 @@ void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg)
 	}
 }
 
+/* int	count_pipes(t_arg *head)
+{
+	int	count;
 
+	count = 0;
+	while (head)
+	{
+		if (head->type == PIPE)
+			count++;
+		head = head->next;
+	}
+	return (count);
+} */
 

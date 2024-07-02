@@ -11,3 +11,4 @@ hello|world
 <<
 if the input containts quotes the behaviour with expandables change
 
+echo hello >hello.txt test | echo tree
