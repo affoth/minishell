@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 20:40:49 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/02 13:42:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ which is only relevant because O_CREAT is one of the flags.
 0644 is an octal number that indicates the permissions of the file if it's created.
 In this case, 0644 means the owner of the file will have read
 and write permissions, and everyone else will have read permissions.*/
-void	output_redirection(t_arg *head, t_arg *tmp)
+void	output_redirection(t_gc *gc, t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
@@ -66,7 +66,7 @@ void	output_redirection(t_arg *head, t_arg *tmp)
 	// printf("fd: %d\n", fd);
 	// printf("STDOUT_FILENO: %d\n", STDOUT_FILENO);
 	//Execute command
-	redirect_execve_args(tmp);
+	redirect_execve_args(gc, tmp);
 	dup2(stdout_save, STDOUT_FILENO);
 	if (dup2(stdout_save, STDOUT_FILENO) == -1)
 	{

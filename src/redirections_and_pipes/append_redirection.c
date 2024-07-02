@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   append_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 22:59:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:57:51 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/02 13:39:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	append_redirection(t_arg *head, t_arg *tmp)
+void	append_redirection(t_gc *gc, t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
@@ -23,8 +23,7 @@ void	append_redirection(t_arg *head, t_arg *tmp)
 	if (fd == -1)
 	{
 		perror("open");
-		ft_gc_free();
-		exit(EXIT_FAILURE);
+		// exit(EXIT_FAILURE);
 	}
 	stdout_save = dup(STDOUT_FILENO);
 	if (stdout_save == -1)
@@ -44,7 +43,7 @@ void	append_redirection(t_arg *head, t_arg *tmp)
 	// printf("fd: %d\n", fd);
 	// printf("STDOUT_FILENO: %d\n", STDOUT_FILENO);
 	//Execute command
-	redirect_execve_args(tmp);
+	redirect_execve_args(gc, tmp);
 	//dup2(stdout_save, STDOUT_FILENO); //this is not needed ???
 	if (dup2(stdout_save, STDOUT_FILENO) == -1)
 	{

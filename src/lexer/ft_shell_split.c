@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 19:42:59 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:36:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ static size_t	ft_words(char const *s, char c)
 	return (count);
 }
 
-static void	*ft_allocate(const char *s, int start, int end)
+static void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
 {
 	char	*word;
 	int		i;
 
 	i = 0;
-	word = ft_gc_malloc((end - start + 1) * sizeof(char));
+	word = ft_gc_malloc(gc, (end - start + 1) * sizeof(char));
 	if (!word)
 		return (NULL);
 	while (start < end)
@@ -55,7 +55,7 @@ static void	*ft_allocate(const char *s, int start, int end)
 	return (word);
 }
 
-char	**ft_shell_split(const char *s, char c)
+char	**ft_shell_split(t_gc *gc, const char *s, char c)
 {
 	char	**array;
 	size_t	i;
@@ -63,7 +63,7 @@ char	**ft_shell_split(const char *s, char c)
 	bool	quote;
 	int		index;
 
-	array = ft_gc_malloc((ft_words(s, c) + 1) * sizeof(char *));
+	array = ft_gc_malloc(gc, (ft_words(s, c) + 1) * sizeof(char *));
 	if (!s || !array)
 		return (NULL);
 	assign(&i, &j, &index, &quote);
@@ -75,7 +75,7 @@ char	**ft_shell_split(const char *s, char c)
 		else if (((s[i] == c && quote == false) || \
 		i == ft_strlen(s)) && index >= 0)
 		{
-			array[j++] = ft_allocate(s, index, i);
+			array[j++] = ft_allocate(gc, s, index, i);
 			index = -1;
 		}
 		i++;

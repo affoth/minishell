@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/01 16:31:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:44:49 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_redirection_or_pipe(t_arg *tmp_position)
+void	handle_redirection_or_pipe(t_gc *gc, t_arg *tmp_position)
 {
 	t_arg	*head_of_struct;
 
@@ -23,21 +23,21 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 	{
 		if (tmp_position->type == REDIRECTION_IN)
 		{
-			input_redirection(tmp_position, head_of_struct);
+			input_redirection(gc, tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == REDIRECTION_OUT)
 		{
-			output_redirection(tmp_position, head_of_struct);
+			output_redirection(gc, tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == REDIRECTION_APPEND)
 		{
-			append_redirection(tmp_position, head_of_struct);
+			append_redirection(gc, tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == HEREDOC)
 		{
 			// Get the delimiter which is the next argument
-            if (tmp_position->next && (tmp_position->next->type == WORD || 
-                                        tmp_position->next->type == DOUBLE_QUOTED_STRING || 
+            if (tmp_position->next && (tmp_position->next->type == WORD ||
+                                        tmp_position->next->type == DOUBLE_QUOTED_STRING ||
                                         tmp_position->next->type == SINGLE_QUOTED_STRING))
             {
                 heredoc(tmp_position->next->arg);
@@ -45,7 +45,7 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == PIPE)
 		{
-			pipe_redirection(tmp_position, head_of_struct);
+			pipe_redirection(gc, tmp_position, head_of_struct);
 		}
 		tmp_position = tmp_position->next;
 	}

@@ -6,14 +6,14 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 22:37:11 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:43:07 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 //what return type should be?
-void	pipe_redirection(t_arg *head, t_arg *tmp)
+void	pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp)
 {
 	int		fd[2];
 	pid_t	pid1;
@@ -43,7 +43,7 @@ void	pipe_redirection(t_arg *head, t_arg *tmp)
 		}
 		close(fd[0]);
 		close(fd[1]);
-		redirect_execve_args(tmp);
+		redirect_execve_args(gc, tmp);
 		exit(0);
 	}
 	if (pid1 > 0)
@@ -72,7 +72,7 @@ void	pipe_redirection(t_arg *head, t_arg *tmp)
 		}
 		close(fd[0]);
 		close(fd[1]);
-		redirect_execve_args(head->next);
+		redirect_execve_args(gc, head->next);
 		exit(0);
 	}
 	if (pid2 > 0)

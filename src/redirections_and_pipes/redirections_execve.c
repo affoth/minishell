@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/01 15:56:36 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:51:41 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int redirect_count_arguments(t_arg *args_head)
 }
 
 // fork and execve
-void redirect_execve_args(t_arg *args_head)
+void redirect_execve_args(t_gc *gc, t_arg *args_head)
 {
 	t_arg *tmp;
 	pid_t pid;
@@ -40,21 +40,21 @@ void redirect_execve_args(t_arg *args_head)
 
 	tmp = args_head;
 	argc = redirect_count_arguments(tmp);
-	args = (char **)ft_gc_malloc(sizeof(char *) * (argc + 1));
+	args = (char **)ft_gc_malloc(gc, (sizeof(char *) * (argc + 1)));
 	i = 0;
 	while (tmp && i < argc)
 	{
 		if (tmp->type == WORD || tmp->type == DOUBLE_QUOTED_STRING ||
 			tmp->type == SINGLE_QUOTED_STRING)
 		{
-			args[i] = ft_shell_strdup(remove_quotes(tmp->arg));
+			args[i] = ft_shell_strdup(gc, remove_quotes(gc, tmp->arg));
 			i++;
 		}
 		tmp = tmp->next;
 	}
 	args[i] = NULL;
 
-	path = get_path(args[0]);
+	path = get_path(gc, args[0]);
 	if (!path)
 	{
 		fprintf(stderr, "Command not found: %s\n", args[0]);
@@ -73,7 +73,7 @@ void redirect_execve_args(t_arg *args_head)
 		// In child process
 		if (is_built_in(args[0]))
 		{
-			exec_built_ins(args_head);
+			exec_built_ins(gc, args_head);
 			exit(0);
 		}
 		else

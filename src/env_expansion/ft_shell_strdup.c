@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell_strdup.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:20:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/21 15:58:36 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/02 13:29:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../include/minishell.h"
 
-char	*ft_shell_strdup(const char *s1)
+char	*ft_shell_strdup(t_gc *gc, const char *s1)
 {
 	char	*dest;
 	size_t	i;
 
-	dest = (char *) ft_gc_malloc(ft_strlen(s1) + 1);
+	dest = (char *) ft_gc_malloc(gc, ft_strlen(s1) + 1);
 	if (!dest)
 		return (NULL);
 	i = 0;
@@ -31,12 +31,12 @@ char	*ft_shell_strdup(const char *s1)
 	return (dest);
 }
 
-char *ft_shell_strndup(const char *s1, size_t n)
+char *ft_shell_strndup(t_gc *gc, const char *s1, size_t n)
 {
 	char	*dest;
 	size_t	i;
 
-	dest = (char *) ft_gc_malloc(n + 1);
+	dest = (char *) ft_gc_malloc(gc, (n + 1));
 	if (!dest)
 		return (NULL);
 	i = 0;
@@ -50,7 +50,7 @@ char *ft_shell_strndup(const char *s1, size_t n)
 }
 
 //null protection
-char	*ft_shell_strjoin(char *s1, char *s2)
+char	*ft_shell_strjoin(t_gc *gc, char *s1, char *s2)
 {
 	char	*newstr;
 	int		i;
@@ -60,7 +60,7 @@ char	*ft_shell_strjoin(char *s1, char *s2)
 	j = 0;
 	if (!s1 || !s2)
 		return (NULL);
-	newstr = (char *) ft_gc_malloc((ft_strlen(s1)
+	newstr = (char *) ft_gc_malloc(gc, (ft_strlen(s1)
 				+ ft_strlen(s2) + 1) * sizeof(char));
 	if (!newstr)
 		return (NULL);
@@ -74,7 +74,7 @@ char	*ft_shell_strjoin(char *s1, char *s2)
 }
 
 // Helper function to extract a substring from a string
-char *ft_shell_substr(char const *s, unsigned int start, size_t len)
+char *ft_shell_substr(t_gc *gc, char const *s, unsigned int start, size_t len)
 {
 	char *sub;
 	size_t i;
@@ -82,8 +82,8 @@ char *ft_shell_substr(char const *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	if (start >= ft_strlen(s))
-		return (ft_shell_strdup(""));
-	if (!(sub = (char *)ft_gc_malloc(sizeof(char) * (len + 1))))
+		return (ft_shell_strdup(gc, ""));
+	if (!(sub = (char *)ft_gc_malloc(gc, (sizeof(char) * (len + 1)))))
 		return (NULL);
 	i = 0;
 	while (i < len && s[start + i])

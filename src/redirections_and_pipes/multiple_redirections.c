@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/01 16:34:53 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:51:34 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ while head != NULL
 	exec pipe (1, 2)*/
 
 
-void	multiple_redirections(t_arg *head)
+void	multiple_redirections(t_gc *gc, t_arg *head)
 {
 	t_arg	*first_arg;
 	t_arg	*second_arg;
@@ -31,26 +31,26 @@ void	multiple_redirections(t_arg *head)
 	{
 		if (second_arg->type == REDIRECTION_IN || second_arg->type == REDIRECTION_OUT || second_arg->type == REDIRECTION_APPEND || second_arg->type == HEREDOC || second_arg->type == PIPE)
 		{
-			handle_multiple_redirections_and_pipes(first_arg, second_arg->next);
+			handle_multiple_redirections_and_pipes(gc, first_arg, second_arg->next);
 			first_arg = second_arg;
 		}
 		second_arg = second_arg->next;
 	}
 }
 
-void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg)
+void	handle_multiple_redirections_and_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg)
 {
 	if (second_arg->type == REDIRECTION_IN)
 	{
-		input_redirection(second_arg, first_arg);
+		input_redirection(gc, second_arg, first_arg);
 	}
 	else if (second_arg->type == REDIRECTION_OUT)
 	{
-		output_redirection(second_arg, first_arg);
+		output_redirection(gc, second_arg, first_arg);
 	}
 	else if (second_arg->type == REDIRECTION_APPEND)
 	{
-		append_redirection(second_arg, first_arg);
+		append_redirection(gc, second_arg, first_arg);
 	}
 	else if (second_arg->type == HEREDOC)
 	{
@@ -64,7 +64,7 @@ void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg)
 	}
 	else if (second_arg->type == PIPE)
 	{
-		pipe_redirection(second_arg, first_arg);
+		pipe_redirection(gc, second_arg, first_arg);
 	}
 }
 

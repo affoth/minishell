@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 22:36:43 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:39:37 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	input_redirection(t_arg *head, t_arg *tmp)
+void	input_redirection(t_gc *gc, t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
@@ -45,7 +45,7 @@ void	input_redirection(t_arg *head, t_arg *tmp)
 		// printf("fd: %d\n", fd);
 		// printf("STDIN_FILENO: %d\n\n", STDIN_FILENO);
 		//Execute command
-		redirect_execve_args(tmp);
+		redirect_execve_args(gc, tmp);
 		dup2(stdin_save, STDIN_FILENO);
 		close(stdin_save);
 		close(fd);

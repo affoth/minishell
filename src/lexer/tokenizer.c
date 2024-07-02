@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/27 16:16:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:38:29 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,19 +123,19 @@ TokenType get_token_type(char *arg)
 
 
 // ADD the arguments with type information into a list
-t_arg *create_arg_node(char *arg)
+t_arg *create_arg_node(t_gc *gc, char *arg)
 {
-	t_arg *node = (t_arg *)ft_gc_malloc(sizeof(t_arg));
+	t_arg *node = (t_arg *)ft_gc_malloc(gc, sizeof(t_arg));
 	if (node == NULL)
 	{
 		perror("Memory allocation failed");
 		exit(EXIT_FAILURE);
 	}
-	node->arg = ft_shell_strdup(arg);
+	node->arg = ft_shell_strdup(gc, arg);
 	if (node->arg == NULL)
 	{
 		perror("Memory allocation failed");
-		ft_gc_free();
+		ft_gc_free(gc);
 		exit(EXIT_FAILURE);
 	}
 	node->type = get_token_type(arg);
@@ -145,9 +145,9 @@ t_arg *create_arg_node(char *arg)
 }
 
 // Create a double linked list of arguments
-void add_arg_to_list(t_arg **head, char *arg)
+void add_arg_to_list(t_gc *gc, t_arg **head, char *arg)
 {
-	t_arg *new_node = create_arg_node(arg);
+	t_arg *new_node = create_arg_node(gc, arg);
 	if (*head == NULL) {
 		*head = new_node;
 		return;
@@ -183,13 +183,13 @@ void print_args(t_arg *head)
 // 	}
 // }
 
-t_arg *tokenizer(char *line)
+t_arg *tokenizer(t_gc *gc, char *line)
 {
 	if(ft_quotes_not_closed(line))
 	{
 		return NULL;
 	}
-	char **split_args = ft_shell_split(line, ' ');
+	char **split_args = ft_shell_split(gc, line, ' ');
 	if (!split_args)
 	{
 		perror("Split failed");
@@ -202,7 +202,7 @@ t_arg *tokenizer(char *line)
 	i = 0;
 	while (split_args[i] != NULL)
 	{
-		add_arg_to_list(&args_head, split_args[i]);
+		add_arg_to_list(gc, &args_head, split_args[i]);
 		i++;
 	}
 	// Syntax check the list FOR OPERATORS aka. types PIPE, AND, OR, REDIRECTION_OUT, REDIRECTION_IN, REDIRECTION_APPEND, HEREDOC

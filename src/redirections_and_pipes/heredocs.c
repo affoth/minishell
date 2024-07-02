@@ -6,65 +6,90 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:10:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/01 19:53:21 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 18:20:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// Function to handle Here Document
+#include "../../include/minishell.h"
+
 void heredoc(const char *delimiter)
 {
-    int fd[2];
-    pid_t pid;
-    char *line = NULL;
+	int pipe_fd[2];
+	pid_t child_pid;
+	char *line = NULL;
+	int status;
 
-    if (pipe(fd) == -1)
-    {
-        perror("pipe");
-        return; // Exit function on pipe creation failure
-    }
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("pipe");
+		return;
+	}
 
-    pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        return; // Exit function on fork failure
-    }
-    else if (pid == 0)
-    {
-        // Child process to write Here Document content to the pipe
-        close(fd[0]); // Close reading end of the pipe
+	child_pid = fork();
+	if (child_pid == -1)
+	{
+		perror("fork");
+		return;
+	}
+	else if (child_pid == 0)
+	{
+		// Child process to handle Here Document input
+		close(pipe_fd[0]); // Close reading end of the pipe
+		set_signals_child();
 
-        // Use readline for interactive input handling
-        while ((line = readline("heredoc> ")) != NULL)
-        {
-            if (strcmp(line, delimiter) == 0)
-            {
-                free(line);
-                break;
-            }
-            write(fd[1], line, strlen(line));
-            write(fd[1], "\n", 1);
-            free(line);
-        }
+		while (1)
+		{
+			line = readline("heredoc> ");
+			if (line == NULL || g_signal.sigint_received) // Ctrl+D or readline error or SIGINT received
+			{
+				free(line);
+				break;
+			}
 
-        close(fd[1]);
-        // exit(EXIT_SUCCESS); // Exit child process after completing Here Document
-    }
-    else
-    {
-        // Parent process
-        close(fd[1]); // Close writing end of the pipe
-        waitpid(pid, NULL, 0); // Wait for child process to complete
+			if (strcmp(line, delimiter) == 0)
+			{
+				free(line);
+				break;
+			}
+			write(pipe_fd[1], line, strlen(line));
+			write(pipe_fd[1], "\n", 1);
+			free(line);
+		}
 
-        // Redirect the standard input to the pipe
-        if (dup2(fd[0], STDIN_FILENO) == -1)
-        {
-            perror("dup2");
-            close(fd[0]);
-            return; // Exit function on dup2 failure
-        }
-        close(fd[0]);
-    }
+		close(pipe_fd[1]);
+		// _exit(EXIT_SUCCESS); // Exit child process
+	}
+	else
+	{
+		// Parent process
+		close(pipe_fd[1]); // Close writing end of the pipe
+
+		// Wait for the child process to complete
+		waitpid(child_pid, &status, 0);
+
+		// Check if the SIGINT was received during heredoc
+		if (g_signal.sigint_received)
+		{
+			g_signal.sigint_received = 0;
+			// Cleanup and return to the main shell prompt
+			close(pipe_fd[0]);
+			return;
+		}
+
+		// Redirect standard input to the pipe if child process completed normally
+		if (WIFEXITED(status))
+		{
+			if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+			{
+				perror("dup2");
+				close(pipe_fd[0]);
+				return;
+			}
+			close(pipe_fd[0]);
+		}
+	}
 }
+
+
