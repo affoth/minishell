@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/03 13:15:28 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/03 17:03:55 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	multiple_redirections(t_arg *head)
 	t_arg	*second_arg;
 	int	fd;
 
-	fd = -1;
+	fd = -2;
 	first_arg = head;
 	second_arg = head;
 	while (second_arg != NULL)

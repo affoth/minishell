@@ -6,14 +6,14 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/03 12:55:14 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/03 17:06:16 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-/* void	multiple_pipes(t_arg *first_arg, t_arg *second_arg)
+void	multiple_pipes(t_arg *first_arg, t_arg *second_arg)
 {
 
 	int		fd[2];
@@ -161,7 +161,7 @@ void	process_right_arg_with_pipes_ahead(int *fd, int *fd2, t_arg *second_arg)
 		redirect_execve_args(second_arg);
 		exit(0);
 	}
-} */
+}
 
 
 
@@ -176,7 +176,7 @@ void	pipe_redirection(t_arg *head, t_arg *tmp, int fd_input)
 		perror("pipe");
 		return ;
 	}
-	if (fd_input != -1)
+	if (fd_input != -1 && fd_input != -2)
 	{
 		if (dup2(fd_input, fd[1]) == -1)
 		{

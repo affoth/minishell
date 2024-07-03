@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/03 13:05:07 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/03 16:27:40 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,18 @@ int	find_redirections_and_pipes(t_arg *head)
 	}
 	return (count);
 }
+
+t_arg	*search_for_next_redirection(t_arg *tmp)
+{
+	while (tmp)
+	{
+		if (tmp->type == REDIRECTION_IN || tmp->type == REDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == HEREDOC || tmp->type == PIPE)
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
 
 /* int	count_pipes(t_arg *head)
 {

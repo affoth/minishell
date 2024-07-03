@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/03 13:13:56 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/03 16:27:02 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	*ft_shell_substr(const char *s, unsigned int start, size_t len);
 
 //redirections and pipes
 void	handle_redirection_or_pipe(t_arg *head_position);
-int	input_redirection(t_arg *head, t_arg *tmp);
+int		input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *head, t_arg *tmp);
 void	append_redirection(t_arg *head, t_arg *tmp);
@@ -127,8 +127,9 @@ int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);
 void	redirect_execve_args(t_arg *args_head);
 void	multiple_redirections(t_arg *head);
-int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, int fd);
-int	is_executable(t_arg *arg);
+int		handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, int fd);
+int		is_executable(t_arg *arg);
+t_arg	*search_for_next_redirection(t_arg *tmp);
 
 //built_ins
 int		is_built_in(char *cmd);
