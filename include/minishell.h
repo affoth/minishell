@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/01 15:17:54 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/03 12:29:23 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	multiple_redirections(t_arg *head);
 void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg);
 
 //built_ins
-int		is_built_in(t_arg *args_head);
+int		is_built_in(char *cmd);
 void	exec_built_ins(t_arg *args_head);
 void	built_in_cd(t_arg *args_head, char ***env);
 void	built_in_pwd(void);
