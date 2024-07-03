@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/02 18:42:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/03 13:15:28 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ void	multiple_redirections(t_arg *head)
 {
 	t_arg	*first_arg;
 	t_arg	*second_arg;
+	int	fd;
 
+	fd = -1;
 	first_arg = head;
 	second_arg = head;
 	while (second_arg != NULL)
@@ -54,35 +56,44 @@ void	multiple_redirections(t_arg *head)
 			// if (second_arg->type == PIPE)
 			// 	second_arg = multiple_pipes(first_arg, second_arg->next);
 			// else
-				handle_multiple_redirections_and_pipes(first_arg, second_arg->next);
-			first_arg = second_arg->next;
+				fd = handle_multiple_redirections_and_pipes(first_arg, second_arg->next, fd);
+				if (is_executable(second_arg->next))
+					first_arg = second_arg->next;
 		}
 		second_arg = second_arg->next;
 	}
 }
 
-void	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg)
+int	is_executable(t_arg *arg)
 {
-	if (second_arg->type == REDIRECTION_IN)
+	if (access(arg->arg, X_OK) == 0)
+		return (1);
+	return (0);
+}
+
+int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, int fd)
+{
+	if (second_arg->prev->type == REDIRECTION_IN)
 	{
-		input_redirection(second_arg->next, first_arg);
+		fd = input_redirection(second_arg->next, first_arg);
 	}
-	else if (second_arg->type == REDIRECTION_OUT)
+	else if (second_arg->prev->type == REDIRECTION_OUT)
 	{
 		output_redirection(second_arg->next, first_arg);
 	}
-	else if (second_arg->type == REDIRECTION_APPEND)
+	else if (second_arg->prev->type == REDIRECTION_APPEND)
 	{
 		append_redirection(second_arg->next, first_arg);
 	}
-	else if (second_arg->type == HEREDOC)
+	else if (second_arg->prev->type == HEREDOC)
 	{
 		heredoc(second_arg->next, first_arg);
 	}
-	else if (second_arg->type == PIPE)
+	else if (second_arg->prev->type == PIPE)
 	{
-		pipe_redirection(second_arg->next, first_arg);
+		pipe_redirection(second_arg->next, first_arg, fd);
 	}
+	return (fd);
 }
 
 /* int	count_pipes(t_arg *head)

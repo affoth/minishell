@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 22:42:48 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:05:07 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == PIPE)
 		{
-			pipe_redirection(tmp_position, head_of_struct);
+			printf("I GOT  CHANGED< CHECK REDIRECTION UTILS\n");
+			//pipe_redirection(tmp_position, head_of_struct);
 		}
 		tmp_position = tmp_position->next;
 	}
