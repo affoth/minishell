@@ -17,6 +17,8 @@
 		"minishell.h": "c",
 		"signal.h": "c",
 		"libft.h": "c",
-		"fcntl.h": "c"
+		"fcntl.h": "c",
+		"cstdlib": "c",
+		"wait.h": "c"
 	}
 }

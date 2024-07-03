@@ -6,48 +6,48 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 18:26:33 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:40:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_signal g_signal = {0, 0, 0, 0};
-
-void sigint_handler_parent(int num)
+// Signal handler for SIGINT
+void sigint_handler(int signum)
 {
-    (void)num;
-    write(1, "\n", 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
-    rl_redisplay();
-    g_signal.sigint_received = 1;
+	(void)signum; // Cast to void to suppress unused parameter warning
+	if (isatty(STDIN_FILENO)) {
+		// Main shell behavior on SIGINT
+		write(STDOUT_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else {
+		// Heredoc behavior on SIGINT
+		exit(EXIT_FAILURE); // Exit heredoc child process on SIGINT
+	}
 }
 
-void sigint_handler_child(int num)
-{
-    (void)num;
-	write(STDOUT_FILENO, "\n", 1);
-	_exit(1);
-    g_signal.sigint_received = 1;
+// Signal handler for SIGQUIT (ignored)
+void sigquit_handler(int signum) {
+	// Ignore SIGQUIT in heredoc child
+	(void)signum;
 }
 
-void sigquit_handler(int num)
-{
-    (void)num;
-    g_signal.sigquit_received = 1;
-	write(1, "Quit: ", 6);
-    write(1, "\n", 1);
+// Function to set up signal handlers in the parent process
+void set_signals_parent(void) {
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN); // Optionally handle SIGQUIT
 }
 
-void set_signals_parent(void)
-{
-    signal(SIGINT, sigint_handler_parent);
-    signal(SIGQUIT, SIG_IGN);
+// Signal handler for SIGINT in heredoc child process
+void sigint_handler_child(int signum) {
+	(void)signum;
 }
 
-void set_signals_child(void)
-{
-    signal(SIGINT, sigint_handler_child);
-    signal(SIGQUIT, SIG_IGN);
+// Function to set up signal handlers in heredoc child process
+void set_signals_child(void) {
+	signal(SIGINT, SIG_DFL); // Default behavior for SIGINT in child
+	signal(SIGQUIT, SIG_IGN); // Ignore SIGQUIT in heredoc child
 }

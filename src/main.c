@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 18:22:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:14:19 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,6 @@ int	main()
 	while (1)
 	{
 		input = get_input();
-		if (g_signal.sigint_received)
-        {
-            free(input);
-            g_signal.sigint_received = 0;
-            continue;
-        }
 		expanded = expand_string(&gc, input);
 		if (!expanded)
 			continue;
@@ -70,9 +64,6 @@ int	main()
 			execve_args(&gc, args_head);
 		free(input);
 		free(expanded);
-
-		if (g_signal.sigint_received)
-			rl_replace_line("", 0);
 	}
 	ft_gc_free(&gc);
 	rl_clear_history();

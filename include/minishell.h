@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 18:31:52 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:19:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@
 # include <sys/types.h>  // POSIX Library
 # include <sys/stat.h>   // POSIX Library
 # include <sys/wait.h>   // POSIX Library
+# include <sys/ioctl.h>  // POSIX Library
 # include <fcntl.h>      // POSIX Library
 # include <signal.h>     // POSIX Library
+# include <bits/sigaction.h> // POSIX Library
 # include <dirent.h>     // POSIX Library
 
 # include <term.h>       // Termcap/Terminfo Library
@@ -39,17 +41,6 @@
 # include <termios.h>    // POSIX Terminal I/O Library
 
 extern char		**environ;
-
-// Struct to manage signals
-typedef struct s_signal
-{
-	int sigint_received;
-	int sigquit_received;
-	int exit_status;
-	pid_t process_id;
-} t_signal;
-
-extern	t_signal g_signal;
 
 // Global instance of signal management struct
 typedef enum TokenType
@@ -166,11 +157,11 @@ char	*get_path(t_gc *gc, char *cmd);
 int		count_arguments(t_arg *args_head);
 char	*remove_quotes(t_gc *gc, const char *str);
 
-// signals
-void sigint_handler_parent(int num);
-void sigint_handler_child(int num);
-void sigquit_handler(int num);
+extern volatile sig_atomic_t g_signal_received;
+
+void sigint_handler(int signum);
 void set_signals_parent(void);
 void set_signals_child(void);
+
 
 # endif
