@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/03 17:03:55 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 16:25:48 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,18 @@ void	multiple_redirections(t_arg *head)
 		second_arg = second_arg->next;
 	}
 }
-
+//check with get_path if the command is executable
 int	is_executable(t_arg *arg)
 {
-	if (access(arg->arg, X_OK) == 0)
-		return (1);
-	return (0);
+	char	*path;
+
+	path = get_path(arg->arg);
+	if (!path)
+	{
+		fprintf(stderr, "Command not found: %s\n", arg->arg);
+		return (0);
+	}
+	return (1);
 }
 
 int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, int fd)
@@ -79,7 +85,7 @@ int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, 
 	}
 	else if (second_arg->prev->type == REDIRECTION_OUT)
 	{
-		output_redirection(second_arg->next, first_arg);
+		output_redirection(first_arg, second_arg, fd);
 	}
 	else if (second_arg->prev->type == REDIRECTION_APPEND)
 	{
@@ -87,11 +93,13 @@ int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, 
 	}
 	else if (second_arg->prev->type == HEREDOC)
 	{
-		heredoc(second_arg->next, first_arg);
+		printf("I GOT  CHANGED< CHECK MULTIPLE REDIRECTION\n");
+		//heredoc(second_arg->next, first_arg);
 	}
 	else if (second_arg->prev->type == PIPE)
 	{
-		pipe_redirection(second_arg->next, first_arg, fd);
+		//pipe_redirection(second_arg->next, first_arg, fd);
+		fd = multiple_pipes(first_arg, second_arg, fd);
 	}
 	return (fd);
 }

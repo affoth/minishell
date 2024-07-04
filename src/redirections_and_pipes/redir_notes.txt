@@ -11,6 +11,9 @@ find / | head -n 10
 non_existent_command | wc -l
 
 FAILED TEST
+sort < output.txt > output2.txt > test.txt
+sort < output.txt >> output2.txt >> test.txt
+
 ls -l | grep ".txt"
 find / | head -n 10
 non_existent_command | wc -l

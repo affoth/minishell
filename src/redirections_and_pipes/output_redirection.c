@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/03 17:08:39 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 16:49:01 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,55 @@ which is only relevant because O_CREAT is one of the flags.
 0644 is an octal number that indicates the permissions of the file if it's created.
 In this case, 0644 means the owner of the file will have read
 and write permissions, and everyone else will have read permissions.*/
-void	output_redirection(t_arg *head, t_arg *tmp)
+void	output_redirection(t_arg *first_arg, t_arg *second_arg, int fd_input)
+{
+	int	fd;
+	int	stdout_save;
+	pid_t	pid;
+	printf("second_arg->arg: %s\n", second_arg->arg);
+	//check_file_writable(head->next->arg);
+	fd = open(second_arg->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		perror("open");
+	stdout_save = dup(STDOUT_FILENO);
+	if (stdout_save == -1)
+		perror("dup");
+
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		close(fd);
+		return;
+	}
+	if (pid > 0)
+	{
+		printf("\noutchild\n");
+		printf("pidout: %d\n", pid);
+	}
+	if (pid == 0)
+	{
+
+		if (fd_input != -1 && dup2(fd_input, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			close(fd);
+		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			perror("dup2");
+		redirect_execve_args(first_arg);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(pid, NULL, 0);
+	if (dup2(stdout_save, STDOUT_FILENO) == -1)
+		perror("dup2");
+	close(stdout_save);
+	close(fd);
+}
+
+//this is the original function
+/* void	output_redirection(t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
@@ -55,5 +103,4 @@ void	output_redirection(t_arg *head, t_arg *tmp)
 		perror("dup2");
 	close(stdout_save);
 	close(fd);
-}
-
+} */

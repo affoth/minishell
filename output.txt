@@ -1,7 +1,7 @@
-grape
-elderberry
 apple
-date
+elderberry
 banana
 cherry
+date
 fig
+grape

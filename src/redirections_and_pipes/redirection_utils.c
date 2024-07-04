@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/03 16:27:40 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 15:44:00 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == REDIRECTION_OUT)
 		{
-			output_redirection(tmp_position, head_of_struct);
+			printf("I GOT  CHANGED< CHECK REDIRECTION UTILS\n");
+			//output_redirection(tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == REDIRECTION_APPEND)
 		{
@@ -35,7 +36,8 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == HEREDOC)
 		{
-			heredoc(tmp_position, head_of_struct);
+			printf("I GOT  CHANGED< CHECK REDIRECTION UTILS\n");
+			//heredoc(tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == PIPE)
 		{
