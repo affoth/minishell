@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/03 17:40:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/04 17:06:22 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,13 @@
 void sigint_handler(int signum)
 {
 	(void)signum; // Cast to void to suppress unused parameter warning
-	if (isatty(STDIN_FILENO)) {
+	if (isatty(STDIN_FILENO))
+	{
 		// Main shell behavior on SIGINT
 		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-	}
-	else {
-		// Heredoc behavior on SIGINT
-		exit(EXIT_FAILURE); // Exit heredoc child process on SIGINT
 	}
 }
 
@@ -42,7 +39,8 @@ void set_signals_parent(void) {
 }
 
 // Signal handler for SIGINT in heredoc child process
-void sigint_handler_child(int signum) {
+void sigint_handler_child(int signum)
+{
 	(void)signum;
 }
 

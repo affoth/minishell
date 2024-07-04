@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:10:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/03 17:32:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/04 17:07:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ void heredoc(const char *delimiter) {
 	if (child_pid == -1) {
 		perror("fork");
 		return;
-	} else if (child_pid == 0) {
+	}
+	else if (child_pid == 0)
+	{
 		// Child process to handle Here Document input
 		close(pipe_fd[0]); // Close reading end of the pipe
 		set_signals_child();
@@ -49,8 +51,9 @@ void heredoc(const char *delimiter) {
 		}
 
 		close(pipe_fd[1]);
-		// exit(EXIT_SUCCESS); // Exit child process
-	} else {
+	}
+	else
+	{
 		// Parent process
 		close(pipe_fd[1]); // Close writing end of the pipe
 
