@@ -6,15 +6,16 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/03 16:31:56 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:07:03 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 //ORINGINAL FUNCTION
-/* void	input_redirection(t_arg *head, t_arg *tmp)
+void	simple_input_redirection(t_arg *head, t_arg *tmp)
 {
+	int	fd;
 	int	dup2_check;
 	int stdin_save;
 
@@ -33,8 +34,9 @@
 		dup2(stdin_save, STDIN_FILENO);
 		close(stdin_save);
 		close(fd);
+	}
 }
- */
+
 
 int	input_redirection(t_arg *head, t_arg *tmp)
 {

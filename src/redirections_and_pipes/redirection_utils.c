@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/04 15:44:00 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:04:51 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,15 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 	{
 		if (tmp_position->type == REDIRECTION_IN)
 		{
-			input_redirection(tmp_position, head_of_struct);
+			simple_input_redirection(tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == REDIRECTION_OUT)
 		{
-			printf("I GOT  CHANGED< CHECK REDIRECTION UTILS\n");
-			//output_redirection(tmp_position, head_of_struct);
+			simple_output_redirection(tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == REDIRECTION_APPEND)
 		{
-			append_redirection(tmp_position, head_of_struct);
+			simple_append_redirection(tmp_position, head_of_struct);
 		}
 		else if (tmp_position->type == HEREDOC)
 		{
@@ -41,8 +40,7 @@ void	handle_redirection_or_pipe(t_arg *tmp_position)
 		}
 		else if (tmp_position->type == PIPE)
 		{
-			printf("I GOT  CHANGED< CHECK REDIRECTION UTILS\n");
-			//pipe_redirection(tmp_position, head_of_struct);
+			simple_pipe_redirection(tmp_position, head_of_struct);
 		}
 		tmp_position = tmp_position->next;
 	}

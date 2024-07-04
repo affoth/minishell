@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/04 16:37:29 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:06:01 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,12 +115,18 @@ char	*ft_expand_env(char *env);
 char	*ft_shell_strjoin(char *s1, char *s2);
 char	*ft_shell_substr(const char *s, unsigned int start, size_t len);
 
+//sinple redirections
+void	simple_append_redirection(t_arg *head, t_arg *tmp);
+void	simple_output_redirection(t_arg *head, t_arg *tmp);
+void	simple_input_redirection(t_arg *head, t_arg *tmp);
+void	simple_pipe_redirection(t_arg *head, t_arg *tmp);
+
 //redirections and pipes
 void	handle_redirection_or_pipe(t_arg *head_position);
 int		input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *first_arg, t_arg *second_arg, int fd);
-void	append_redirection(t_arg *head, t_arg *tmp);
+void	append_redirection(t_arg *head, t_arg *tmp, int fd);
 void	heredoc(t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);

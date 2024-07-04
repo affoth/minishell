@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/04 16:49:01 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:07:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,13 @@ void	output_redirection(t_arg *first_arg, t_arg *second_arg, int fd_input)
 	}
 	if (pid == 0)
 	{
-
-		if (fd_input != -1 && dup2(fd_input, STDIN_FILENO) == -1)
+		if (fd_input != -1 && fd_input != -2)
 		{
-			perror("dup2");
-			close(fd);
+			if (dup2(fd_input, STDIN_FILENO) == -1)
+			{
+				perror("dup2");
+			}
+			close(fd_input);
 		}
 		if (dup2(fd, STDOUT_FILENO) == -1)
 			perror("dup2");
@@ -81,7 +83,7 @@ void	output_redirection(t_arg *first_arg, t_arg *second_arg, int fd_input)
 }
 
 //this is the original function
-/* void	output_redirection(t_arg *head, t_arg *tmp)
+void	simple_output_redirection(t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
@@ -103,4 +105,4 @@ void	output_redirection(t_arg *first_arg, t_arg *second_arg, int fd_input)
 		perror("dup2");
 	close(stdout_save);
 	close(fd);
-} */
+}

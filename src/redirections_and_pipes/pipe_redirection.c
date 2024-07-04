@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/04 16:40:13 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:05:38 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void	process_right_arg_with_pipes_ahead(int *fd, int *fd2, t_arg *second_arg)
 
 
 
-void	pipe_redirection(t_arg *head, t_arg *tmp, int fd_input)
+/* void	pipe_redirection(t_arg *head, t_arg *tmp, int fd_input)
 {
 	int		fd[2];
 	pid_t	pid1;
@@ -283,7 +283,7 @@ void	pipe_redirection(t_arg *head, t_arg *tmp, int fd_input)
 	//make sure to close the pipes in the parent process
 	close(fd[0]);
 	waitpid(pid2, NULL, 0);
-}
+} */
 
 
 
@@ -292,7 +292,7 @@ void	pipe_redirection(t_arg *head, t_arg *tmp, int fd_input)
 
 //ORIGINAL WORKING PIPE FUNCTION
 //what return type should be?
-/* void	pipe_redirection(t_arg *head, t_arg *tmp)
+void	simple_pipe_redirection(t_arg *head, t_arg *tmp)
 {
 	int		fd[2];
 	pid_t	pid1;
@@ -362,5 +362,5 @@ void	pipe_redirection(t_arg *head, t_arg *tmp, int fd_input)
 	//make sure to close the pipes in the parent process
 	close(fd[0]);
 	waitpid(pid2, NULL, 0);
-} */
+}
 

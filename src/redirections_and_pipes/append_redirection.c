@@ -6,13 +6,65 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 22:59:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/06/27 16:57:51 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:06:16 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	append_redirection(t_arg *head, t_arg *tmp)
+
+
+void	append_redirection(t_arg *first_arg, t_arg *second_arg, int fd_input)
+{
+	int	fd;
+	int	stdout_save;
+	pid_t	pid;
+	printf("second_arg->arg: %s\n", second_arg->arg);
+	//check_file_writable(head->next->arg);
+	fd = open(second_arg->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+		perror("open");
+	stdout_save = dup(STDOUT_FILENO);
+	if (stdout_save == -1)
+		perror("dup");
+
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		close(fd);
+		return;
+	}
+	if (pid > 0)
+	{
+		printf("\noutchild\n");
+		printf("pidout: %d\n", pid);
+	}
+	if (pid == 0)
+	{
+		if (fd_input != -1 && fd_input != -2)
+		{
+			if (dup2(fd_input, STDIN_FILENO) == -1)
+			{
+				perror("dup2");
+			}
+			close(fd_input);
+		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			perror("dup2");
+		redirect_execve_args(first_arg);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(pid, NULL, 0);
+	if (dup2(stdout_save, STDOUT_FILENO) == -1)
+		perror("dup2");
+	close(stdout_save);
+	close(fd);
+}
+
+
+void	simple_append_redirection(t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
