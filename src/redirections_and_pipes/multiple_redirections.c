@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/04 17:02:22 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:27:47 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, 
 {
 	if (second_arg->prev->type == REDIRECTION_IN)
 	{
-		fd = input_redirection(second_arg->next, first_arg);
+		fd = advanced_input_redirection(second_arg, first_arg);
 	}
 	else if (second_arg->prev->type == REDIRECTION_OUT)
 	{
@@ -89,7 +89,7 @@ int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, 
 	}
 	else if (second_arg->prev->type == REDIRECTION_APPEND)
 	{
-		append_redirection(second_arg->next, first_arg, fd);
+		append_redirection(second_arg, first_arg, fd);
 	}
 	else if (second_arg->prev->type == HEREDOC)
 	{

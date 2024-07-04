@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/04 17:06:01 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/04 17:26:09 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,11 @@ void	simple_output_redirection(t_arg *head, t_arg *tmp);
 void	simple_input_redirection(t_arg *head, t_arg *tmp);
 void	simple_pipe_redirection(t_arg *head, t_arg *tmp);
 
+//advanced redirections
+int		advanced_input_redirection(t_arg *second_arg, t_arg *first_arg);
+
 //redirections and pipes
 void	handle_redirection_or_pipe(t_arg *head_position);
-int		input_redirection(t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
 void	output_redirection(t_arg *first_arg, t_arg *second_arg, int fd);
 void	append_redirection(t_arg *head, t_arg *tmp, int fd);
