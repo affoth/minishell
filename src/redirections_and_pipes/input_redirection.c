@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/04 17:24:23 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/06 13:25:50 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ int	advanced_input_redirection(t_arg *second_arg, t_arg *first_arg)
 	t_arg	*next_redirection;
 	//int stdin_save;
 
-	if (!check_file_readable(second_arg->next->arg))
+	if (!check_file_readable(second_arg->arg))
 	{
-		fd = open(second_arg->next->arg, O_RDONLY);
+		fd = open(second_arg->arg, O_RDONLY);
 		if (fd == -1)
 			perror("open");
 		next_redirection = search_for_next_redirection(first_arg);
