@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:28:26 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 22:26:51 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:58:10 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void print_echo_arguments(t_arg *args_head)
 void	built_in_echo(t_arg *args_head)
 {
 	bool suppress_newline;
-	printf("echobi\n");
 	// Skip the command name itself
 	if (args_head)
 		args_head = args_head->next;

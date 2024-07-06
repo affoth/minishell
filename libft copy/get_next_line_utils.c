@@ -6,21 +6,11 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 18:01:36 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/03/11 14:52:46 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 16:21:23 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
 
 char	*gft_substr(char const *s, unsigned int start, size_t len)
 {

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 18:09:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/29 15:14:44 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/01 16:25:41 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,6 @@ int syntax_checker(t_arg *head)
 	tmp = head;
 	while (tmp)
 	{
-		// check if there is an operator at the beginning or end of the list
-		if (tmp == head && ft_isoperator(tmp->type))
-		{
-			printf("syntax error: operator at beginning or end `%s'\n", tmp->arg);
-			return (1);
-		}
 		// check if there is an operator after another operator
 		if (ft_isoperator(tmp->type) && (tmp->next == NULL || ft_isoperator(tmp->next->type)))
 		{

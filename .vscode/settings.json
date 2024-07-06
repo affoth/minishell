@@ -14,6 +14,11 @@
 		"tuple": "c",
 		"ctype.h": "c",
 		"stdbool.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"signal.h": "c",
+		"libft.h": "c",
+		"fcntl.h": "c",
+		"cstdlib": "c",
+		"wait.h": "c"
 	}
 }

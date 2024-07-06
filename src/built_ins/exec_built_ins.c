@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:37:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 23:00:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:50:50 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ int is_built_in(char *arg)
 }
 
 // Function to execute built-in commands
-void exec_built_ins(t_arg *args_head)
+void exec_built_ins(t_gc *gc, t_arg *args_head)
 {
+	printf("exec_built_ins\n");
 	if (ft_strcmp(args_head->arg, "cd") == 0)
-		built_in_cd(args_head, &environ);
+		built_in_cd(gc, args_head, &environ);
 	if (ft_strcmp(args_head->arg, "echo") == 0)
 		built_in_echo(args_head);
 	if (ft_strcmp(args_head->arg, "pwd") == 0)
@@ -44,9 +45,9 @@ void exec_built_ins(t_arg *args_head)
 	if (ft_strcmp(args_head->arg, "env") == 0)
 		built_in_env(environ);
 	if (ft_strcmp(args_head->arg, "export") == 0)
-		built_in_export(args_head, &environ);
+		built_in_export(gc, args_head, &environ);
 	if (ft_strcmp(args_head->arg, "unset") == 0)
-		built_in_unset(args_head, &environ);
+		built_in_unset(gc, args_head, &environ);
 	if (ft_strcmp(args_head->arg, "exit") == 0)
 		built_in_exit(args_head);
 }

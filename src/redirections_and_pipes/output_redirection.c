@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/04 17:07:17 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/06 16:52:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ which is only relevant because O_CREAT is one of the flags.
 0644 is an octal number that indicates the permissions of the file if it's created.
 In this case, 0644 means the owner of the file will have read
 and write permissions, and everyone else will have read permissions.*/
-void	output_redirection(t_arg *first_arg, t_arg *second_arg, int fd_input)
+void	output_redirection(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_input)
 {
 	int	fd;
 	int	stdout_save;
@@ -99,7 +99,7 @@ void	simple_output_redirection(t_arg *head, t_arg *tmp)
 	dup2_check = dup2(fd, STDOUT_FILENO);
 	if (dup2_check == -1)
 		perror("dup2");
-	redirect_execve_args(tmp);
+	redirect_execve_args(gc, tmp);
 	dup2(stdout_save, STDOUT_FILENO);
 	if (dup2(stdout_save, STDOUT_FILENO) == -1)
 		perror("dup2");

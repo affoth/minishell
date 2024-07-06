@@ -6,20 +6,20 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 20:50:46 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:09:08 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Function to remove quotes from a string
-char	*remove_quotes(const char *str)
+char	*remove_quotes(t_gc *gc, const char *str)
 {
 	char *result;
 	int i;
 	int	j;
 
-	result = (char *)ft_gc_malloc(strlen(str) + 1);
+	result = (char *)ft_gc_malloc(gc, (strlen(str) + 1));
 	if (!result)
 	{
 		perror("malloc");
@@ -40,7 +40,7 @@ char	*remove_quotes(const char *str)
 }
 
 // get path for execve
-char	*get_path(char *cmd)
+char	*get_path(t_gc *gc, char *cmd)
 {
 	char *path;
 	char *path_env;
@@ -55,16 +55,16 @@ char	*get_path(char *cmd)
 	// Check if cmd is already an absolute path
 	if (access(cmd, F_OK | X_OK) == 0)
 	{
-		return ft_shell_strdup(cmd);
+		return ft_shell_strdup(gc, cmd);
 	}
 	path_env = getenv("PATH");
-	path_split = ft_shell_split(path_env, ':');
+	path_split = ft_shell_split(gc, path_env, ':');
 	i = 0;
 	while (path_split[i])
 	{
 		// Construct the full path directly
-		path = ft_shell_strjoin(path_split[i], "/");
-		path = ft_shell_strjoin(path, cmd);
+		path = ft_shell_strjoin(gc, path_split[i], "/");
+		path = ft_shell_strjoin(gc, path, cmd);
 		if (access(path, F_OK | X_OK) == 0)
 		{
 			return (path);
@@ -86,7 +86,7 @@ int	count_arguments(t_arg *args_head)
 }
 
 // fork and execve
-void	execve_args(t_arg *args_head)
+void	execve_args(t_gc *gc, t_arg *args_head)
 {
 	pid_t pid;
 	char *path;
@@ -96,15 +96,15 @@ void	execve_args(t_arg *args_head)
 
 	argc = count_arguments(args_head);
 	i = 0;
-	args = (char **)ft_gc_malloc(sizeof(char *) * (argc + 1));
+	args = (char **)ft_gc_malloc(gc, (sizeof(char *) * (argc + 1)));
 	while (args_head)
 	{
-		args[i] = ft_shell_strdup(remove_quotes(args_head->arg));
+		args[i] = ft_shell_strdup(gc, remove_quotes(gc, args_head->arg));
 		args_head = args_head->next;
 		i++;
 	}
 	args[i] = NULL;
-	path = get_path(args[0]);
+	path = get_path(gc, args[0]);
 	printf("Resolved path: %s\n", path);  // Print resolved path
 	if (!path)
 	{
@@ -113,7 +113,7 @@ void	execve_args(t_arg *args_head)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(path, args, NULL);
+		execve(path, args, environ);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/26 15:39:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:51:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ void	ft_sort(char **env, int len)
 
 }
 
-void print_export_env(char **env)
+void print_export_env(t_gc *gc, char **env)
 {
 	int		env_len;
 	char	**sorted_env;
 	int		i;
 
 	env_len = ft_env_len(env);
-	sorted_env = (char **)ft_gc_malloc(sizeof(char *) * (env_len + 1));
+	sorted_env = (char **)ft_gc_malloc(gc, (sizeof(char *) * (env_len + 1)));
 	i = 0;
 	while (i < env_len) {
 		sorted_env[i] = ft_strdup(env[i]);
@@ -69,14 +69,14 @@ void print_export_env(char **env)
 }
 
 // Handle the export built-in command
-void built_in_export(t_arg *args_head, char ***env)
+void built_in_export(t_gc *gc, t_arg *args_head, char ***env)
 {
 	t_arg *tmp;
 
 	tmp = args_head->next;
 	if (!tmp)
 	{
-		print_export_env(*env);
+		print_export_env(gc, *env);
 		return;
 	}
 
@@ -84,7 +84,7 @@ void built_in_export(t_arg *args_head, char ***env)
 	{
 		if (ft_strchr(tmp->arg, '=') && tmp->arg[0] != '=' && tmp->arg[ft_strlen(tmp->arg) - 1] != '=')
 		{
-			*env = change_or_add_env_var(tmp->arg, *env);
+			*env = change_or_add_env_var(gc, tmp->arg, *env);
 		}
 		else
 		{

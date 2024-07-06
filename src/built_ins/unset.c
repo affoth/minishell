@@ -6,20 +6,20 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 16:46:30 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 19:59:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:29:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../include/minishell.h"
 
 // Remove the environment variable at the given index
-char	**remove_env_var(char **env, int env_idx)
+char	**remove_env_var(t_gc *gc, char **env, int env_idx)
 {
 	int		env_len;
 	int		i;
 
 	env_len = ft_env_len(env);
-	char	**new_env = ft_gc_malloc((env_len) * sizeof(char *));
+	char	**new_env = ft_gc_malloc(gc, ((env_len) * sizeof(char *)));
 	if (!new_env)
 	{
 		perror("No memory left for new_env");
@@ -42,7 +42,7 @@ char	**remove_env_var(char **env, int env_idx)
 }
 
 // Handle the unset built-in command
-void	built_in_unset(t_arg *args_head, char ***env)
+void	built_in_unset(t_gc *gc, t_arg *args_head, char ***env)
 {
 	t_arg	*tmp;
 	int		env_idx;
@@ -57,7 +57,7 @@ void	built_in_unset(t_arg *args_head, char ***env)
 		env_idx = find_var_in_env(*env, tmp->arg);
 		if (env_idx != -1)
 		{
-			*env = remove_env_var(*env, env_idx);
+			*env = remove_env_var(gc, *env, env_idx);
 		}
 		tmp = tmp->next;
 	}

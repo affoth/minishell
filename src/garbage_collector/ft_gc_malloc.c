@@ -6,16 +6,14 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:50:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/26 14:58:07 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:08:21 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_garbage *g_head = NULL; // Define and initialize the global variable
-
 // Function to allocate memory and add to garbage collector
-void *ft_gc_malloc(size_t size)
+void *ft_gc_malloc(t_gc *gc, size_t size)
 {
 	void *ptr;
 	t_garbage *new_node;
@@ -35,19 +33,19 @@ void *ft_gc_malloc(size_t size)
 		exit(EXIT_FAILURE);
 	}
 	new_node->ptr = ptr;
-	new_node->next = g_head;
-	g_head = new_node;
+	new_node->next = gc->head;
+	gc->head = new_node;
 
 	return ptr;
 }
 
-void ft_gc_free(void)
+void ft_gc_free(t_gc *gc)
 {
 	t_garbage *tmp;
-	while (g_head)
+	while (gc->head)
 	{
-		tmp = g_head;
-		g_head = g_head->next;
+		tmp = gc->head;
+		gc->head = gc->head->next;
 		free(tmp->ptr);
 		free(tmp);
 	}

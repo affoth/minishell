@@ -6,14 +6,14 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/06 13:25:50 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/06 16:42:26 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 //ORINGINAL FUNCTION
-void	simple_input_redirection(t_arg *head, t_arg *tmp)
+void	simple_input_redirection(t_gc *gc, t_arg *head, t_arg *tmp)
 {
 	int	fd;
 	int	dup2_check;
@@ -30,7 +30,14 @@ void	simple_input_redirection(t_arg *head, t_arg *tmp)
 		dup2_check = dup2(fd, STDIN_FILENO);
 		if (dup2_check == -1)
 			perror("dup2");
-		redirect_execve_args(tmp);
+			// ft_gc_free();
+			// exit(EXIT_FAILURE);
+		}
+		// printf("\nInput redirection: %s\n", head->next->arg);
+		// printf("fd: %d\n", fd);
+		// printf("STDIN_FILENO: %d\n\n", STDIN_FILENO);
+		//Execute command
+		redirect_execve_args(gc, tmp);
 		dup2(stdin_save, STDIN_FILENO);
 		close(stdin_save);
 		close(fd);

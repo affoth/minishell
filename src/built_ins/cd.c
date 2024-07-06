@@ -6,22 +6,26 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/27 22:27:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/07/02 14:04:01 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// Update environment variable PWD
-
 // Function to change directory
-void built_in_cd(t_arg *args_head, char ***env)
+void built_in_cd(t_gc *gc, t_arg *args_head, char ***env)
 {
 	char *target_dir;
-	char *oldpwd;;
+	char *oldpwd;
+	char *newpwd;
 
 	oldpwd = getcwd(NULL, 0);
-	target_dir = NULL;
+	if (!oldpwd)
+	{
+		perror("getcwd");
+		return;
+	}
+
 	// Determine the target directory based on the argument
 	if (args_head->next)
 	{
@@ -33,6 +37,7 @@ void built_in_cd(t_arg *args_head, char ***env)
 		if (!target_dir)
 		{
 			ft_printf("Error: HOME environment variable not set.\n");
+			free(oldpwd);
 			return;
 		}
 	}
@@ -42,9 +47,24 @@ void built_in_cd(t_arg *args_head, char ***env)
 	{
 		// Print error message along with the target directory and error details
 		ft_printf("Error changing directory to %s\n", target_dir);
+		free(oldpwd);
+		return;
 	}
 
-	// update oldpwd
-	*env = change_or_add_env_var(ft_strjoin("OLDPWD=", oldpwd), *env);
-	*env = change_or_add_env_var(ft_strjoin("PWD=", getcwd(NULL, 0)), *env);
+	newpwd = getcwd(NULL, 0);
+	if (!newpwd)
+	{
+		perror("getcwd");
+		free(oldpwd);
+		return;
+	}
+
+	// Update environment variables
+	*env = change_or_add_env_var(gc, ft_shell_strjoin(gc, "OLDPWD=", oldpwd), *env);
+	*env = change_or_add_env_var(gc, ft_shell_strjoin(gc, "PWD=", newpwd), *env);
+
+	// Free allocated memory
+	free(oldpwd);
+	free(newpwd);
 }
+
