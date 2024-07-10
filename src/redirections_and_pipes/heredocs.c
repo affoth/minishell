@@ -6,13 +6,14 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:10:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/06 16:36:16 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/10 18:08:31 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void heredoc(const char *delimiter) {
+void heredoc(const char *delimiter)
+{
 	int pipe_fd[2];
 	pid_t child_pid;
 	char *line = NULL;

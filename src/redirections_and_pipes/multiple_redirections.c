@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 19:28:09 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/06 16:51:00 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/10 18:39:51 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	handle_multiple_redirections_and_pipes(t_gc *gc, t_arg *first_arg, t_arg *s
 
 
 
-void	multiple_redirections(t_arg *head)
+void	multiple_redirections(t_gc *gc, t_arg *head)
 {
 	t_arg	*first_arg;
 	t_arg	*second_arg;
@@ -59,19 +59,19 @@ void	multiple_redirections(t_arg *head)
 			// if (second_arg->type == PIPE)
 			// 	second_arg = multiple_pipes(first_arg, second_arg->next);
 			// else
-				fd = handle_multiple_redirections_and_pipes(first_arg, second_arg->next, fd);
-				if (is_executable(second_arg->next))
+				fd = handle_multiple_redirections_and_pipes(gc, first_arg, second_arg->next, fd);
+				if (is_executable(gc, second_arg->next))
 					first_arg = second_arg->next;
 		}
 		second_arg = second_arg->next;
 	}
 }
 //check with get_path if the command is executable
-int	is_executable(t_arg *arg)
+int	is_executable(t_gc *gc, t_arg *arg)
 {
 	char	*path;
 
-	path = get_path(arg->arg);
+	path = get_path(gc, arg->arg);
 	if (!path)
 	{
 		fprintf(stderr, "Command not found: %s\n", arg->arg);
@@ -80,7 +80,7 @@ int	is_executable(t_arg *arg)
 	return (1);
 }
 
-int	handle_multiple_redirections_and_pipes(t_arg *first_arg, t_arg *second_arg, int fd)
+int	handle_multiple_redirections_and_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd)
 {
 	if (second_arg->prev->type == REDIRECTION_IN)
 	{
