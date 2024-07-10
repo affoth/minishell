@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/06 16:16:43 by afoth            ###   ########.fr       */
+/*   Updated: 2024/07/07 18:34:14 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ int		check_file_readable(const char *filepath);
 void	output_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
 void	append_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
 void	heredoc(const char *delimiter);
-void	pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
 int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);
 void	redirect_execve_args(t_gc *gc, t_arg *args_head);
@@ -148,7 +147,7 @@ int		is_executable(t_arg *arg);
 t_arg	*search_for_next_redirection(t_arg *tmp);
 
 //pipes
-void	pipe_redirection(t_arg *head, t_arg *tmp, int fd_input);
+void	pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp, int fd_input)
 int		multiple_pipes(t_arg *first_arg, t_arg *second_arg, int fd);
 void	process_left_arg(int *fd, t_arg *first_arg);
 void	process_right_arg(int *fd, t_arg *second_arg);
