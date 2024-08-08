@@ -1,11 +1,9 @@
 FAILED TEST
-awk '{print $1}' < output.txt
-tr 'a-z' 'A-Z' < output.txt
+
 
 cat < output.txt | wc
-ls -l | grep ".txt"
 find / | head -n 10 BACKSLASH IS NOT REQUIRED
-non_existent_command | wc -l
+
 $'test\n\n\nhi'
 
 var="world"
@@ -18,4 +16,12 @@ echo 'aspas -> " '
 echo 'aspas ->"'
 echo "aspas -> ' "
 echo '$PWD'
-echo "$PWD" 
+echo "$PWD"
+
+Exit codes in general?
+
+cat << EOF | wc -l
+line 1
+line 2
+line 3
+EOF
