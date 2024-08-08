@@ -12,3 +12,10 @@ var="world"
 echo $var
 
 sort < output.txt > sorted.txt
+echo 'exit_code ->$? user ->$USER home -> $HOME'
+echo "exit_code ->$? user ->$USER home -> $HOME"
+echo 'aspas -> " '
+echo 'aspas ->"'
+echo "aspas -> ' "
+echo '$PWD'
+echo "$PWD" 
