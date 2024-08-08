@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:28:26 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/01 15:58:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/08 17:09:23 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void print_echo_arguments(t_arg *args_head)
 	while (tmp)
 	{
 		if (!first_arg)
-			ft_printf(" ");
-		ft_printf("%s", tmp->arg);
+			printf(" ");
+		printf("%s", tmp->arg);
 		first_arg = false;
 		tmp = tmp->next;
 	}

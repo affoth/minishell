@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/10 18:52:40 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/08 17:01:02 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void	process_left_arg(t_gc *gc, int *fd, t_arg *first_arg)
 	}
 	if (pid1 > 0)
 	{
-		printf("\nchild1\n");
-		printf("pid1: %d\n", pid1);
+		//printf("\nchild1\n");
+		//printf("pid1: %d\n", pid1);
 	}
 	if (pid1 == 0)
 	{
@@ -135,8 +135,8 @@ void process_right_arg(t_gc *gc, int *fd, t_arg *second_arg)
 	}
 	if (pid2 > 0)
 	{
-		printf("\nchild2\n");
-		printf("pid2: %d\n", pid2);
+		//printf("\nchild2\n");
+		//printf("pid2: %d\n", pid2);
 	}
 	if (pid2 == 0)
 	{
@@ -171,8 +171,8 @@ void	process_right_arg_with_pipes_ahead(t_gc *gc, int *fd, int *fd2, t_arg *seco
 	}
 	if (pid2 > 0)
 	{
-		printf("\nmorechild\n");
-		printf("pidmore: %d\n", pid2);
+		//printf("\nmorechild\n");
+		//printf("pidmore: %d\n", pid2);
 	}
 	if (pid2 == 0)
 	{
@@ -264,8 +264,8 @@ void	simple_pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp)
 	}
 	if (pid2 > 0)
 	{
-		printf("\nchild2\n");
-		printf("pid2: %d\n", pid2);
+		//printf("\nchild2\n");
+		//printf("pid2: %d\n", pid2);
 	}
 	//make sure to close the pipes in the parent process
 	close(fd[0]);

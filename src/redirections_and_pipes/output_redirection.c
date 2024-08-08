@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/10 18:01:19 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/08 17:00:20 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void	output_redirection(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_in
 	}
 	if (pid > 0)
 	{
-		printf("\noutchild\n");
-		printf("pidout: %d\n", pid);
+		//printf("\noutchild\n");
+		//printf("pidout: %d\n", pid);
 	}
 	if (pid == 0)
 	{

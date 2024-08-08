@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:20:25 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/06/20 18:10:06 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/08 17:07:38 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ void	built_in_exit(t_arg *args_head)
 
 	if (tmp->next)
 	{
-		ft_printf("exit: too many arguments\n");
+		printf("exit: too many arguments\n");
 		return;
 	}
 
 	if (!ft_isnumber(tmp->arg) || ft_atoi(tmp->arg) < 0 || ft_atoi(tmp->arg) > 255)
 	{
-		ft_printf("exit: %s: numeric required from 0 to 255\n", tmp->arg);
+		printf("exit: %s: numeric required from 0 to 255\n", tmp->arg);
 		exit(255);
 	}
 	ex_code = ft_atoi(tmp->arg);
-	ft_printf("exit status: %d\n", ex_code);
+	printf("exit status: %d\n", ex_code);
 	exit(ex_code);
 }

@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/10 18:28:21 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/08 16:52:52 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	advanced_input_redirection(t_gc *gc, t_arg *second_arg, t_arg *first_arg)
 		//stdin_save = dup(STDIN_FILENO);
 		//if (stdin_save == -1)
 			//perror("dup");
-
 		redirect_execve_args(gc, first_arg);
 		//dup2(stdin_save, STDIN_FILENO);
 		//close(stdin_save);

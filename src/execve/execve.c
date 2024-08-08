@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 15:09:08 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:58:48 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	execve_args(t_gc *gc, t_arg *args_head)
 	}
 	args[i] = NULL;
 	path = get_path(gc, args[0]);
-	printf("Resolved path: %s\n", path);  // Print resolved path
+	//printf("Resolved path: %s\n", path);  // Print resolved path
 	if (!path)
 	{
 		return;

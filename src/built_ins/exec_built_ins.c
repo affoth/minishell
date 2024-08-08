@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_ins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:37:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 13:50:50 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/08 17:09:42 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int is_built_in(char *arg)
 // Function to execute built-in commands
 void exec_built_ins(t_gc *gc, t_arg *args_head)
 {
-	printf("exec_built_ins\n");
+	//printf("exec_built_ins\n");
 	if (ft_strcmp(args_head->arg, "cd") == 0)
 		built_in_cd(gc, args_head, &environ);
 	if (ft_strcmp(args_head->arg, "echo") == 0)

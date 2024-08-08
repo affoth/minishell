@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/02 13:38:29 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:57:42 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,6 @@ t_arg *tokenizer(t_gc *gc, char *line)
 		ft_printf("Syntax checker not passed\n");
 		return NULL;
 	}
-	print_args(args_head);
+	//print_args(args_head);
 	return 	args_head;
 }

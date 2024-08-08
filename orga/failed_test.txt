@@ -1,14 +1,18 @@
 FAILED TEST
-awk '{print $1}' < output.txt
-tr 'a-z' 'A-Z' < output.txt
 
 cat < output.txt | wc
-ls -l | grep ".txt"
 find / | head -n 10 BACKSLASH IS NOT REQUIRED
-non_existent_command | wc -l
+//non_existent_command | wc -l
 $'test\n\n\nhi'
 
 var="world"
 echo $var
 
 sort < output.txt > sorted.txt
+echo 'exit_code ->$? user ->$USER home -> $HOME'
+echo "exit_code ->$? user ->$USER home -> $HOME"
+echo 'aspas -> " '
+echo 'aspas ->"'
+echo "aspas -> ' "
+echo '$PWD'
+echo "$PWD" 
