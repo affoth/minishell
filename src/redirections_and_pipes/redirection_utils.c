@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/06 17:00:11 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/09 16:28:33 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	handle_redirection_or_pipe(t_gc *gc, t_arg *tmp_position)
             {
                 heredoc(tmp_position->next->arg);
             }
+			//need an else statement?
 		}
 		else if (tmp_position->type == PIPE)
 		{
