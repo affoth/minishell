@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:10:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/10 18:08:31 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/12 12:17:40 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,17 @@ void heredoc(const char *delimiter)
 		close(pipe_fd[0]); // Close reading end of the pipe
 		set_signals_child();
 
-		while (1) {
+		while (1)
+		{
 			line = readline("heredoc> ");
-			if (line == NULL) { // Ctrl+D or readline error
+			if (line == NULL) // Ctrl+D or readline error
 				break;
-			}
 
-			if (strcmp(line, delimiter) == 0) {
+			if (strcmp(line, delimiter) == 0)
+			{
 				free(line);
 				break;
 			}
-
 			write(pipe_fd[1], line, strlen(line));
 			write(pipe_fd[1], "\n", 1);
 			free(line);

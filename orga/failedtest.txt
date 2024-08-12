@@ -4,6 +4,11 @@ cat < output.txt | wc
 find / | head -n 10 BACKSLASH IS NOT REQUIRED
 //non_existent_command | wc -l
 env | sort | grep -v SHLVL | grep -v ^_
+cat << EOF | wc -l
+line 1
+line 2
+line 3
+EOF
 
 $'test\n\n\nhi'
 
@@ -34,8 +39,3 @@ HELLO-=123
 
 cd $PWD hi
 
-cat << EOF | wc -l
-line 1
-line 2
-line 3
-EOF
