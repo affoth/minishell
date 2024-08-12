@@ -3,7 +3,11 @@ FAILED TEST
 cat < output.txt | wc
 find / | head -n 10 BACKSLASH IS NOT REQUIRED
 //non_existent_command | wc -l
+env | sort | grep -v SHLVL | grep -v ^_
+
 $'test\n\n\nhi'
+
+
 
 var="world"
 echo $var
@@ -15,4 +19,17 @@ echo 'aspas -> " '
 echo 'aspas ->"'
 echo "aspas -> ' "
 echo '$PWD'
-echo "$PWD" 
+echo "$PWD"
+
+exit codes
+exit 298
+mini output = (exit: 298: numeric required from 0 to 255)
+bash output = ()
+mini exit code = 255
+bash exit code = 42
+
+export hello
+export HELLO=123 A
+HELLO-=123
+
+cd $PWD hi
