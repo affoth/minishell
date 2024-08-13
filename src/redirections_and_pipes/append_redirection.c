@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 22:59:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/10 18:13:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/13 15:01:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	append_redirection(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_in
 	stdout_save = dup(STDOUT_FILENO);
 	if (stdout_save == -1)
 		perror("dup");
-
-
 	pid = fork();
 	if (pid == -1)
 	{

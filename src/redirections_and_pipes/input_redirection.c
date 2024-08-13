@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:28:22 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/10 18:28:21 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/13 15:04:19 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,3 +97,35 @@ int	check_file_readable(const char *filepath)
 	return (0);
 }
 
+
+//old ft,if new breaks
+/* int	advanced_input_redirection(t_gc *gc, t_arg *second_arg, t_arg *first_arg)
+{
+	int	fd;
+	int	dup2_check;
+	t_arg	*next_redirection;
+	//int stdin_save;
+
+	if (!check_file_readable(second_arg->arg))
+	{
+		fd = open(second_arg->arg, O_RDONLY);
+		if (fd == -1)
+			perror("open");
+		next_redirection = search_for_next_redirection(first_arg);
+		dup2_check = dup2(fd, STDIN_FILENO);
+		if (dup2_check == -1)
+			perror("dup2");
+		if (next_redirection->type == PIPE || next_redirection->type == REDIRECTION_OUT || next_redirection->type == REDIRECTION_APPEND)
+			return (fd);
+		//stdin_save = dup(STDIN_FILENO);
+		//if (stdin_save == -1)
+			//perror("dup");
+
+		redirect_execve_args(gc, first_arg);
+		//dup2(stdin_save, STDIN_FILENO);
+		//close(stdin_save);
+		//close(fd);
+		return (fd);
+	}
+	return (-1);
+} */

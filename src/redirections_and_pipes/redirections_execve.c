@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_execve.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:19:55 by afoth             #+#    #+#             */
-/*   Updated: 2024/07/02 13:51:41 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:00:34 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,18 @@ void redirect_execve_args(t_gc *gc, t_arg *args_head)
 		tmp = tmp->next;
 	}
 	args[i] = NULL;
-
 	path = get_path(gc, args[0]);
 	if (!path)
 	{
 		fprintf(stderr, "Command not found: %s\n", args[0]);
 		return;
 	}
-
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
 		return;
 	}
-
 	if (pid == 0)
 	{
 		// In child process

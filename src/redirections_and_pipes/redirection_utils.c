@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:33:45 by afoth             #+#    #+#             */
-/*   Updated: 2024/08/09 16:28:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/13 14:59:36 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,11 @@ void	handle_redirection_or_pipe(t_gc *gc, t_arg *tmp_position)
 	while (tmp_position != NULL)
 	{
 		if (tmp_position->type == REDIRECTION_IN)
-		{
 			simple_input_redirection(gc, tmp_position, head_of_struct);
-		}
 		else if (tmp_position->type == REDIRECTION_OUT)
-		{
 			simple_output_redirection(gc, tmp_position, head_of_struct);
-		}
 		else if (tmp_position->type == REDIRECTION_APPEND)
-		{
 			simple_append_redirection(gc, tmp_position, head_of_struct);
-		}
 		else if (tmp_position->type == HEREDOC)
 		{
 			// Get the delimiter which is the next argument
@@ -45,9 +39,7 @@ void	handle_redirection_or_pipe(t_gc *gc, t_arg *tmp_position)
 			//need an else statement?
 		}
 		else if (tmp_position->type == PIPE)
-		{
 			simple_pipe_redirection(gc, tmp_position, head_of_struct);
-		}
 		tmp_position = tmp_position->next;
 	}
 }

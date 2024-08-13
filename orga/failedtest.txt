@@ -2,8 +2,10 @@ FAILED TEST
 
 cat < output.txt | wc
 find / | head -n 10 BACKSLASH IS NOT REQUIRED
-//non_existent_command | wc -l
 env | sort | grep -v SHLVL | grep -v ^_
+sort < output.txt > test.txt
+sort < output.txt >> test.txt
+
 cat << EOF | wc -l
 line 1
 line 2

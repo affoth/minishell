@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/06 16:17:21 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/13 15:13:50 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	main()
 
 	// Initialize the garbage collector
 	gc.head = NULL;
-
 	set_signals_parent();
 	while (1)
 	{
@@ -53,7 +52,6 @@ int	main()
 		args_head = tokenizer(&gc, expanded);
 		if (!args_head)
 			continue;
-
 		if (find_redirections_and_pipes(args_head) > 1)
 			multiple_redirections(&gc, args_head);
 		else if (find_redirections_and_pipes(args_head) == 1)
