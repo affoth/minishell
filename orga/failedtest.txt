@@ -1,8 +1,6 @@
 FAILED TEST
 
 cat < output.txt | wc
-find / | head -n 10 BACKSLASH IS NOT REQUIRED
-env | sort | grep -v SHLVL | grep -v ^_
 sort < output.txt > test.txt
 sort < output.txt >> test.txt
 
@@ -14,12 +12,13 @@ EOF
 
 $'test\n\n\nhi'
 
+env | sort | grep -v SHLVL | grep -v ^_
+find / | head -n 10 BACKSLASH IS NOT REQUIRED
 
 
 var="world"
 echo $var
 
-sort < output.txt > sorted.txt
 echo 'exit_code ->$? user ->$USER home -> $HOME'
 echo "exit_code ->$? user ->$USER home -> $HOME"
 echo 'aspas -> " '
@@ -41,3 +40,8 @@ HELLO-=123
 
 cd $PWD hi
 
+cat file.txt | sort | uniq
+ls | grep ".txt" | wc -l
+echo "Hello World" | tr '[:lower:]' '[:upper:]' | rev
+ps aux | grep "python" | awk '{print $2}'
+cat file.txt | sort | uniq
