@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/10 18:53:40 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/20 18:04:39 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ t_arg	*search_for_next_redirection(t_arg *tmp);
 //void	pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp, int fd_input);
 int		multiple_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd);
 void	process_left_arg(t_gc *gc, int *fd, t_arg *first_arg);
-void	process_right_arg(t_gc *gc, int *fd, t_arg *second_arg);
+void	process_right_arg(t_gc *gc, int *fd, t_arg *second_arg , int fd_input, bool prev_arg_taken);
 void	process_right_arg_with_pipes_ahead(t_gc *gc, int *fd, int *fd2, t_arg *second_arg);
 int		redirection_ahead(t_arg *second_arg);
 

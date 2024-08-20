@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 21:08:32 by afoth             #+#    #+#             */
-/*   Updated: 2024/08/20 16:30:36 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/20 18:04:32 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ int	output_redirection_ahead(t_arg *second_arg)
         second_arg = second_arg->next;
     }
     printf("No output redirection ahead.\n");
+    return (0);
+}
+
+int	redirection_ahead(t_arg *second_arg)
+{
+    while (second_arg != NULL)
+    {
+        if (second_arg->type == PIPE || second_arg->type == REDIRECTION_IN || second_arg->type == HEREDOC)
+        {
+            printf("Redirection ahead detected.\n");
+            return (1);
+        }
+        second_arg = second_arg->next;
+    }
+    printf("No redirection ahead.\n");
     return (0);
 }
 
@@ -53,7 +68,8 @@ int	multiple_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_input)
             close(fd[1]);
             return(-1);
         }
-        close(fd_input);
+		printf("fd[0]: %d, fd_input: %d\n", fd[0], fd_input);
+        //close(fd_input);
         printf("Dup2 successful: fd_input -> fd[0]\n");
     }
 
@@ -77,6 +93,7 @@ int	multiple_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_input)
         prev_arg_taken = true;
         close(fd[0]);
         close(fd[1]);
+		printf("RETURN fd2[1]: %d\n", fd2[1]);
         return(fd2[1]);
     }
     else
@@ -84,7 +101,7 @@ int	multiple_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_input)
         if (output_redirection_ahead(second_arg) != 1)
         {
             printf("Processing right argument.\n");
-            process_right_arg(gc, fd, second_arg);
+            process_right_arg(gc, fd, second_arg , fd_input, prev_arg_taken);
         }
         else
         {
@@ -95,6 +112,7 @@ int	multiple_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_input)
     }
     close(fd[0]);
     close(fd[1]);
+	prev_arg_taken = false;
     return (-2);
 }
 
@@ -125,7 +143,7 @@ void	process_left_arg(t_gc *gc, int *fd, t_arg *first_arg)
             exit(EXIT_FAILURE);
         }
         close(fd[0]);
-        close(fd[1]);
+        close(fd[1]);//?
         printf("Executing left argument command.\n");
         redirect_execve_args(gc, first_arg);
         exit(EXIT_FAILURE);
@@ -135,26 +153,12 @@ void	process_left_arg(t_gc *gc, int *fd, t_arg *first_arg)
     printf("Left argument processing complete.\n");
 }
 
-int	redirection_ahead(t_arg *second_arg)
-{
-    while (second_arg != NULL)
-    {
-        if (second_arg->type == PIPE || second_arg->type == REDIRECTION_IN || second_arg->type == HEREDOC)
-        {
-            printf("Redirection ahead detected.\n");
-            return (1);
-        }
-        second_arg = second_arg->next;
-    }
-    printf("No redirection ahead.\n");
-    return (0);
-}
-
-void process_right_arg(t_gc *gc, int *fd, t_arg *second_arg)
+void process_right_arg(t_gc *gc, int *fd, t_arg *second_arg, int fd_input, bool prev_arg_taken)
 {
     pid_t	pid2;
 
-    printf("Forking for right argument.\n");
+    printf("Forking for right argument.");
+	printf("fd[0]: %d, fd[1]: %d\n", fd[0], fd[1]);
     pid2 = fork();
     if (pid2 == -1)
     {
@@ -169,20 +173,32 @@ void process_right_arg(t_gc *gc, int *fd, t_arg *second_arg)
     }
     if (pid2 == 0)
     {
-        if (dup2(fd[0], STDIN_FILENO) == -1)
-        {
+		if (prev_arg_taken) {
+			printf("fd_input: %d\n", fd_input);
+            if (dup2(fd_input, STDIN_FILENO) == -1) {
+                close(fd_input);
+                perror("dup2");
+                exit(EXIT_FAILURE);
+            }
+			printf("fd[0] input : %d\n", fd[0]);
+			printf("fd_input: %d\n", fd_input);
+            close(fd_input);
+        } else {
+            if (dup2(fd[0], STDIN_FILENO) == -1) {
+                close(fd[0]);
+                close(fd[1]);
+                perror("dup2");
+                exit(EXIT_FAILURE);
+            }
             close(fd[0]);
-            close(fd[1]);
-            perror("dup2");
-            exit(EXIT_FAILURE);
         }
-        close(fd[0]);
-        close(fd[1]);
+		close(fd[1]);
         printf("Executing right argument command.\n");
         redirect_execve_args(gc, second_arg);
         exit(EXIT_FAILURE);
     }
     close(fd[0]);
+	close(fd[1]);
     waitpid(pid2, NULL, 0);
     printf("Right argument processing complete.\n");
 }
