@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:28:26 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/01 15:58:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:29:28 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void print_echo_arguments(t_arg *args_head)
 
 	while (tmp)
 	{
+		if (tmp->type == REDIRECTION_IN || tmp->type == REDIRECTION_OUT || tmp->type == REDIRECTION_APPEND || tmp->type == PIPE || tmp->type == HEREDOC)
+			break;
 		if (!first_arg)
 			ft_printf(" ");
 		ft_printf("%s", tmp->arg);

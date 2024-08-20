@@ -44,4 +44,3 @@ cat file.txt | sort | uniq
 ls | grep ".txt" | wc -l
 echo "Hello World" | tr '[:lower:]' '[:upper:]' | rev
 ps aux | grep "python" | awk '{print $2}'
-cat file.txt | sort | uniq

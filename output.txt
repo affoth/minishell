@@ -1,9 +1,2 @@
-apple
-elderberry
-grape
-fig
-banana
-cherry
-date
-fig
-HEllo
+exec_built_ins
+"Hi"

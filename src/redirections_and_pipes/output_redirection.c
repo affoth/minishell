@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:31:38 by afoth             #+#    #+#             */
-/*   Updated: 2024/08/19 15:31:27 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/19 15:40:48 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	output_redirection(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_in
 	fd = open(second_arg->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		perror("open");
-	//stdout_save = dup(STDOUT_FILENO);
+	stdout_save = dup(STDOUT_FILENO);
 	// if (stdout_save == -1)
 	// 	perror("dup");
 
