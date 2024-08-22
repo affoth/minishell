@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 13:36:16 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:01:43 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,45 @@
 
 static size_t	ft_words(char const *s, char c)
 {
-	size_t	count;
-	bool	quote;
-	char	quote_char;
+    size_t count = 0;
+    bool in_quote = false;
+    char quote_char = 0;
 
-	quote_char = 0;
-	count = 0;
-	quote = false;
-	while (*s)
-	{
-		while (*s == c && !quote)
-			s++;
-		skip_quoted_string(&s, &quote, &quote_char);
-		if (*s && (quote || *s != c))
-		{
-			count++;
-			while (*s && (quote || *s != c))
-			{
-				if (*s == quote_char)
-					quote = !quote;
-				s++;
-			}
-		}
-	}
-	return (count);
+    while (*s)
+    {
+        if (*s == '\'' || *s == '\"')
+        {
+            if (!in_quote)
+            {
+                in_quote = true;
+                quote_char = *s;
+            }
+            else if (*s == quote_char)
+            {
+                in_quote = false;
+                quote_char = 0;
+            }
+        }
+        if (*s == c && !in_quote)
+        {
+            while (*s == c)
+                s++;
+            count++;
+        }
+        else
+            s++;
+    }
+    return count + (in_quote ? 1 : 0);
 }
 
 static void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
 {
-	char	*word;
-	int		i;
-
-	i = 0;
-	word = ft_gc_malloc(gc, (end - start + 1) * sizeof(char));
-	if (!word)
-		return (NULL);
-	while (start < end)
-		word[i++] = s[start++];
-	word[i] = '\0';
-	return (word);
+    char *word = ft_gc_malloc(gc, end - start + 1);
+    if (!word)
+        return NULL;
+    strncpy(word, s + start, end - start);
+    word[end - start] = '\0';
+    return word;
 }
 
 char	**ft_shell_split(t_gc *gc, const char *s, char c)

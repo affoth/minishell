@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/13 15:13:50 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/22 15:54:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,9 @@ int	main()
 		args_head = tokenizer(&gc, expanded);
 		if (!args_head)
 			continue;
-		if (find_redirections_and_pipes(args_head) > 1)
-			multiple_redirections(&gc, args_head);
-		else if (find_redirections_and_pipes(args_head) == 1)
-			handle_redirection_or_pipe(&gc, args_head);
-		else if (is_built_in(args_head->arg))
-			exec_built_ins(&gc, args_head);
-		else
-			execve_args(&gc, args_head);
+
+		execute_with_pipes(&gc, args_head); // Call the function to handle pipes
+
 		free(input);
 		free(expanded);
 	}

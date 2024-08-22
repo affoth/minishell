@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:10:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/12 12:17:40 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/22 15:40:54 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void heredoc(const char *delimiter)
 	child_pid = fork();
 	if (child_pid == -1) {
 		perror("fork");
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
 		return;
 	}
 	else if (child_pid == 0)
@@ -38,20 +40,17 @@ void heredoc(const char *delimiter)
 		while (1)
 		{
 			line = readline("heredoc> ");
-			if (line == NULL) // Ctrl+D or readline error
+			if (line == NULL || strcmp(line, delimiter) == 0)
 				break;
 
-			if (strcmp(line, delimiter) == 0)
-			{
-				free(line);
-				break;
-			}
 			write(pipe_fd[1], line, strlen(line));
 			write(pipe_fd[1], "\n", 1);
 			free(line);
 		}
 
+		free(line);
 		close(pipe_fd[1]);
+		exit(0);
 	}
 	else
 	{
@@ -61,7 +60,6 @@ void heredoc(const char *delimiter)
 		// Wait for the child process to complete
 		waitpid(child_pid, &status, 0);
 
-		// Redirect standard input to the pipe if child process completed normally
 		if (WIFEXITED(status)) {
 			if (dup2(pipe_fd[0], STDIN_FILENO) == -1) {
 				perror("dup2");
@@ -72,3 +70,4 @@ void heredoc(const char *delimiter)
 		}
 	}
 }
+

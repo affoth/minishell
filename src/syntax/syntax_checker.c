@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 18:09:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/01 16:25:41 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:52:54 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,37 @@
 
 int ft_isoperator(TokenType type)
 {
-	if (type == PIPE || type == AND || type == OR ||
-			type == REDIRECTION_OUT || type == REDIRECTION_IN ||
-			type == REDIRECTION_APPEND || type == HEREDOC)
-		return (1);
-	return (0);
+    return (type == PIPE || type == AND || type == OR ||
+            type == REDIRECTION_OUT || type == REDIRECTION_IN ||
+            type == REDIRECTION_APPEND || type == HEREDOC);
 }
 
-//	check list for syntax errors and return 1 if there is an error
+// Check list for syntax errors and return 1 if there is an error
 int syntax_checker(t_arg *head)
 {
-	t_arg *tmp;
+    t_arg *tmp = head;
 
-	tmp = head;
-	while (tmp)
-	{
-		// check if there is an operator after another operator
-		if (ft_isoperator(tmp->type) && (tmp->next == NULL || ft_isoperator(tmp->next->type)))
-		{
-				printf("syntax error: same operator next to eachother or next is null `%s'\n", tmp->arg);
-				return (1);
-		}
-		// operator specific syntax checks
-		if (pipe_syntax(head) || redirection_syntax(head) || logical_syntax(head) || word_syntax(head))
-		{
-			return (1);
-		}
-		tmp = tmp->next;
-	}
-	return (0);
+    if (!head)
+    {
+        return 1; // Empty input
+    }
+
+    while (tmp)
+    {
+        // Check for consecutive operators or an operator at the end
+        if (ft_isoperator(tmp->type) && (tmp->next == NULL || ft_isoperator(tmp->next->type)))
+        {
+            printf("syntax error: same operator next to each other or next is null `%s'\n", tmp->arg);
+            return 1;
+        }
+        tmp = tmp->next;
+    }
+
+    // Perform operator-specific syntax checks
+    if (pipe_syntax(head) || redirection_syntax(head) || logical_syntax(head) || word_syntax(head))
+    {
+        return 1;
+    }
+
+    return 0;
 }

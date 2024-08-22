@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/10 18:53:40 by afoth            ###   ########.fr       */
+/*   Updated: 2024/08/22 17:01:58 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ typedef struct s_arg
 	enum TokenType type;
 	struct s_arg *prev;
 	struct s_arg *next;
-	//int exit_status;
 } t_arg;
 
 // Token struct
@@ -128,31 +127,13 @@ void	simple_output_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
 void	simple_input_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
 void	simple_pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
 
-//advanced redirections
-int	advanced_input_redirection(t_gc *gc, t_arg *second_arg, t_arg *first_arg);
+void 	handle_redirections(t_gc *gc, t_arg *args_head);
+void 	execute_with_pipes(t_gc *gc, t_arg *args_head);
 
-//redirections and pipes
-void	handle_redirection_or_pipe(t_gc *gc, t_arg *head_position);
-void	input_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
 int		check_file_readable(const char *filepath);
-void	output_redirection(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_input);
-void	append_redirection(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd_input);
 void	heredoc(const char *delimiter);
-int		find_redirections_and_pipes(t_arg *head);
 int		redirect_count_arguments(t_arg *args_head);
 void	redirect_execve_args(t_gc *gc, t_arg *args_head);
-void	multiple_redirections(t_gc *gc, t_arg *head);
-int		handle_multiple_redirections_and_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd);
-int		is_executable(t_gc *gc, t_arg *arg);
-t_arg	*search_for_next_redirection(t_arg *tmp);
-
-//pipes
-//void	pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp, int fd_input);
-int		multiple_pipes(t_gc *gc, t_arg *first_arg, t_arg *second_arg, int fd);
-void	process_left_arg(t_gc *gc, int *fd, t_arg *first_arg);
-void	process_right_arg(t_gc *gc, int *fd, t_arg *second_arg);
-void	process_right_arg_with_pipes_ahead(t_gc *gc, int *fd, int *fd2, t_arg *second_arg);
-int		redirection_ahead(t_arg *second_arg);
 
 //built_ins
 int		is_built_in(char *cmd);
