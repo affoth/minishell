@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/22 15:54:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:50:58 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int	main()
 		if (!args_head)
 			continue;
 
-		execute_with_pipes(&gc, args_head); // Call the function to handle pipes
+		if (is_built_in(args_head->arg))
+			exec_built_ins(&gc, args_head);
+		else
+			execve_args(&gc, args_head);
 
 		free(input);
 		free(expanded);

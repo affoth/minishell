@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/22 17:01:58 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:46:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,20 +121,6 @@ char	*ft_expand_env(t_gc *gc, char *env);
 char	*ft_shell_strjoin(t_gc *gc, char *s1, char *s2);
 char	*ft_shell_substr(t_gc *gc, const char *s, unsigned int start, size_t len);
 
-//sinple redirections
-void	simple_append_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
-void	simple_output_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
-void	simple_input_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
-void	simple_pipe_redirection(t_gc *gc, t_arg *head, t_arg *tmp);
-
-void 	handle_redirections(t_gc *gc, t_arg *args_head);
-void 	execute_with_pipes(t_gc *gc, t_arg *args_head);
-
-int		check_file_readable(const char *filepath);
-void	heredoc(const char *delimiter);
-int		redirect_count_arguments(t_arg *args_head);
-void	redirect_execve_args(t_gc *gc, t_arg *args_head);
-
 //built_ins
 int		is_built_in(char *cmd);
 void	exec_built_ins(t_gc *gc, t_arg *args_head);
@@ -158,7 +144,6 @@ int		count_arguments(t_arg *args_head);
 char	*remove_quotes(t_gc *gc, const char *str);
 
 extern volatile sig_atomic_t g_signal_received;
-
 
 void sigint_handler(int signum);
 void set_signals_parent(void);
