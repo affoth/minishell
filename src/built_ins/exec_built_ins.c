@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 15:37:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/27 15:30:08 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/08/28 00:01:43 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,21 @@
 // is built-in command
 int is_built_in(char *arg)
 {
-	if (ft_strcmp(arg, "cd") == 0)
-		return 1;
-	if (ft_strcmp(arg, "echo") == 0)
-		return 1;
-	if (ft_strcmp(arg, "pwd") == 0)
-		return 1;
-	if (ft_strcmp(arg, "env") == 0)
-		return 1;
-	if (ft_strcmp(arg, "export") == 0)
-		return 1;
-	if (ft_strcmp(arg, "unset") == 0)
-		return 1;
-	if (ft_strcmp(arg, "exit") == 0)
-		return 1;
-	return 0;
+    if (ft_strcmp(arg, "cd") == 0)
+        return 1;
+    if (ft_strcmp(arg, "echo") == 0)
+        return 1;
+    if (ft_strcmp(arg, "pwd") == 0)
+        return 1;
+    if (ft_strcmp(arg, "env") == 0)
+        return 1;
+    if (ft_strcmp(arg, "export") == 0)
+        return 1;
+    if (ft_strcmp(arg, "unset") == 0)
+        return 1;
+    if (ft_strcmp(arg, "exit") == 0)
+        return 1;
+    return 0;
 }
 
 // Function to execute built-in commands
@@ -37,18 +37,19 @@ void exec_built_ins(t_shell *shell)
 {
     t_arg *args_head = shell->cmds_head->args_head;
 
+    printf("exec_built_ins\n");
     if (ft_strcmp(args_head->arg, "cd") == 0)
         built_in_cd(shell);
-    else if (ft_strcmp(args_head->arg, "echo") == 0)
+    if (ft_strcmp(args_head->arg, "echo") == 0)
         built_in_echo(args_head);
-    else if (ft_strcmp(args_head->arg, "pwd") == 0)
+    if (ft_strcmp(args_head->arg, "pwd") == 0)
         built_in_pwd();
-    else if (ft_strcmp(args_head->arg, "env") == 0)
+    if (ft_strcmp(args_head->arg, "env") == 0)
         built_in_env(shell->env);
-    else if (ft_strcmp(args_head->arg, "export") == 0)
+    if (ft_strcmp(args_head->arg, "export") == 0)
         built_in_export(&shell->gc, args_head, &shell->env);
-    else if (ft_strcmp(args_head->arg, "unset") == 0)
+    if (ft_strcmp(args_head->arg, "unset") == 0)
         built_in_unset(&shell->gc, args_head, &shell->env);
-    else if (ft_strcmp(args_head->arg, "exit") == 0)
+    if (ft_strcmp(args_head->arg, "exit") == 0)
         built_in_exit(args_head);
 }

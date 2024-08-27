@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/27 17:32:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 23:58:03 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,14 @@ int word_syntax(t_arg *head);
 
 // Function prototypes for command processing
 t_arg *tokenizer(t_gc *gc, char *input);
-t_command *create_command(t_gc *gc);
+t_command *create_command();
 void add_arg_to_command(t_command *cmd, t_arg *arg);
 t_command *parse_commands(t_gc *gc, t_arg *args_head);
 void print_commands(t_command *cmds_head);
+
+// Function prototypes for redirection handling
+int handle_output_redirection(t_command *cmd, t_arg *arg);
+int handle_input_redirection(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
@@ -152,10 +156,13 @@ void built_in_unset(t_gc *gc, t_arg *args_head, char ***env);
 void built_in_exit(t_arg *args_head);
 
 // Function prototypes for execve
-void execve_args(t_shell *shell);
 char *get_path(t_gc *gc, char *cmd);
 int count_arguments(t_arg *args_head);
 char *remove_quotes(t_gc *gc, const char *str);
+int needs_piping(t_command *cmds_head);
+void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
+void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head);
+void execute_command(t_shell *shell, t_command *cmd);
 
 // Signal handling
 void sigint_handler(int signum);

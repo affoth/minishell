@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:12:24 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/27 20:19:27 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/28 00:03:25 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,13 @@ t_command *create_command(t_gc *gc)
     return new_cmd;
 }
 
-
 // Function to add an argument to a command
 void add_arg_to_command(t_command *cmd, t_arg *arg) {
-    if (arg == NULL) {
-        fprintf(stderr, "Error: arg is NULL\n");
+    if (!arg || !arg->arg) {
+        fprintf(stderr, "Error: invalid argument\n");
         return;
     }
-    if (arg->arg == NULL) {
-        fprintf(stderr, "Error: arg->arg is NULL\n");
-        return;
-    }
-    printf("Adding argument '%s' to command\n", arg->arg);
+
     if (!cmd->args_head) {
         cmd->args_head = arg;
     } else {
@@ -51,7 +46,6 @@ void add_arg_to_command(t_command *cmd, t_arg *arg) {
         current->next = arg;
         arg->prev = current;
     }
-    printf("Argument '%s' added successfully\n", arg->arg);
 }
 
 void print_commands(t_command *cmds_head) {
@@ -75,60 +69,20 @@ void print_commands(t_command *cmds_head) {
     }
 }
 
-int handle_output_redirection(t_command *current_cmd, t_arg *current_arg) {
-    int flags;
-
-    if (current_arg->type == REDIRECTION_OUT) {
-        flags = O_WRONLY | O_CREAT | O_TRUNC;
-    } else if (current_arg->type == REDIRECTION_APPEND) {
-        flags = O_WRONLY | O_CREAT | O_APPEND;
-    } else {
-        return -1; // Not an output redirection type
-    }
-
-    if (current_arg->next) {
-        printf("Handling output redirection to file '%s'\n", current_arg->next->arg);
-        current_cmd->stdout_fd = open(current_arg->next->arg, flags, 0644);
-        if (current_cmd->stdout_fd < 0) {
-            perror("Failed to open file for stdout redirection");
-        }
-        return 1; // Successfully handled the redirection, skip the next arg
-    }
-
-    return 0; // No next argument, nothing to handle
-}
-
-int handle_input_redirection(t_command *current_cmd, t_arg *current_arg) {
-    if (current_arg->type == REDIRECTION_IN) {
-        if (current_arg->next) {
-            printf("Handling input redirection from file '%s'\n", current_arg->next->arg);
-            current_cmd->stdin_fd = open(current_arg->next->arg, O_RDONLY);
-            if (current_cmd->stdin_fd < 0) {
-                perror("Failed to open file for stdin redirection");
-            }
-            return 1; // Successfully handled the redirection, skip the next arg
-        }
-    }
-
-    return 0; // No next argument, nothing to handle
-}
-
-/*void handle_heredoc(t_command *current_cmd, t_arg *current_arg) {
-    // Implement HEREDOC handling here (e.g., read until a delimiter)
-    // This is a placeholder function for future implementation.
-}*/
-
+// Function to parse commands from the tokenized arguments
 t_command *parse_commands(t_gc *gc, t_arg *args_head) {
     printf("Starting to parse commands\n");
     t_command *cmds_head = NULL;
     t_command *current_cmd = NULL;
     t_arg *current_arg = args_head;
+    t_command *last_cmd = NULL;
 
     while (current_arg) {
         printf("Processing argument: %s, Type: %d\n", current_arg->arg, current_arg->type);
+
         if (current_arg->type == PIPE) {
-            printf("Encountered PIPE, setting current_cmd to NULL\n");
-            current_cmd = NULL;
+            printf("Encountered PIPE\n");
+            current_cmd = NULL; // This will ensure the next command starts fresh
         } else {
             if (!current_cmd) {
                 printf("Creating a new command because current_cmd is NULL\n");
@@ -136,31 +90,20 @@ t_command *parse_commands(t_gc *gc, t_arg *args_head) {
                 if (!cmds_head) {
                     cmds_head = current_cmd;
                 } else {
-                    t_command *last_cmd = cmds_head;
-                    while (last_cmd->next) {
-                        last_cmd = last_cmd->next;
-                    }
                     last_cmd->next = current_cmd;
                 }
+                last_cmd = current_cmd;
             }
 
-            int skip_next_arg = 0;
-
-            // Handle redirection logic in separate functions
-            skip_next_arg = handle_output_redirection(current_cmd, current_arg);
-            if (!skip_next_arg) {
-                skip_next_arg = handle_input_redirection(current_cmd, current_arg);
-            }
-            /*if (!skip_next_arg && current_arg->type == HEREDOC) {
-                handle_heredoc(current_cmd, current_arg);
-            }*/
-
-            // If no redirection was handled, treat it as a normal argument
-            if (!skip_next_arg) {
+            // Handle redirection and add arguments
+            if (!handle_output_redirection(current_cmd, current_arg) &&
+                !handle_input_redirection(current_cmd, current_arg)) {
                 add_arg_to_command(current_cmd, current_arg);
-            } else {
-                current_arg = current_arg->next; // Skip the next argument
-                printf("Skipping the next argument\n");
+            }
+
+            // Skip next argument if redirection was handled
+            if (current_arg->type == REDIRECTION_OUT || current_arg->type == REDIRECTION_IN) {
+                current_arg = current_arg->next;
             }
         }
 
