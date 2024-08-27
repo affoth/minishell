@@ -6,11 +6,17 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:50:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 13:08:21 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:41:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+// Function to initialize the garbage collector
+void ft_gc_init(t_gc *gc)
+{
+    gc->head = NULL;
+}
 
 // Function to allocate memory and add to garbage collector
 void *ft_gc_malloc(t_gc *gc, size_t size)

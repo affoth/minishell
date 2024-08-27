@@ -6,55 +6,16 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/08/22 16:32:30 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 19:22:51 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "../../include/minishell.h"
-
-// typedef enum TokenType
-// {
-//     WORD,                // Generic word (command or argument)
-//     REDIRECTION_OUT,     // >
-//     REDIRECTION_IN,      // <
-//     REDIRECTION_APPEND,  // >>
-//     HEREDOC,             // <<
-//     PIPE,                // |
-//     AND,                 // &&
-//     OR,                  // ||
-//     OPEN_PAREN,          // (
-//     CLOSE_PAREN,         // )
-//     DOUBLE_QUOTED_STRING, // Double-quoted string
-//     SINGLE_QUOTED_STRING, // Single-quoted string
-//     ENV_VARIABLE,        // Environment variable (like $HOME)
-//     END                  // End of input
-// } TokenType;
-
-// // Argument struct
-// typedef struct s_arg
-// {
-//     char *arg;
-//     enum TokenType type;
-//     struct s_arg *prev;
-//     struct s_arg *next;
-// } t_arg;
-
-// // Token struct
-// typedef struct {
-//     char *arg;
-//     TokenType type;
-// } Token;
 
 // Mapping struct for token types that are required by subject pdf
 const Token typeMap[] =
 {
 	{"|", PIPE},
-	{"&&", AND},
-	{"||", OR},
-	{"(", OPEN_PAREN},
-	{")", CLOSE_PAREN},
 	{">", REDIRECTION_OUT},
 	{"<", REDIRECTION_IN},
 	{">>", REDIRECTION_APPEND},
@@ -73,31 +34,6 @@ TokenType get_token_type(char *arg)
 {
 	int i;
 
-	// // POSSIBLE TO TRIM WHITESPACES BEFORE AND AFTER THE ARGUMENT IF NEEDED
-	// while (ft_isspace(*arg))
-	// {
-	//     arg++;
-	// }
-
-    // // Trim trailing spaces
-    // char *end;
-
-    // end = arg + ft_strlen(arg) - 1;
-    // while (end > arg && ft_isspace(*end))
-	// // Trim trailing spaces
-	// char *end;
-
-	// end = arg + ft_strlen(arg) - 1;
-	// while (end > arg && ft_isspace(*end))
-	// {
-	//     end--;
-	// }
-	// end[1] = '\0'; // Null-terminate the trimmed string
-
-	// // Debug print to check the trimmed argument
-	// ft_printf("Trimmed arg: '%s'\n", arg);
-
-	// Iterate through the typeMap array checking if the token string is a substring of the argument
 	i = 0;
 	while (typeMap[i].arg != NULL)
 	{
@@ -171,22 +107,11 @@ void print_args(t_arg *head)
 	}
 }
 
-// // Free the memory allocated for the list
-// void free_arg_list(t_arg *head)
-// {
-// 	t_arg *current_node = head;
-// 	while (current_node != NULL) {
-// 		t_arg *temp_node = current_node;
-// 		current_node = current_node->next;
-// 		free(temp_node->arg);
-// 		free(temp_node);
-// 	}
-// }
-
 t_arg *tokenizer(t_gc *gc, char *line)
 {
 	if(ft_quotes_not_closed(line))
 	{
+		write(STDERR_FILENO, "Error: Quotes not closed\n", 25);
 		return NULL;
 	}
 	char **split_args = ft_shell_split(gc, line, ' ');
@@ -208,7 +133,7 @@ t_arg *tokenizer(t_gc *gc, char *line)
 	// Syntax check the list FOR OPERATORS aka. types PIPE, AND, OR, REDIRECTION_OUT, REDIRECTION_IN, REDIRECTION_APPEND, HEREDOC
 	if (syntax_checker(args_head) == 1)
 	{
-		ft_printf("Syntax checker not passed\n");
+        write(STDERR_FILENO, "Error: Syntax checker not passed\n", 33);
 		return NULL;
 	}
 	print_args(args_head);

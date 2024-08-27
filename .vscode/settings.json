@@ -19,6 +19,11 @@
 		"libft.h": "c",
 		"fcntl.h": "c",
 		"cstdlib": "c",
-		"wait.h": "c"
+		"wait.h": "c",
+		"deque": "c",
+		"string": "c",
+		"vector": "c",
+		"streambuf": "c",
+		"system_error": "c"
 	}
 }

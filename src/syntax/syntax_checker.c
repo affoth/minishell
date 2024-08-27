@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 18:09:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/22 16:52:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 15:56:30 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int ft_isoperator(TokenType type)
 {
-    return (type == PIPE || type == AND || type == OR ||
+    return (type == PIPE ||
             type == REDIRECTION_OUT || type == REDIRECTION_IN ||
             type == REDIRECTION_APPEND || type == HEREDOC);
 }
@@ -41,7 +41,7 @@ int syntax_checker(t_arg *head)
     }
 
     // Perform operator-specific syntax checks
-    if (pipe_syntax(head) || redirection_syntax(head) || logical_syntax(head) || word_syntax(head))
+    if (pipe_syntax(head) || redirection_syntax(head) || word_syntax(head))
     {
         return 1;
     }

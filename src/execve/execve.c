@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/22 17:49:59 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 15:39:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,38 +85,46 @@ int	count_arguments(t_arg *args_head)
 	return count;
 }
 
-// fork and execve
-void	execve_args(t_gc *gc, t_arg *args_head)
+// Function to fork and execve
+void execve_args(t_shell *shell)
 {
-	pid_t pid;
-	char *path;
-	char **args;
-	int i;
-	int argc;
+    pid_t pid;
+    char *path;
+    char **args;
+    int i;
+    int argc;
+    t_arg *args_head = shell->cmds_head->args_head;
 
-	argc = count_arguments(args_head);
-	i = 0;
-	args = (char **)ft_gc_malloc(gc, (sizeof(char *) * (argc + 1)));
-	while (args_head)
-	{
-		args[i] = ft_shell_strdup(gc, remove_quotes(gc, args_head->arg));
-		args_head = args_head->next;
-		i++;
-	}
-	args[i] = NULL;
-	path = get_path(gc, args[0]);
-	printf("Resolved path: %s\n", path);  // Print resolved path
-	if (!path)
-	{
-		return;
-	}
-	pid = fork();
-	if (pid == 0)
-	{
-		execve(path, args, environ);
-	}
-	else
-	{
-		waitpid(pid, NULL, 0);
-	}
+    argc = count_arguments(args_head);
+    i = 0;
+    args = (char **)ft_gc_malloc(&shell->gc, (sizeof(char *) * (argc + 1)));
+    while (args_head)
+    {
+        args[i] = ft_shell_strdup(&shell->gc, remove_quotes(&shell->gc, args_head->arg));
+        args_head = args_head->next;
+        i++;
+    }
+    args[i] = NULL;
+    path = get_path(&shell->gc, args[0]);
+    printf("Resolved path: %s\n", path);  // Print resolved path
+    if (!path)
+    {
+		write(STDERR_FILENO, args[0], strlen(args[0]));
+	    return;
+    }
+    pid = fork();
+    if (pid == 0)
+    {
+        execve(path, args, shell->env);
+        perror("Execution failed");
+        _exit(EXIT_FAILURE);
+    }
+    else if (pid < 0)
+    {
+        perror("Fork failed");
+    }
+    else
+    {
+        waitpid(pid, NULL, 0);
+    }
 }

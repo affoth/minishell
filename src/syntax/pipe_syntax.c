@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 18:55:31 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/28 21:03:20 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 15:52:15 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,26 @@
 
 int pipe_syntax(t_arg *head)
 {
-	t_arg *tmp;
+    t_arg *tmp;
 
-	tmp = head;
-	while (tmp)
-	{
-		if (tmp->type == PIPE)
-		{
-			if (!tmp->next || !tmp->prev)
-			{
-				ft_printf("pipe error: no arguments before or after pipe %s'\n", tmp->arg);
-				return (1);
-			}
-		}
-		tmp = tmp->next;
-	}
-	return (0);
+    tmp = head;
+    while (tmp)
+    {
+        if (tmp->type == PIPE)
+        {
+            if (!tmp->next || !tmp->prev)
+            {
+                write(STDERR_FILENO, "Syntax error: pipe '|' cannot be at the beginning or end of the command\n", 72);
+                return (1);
+            }
+
+            if (tmp->next->type == PIPE || tmp->prev->type == PIPE)
+            {
+                write(STDERR_FILENO, "Syntax error: consecutive pipes '||' are not allowed\n", 54);
+                return (1);
+            }
+        }
+        tmp = tmp->next;
+    }
+    return (0);
 }

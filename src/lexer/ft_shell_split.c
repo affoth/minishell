@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/22 17:40:47 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:12:27 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static size_t	ft_words(char const *s, char c)
     }
     return count + (in_quote ? 1 : 0);
 }
-
 static void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
 {
     char *word = ft_gc_malloc(gc, end - start + 1);
@@ -57,29 +56,32 @@ static void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
 
 char	**ft_shell_split(t_gc *gc, const char *s, char c)
 {
-	char	**array;
-	size_t	i;
-	size_t	j;
-	bool	quote;
-	int		index;
+    char	**array;
+    size_t	i;
+    size_t	j;
+    bool	quote;
+    int		index;
 
-	array = ft_gc_malloc(gc, (ft_words(s, c) + 1) * sizeof(char *));
-	if (!s || !array)
-		return (NULL);
-	assign(&i, &j, &index, &quote);
-	while (i <= ft_strlen(s))
-	{
-		handle_quote_split(s, i, &quote);
-		if ((s[i] != c || quote == true) && index < 0)
-			index = i;
-		else if (((s[i] == c && quote == false) || \
-		i == ft_strlen(s)) && index >= 0)
-		{
-			array[j++] = ft_allocate(gc, s, index, i);
-			index = -1;
-		}
-		i++;
-	}
-	array[j] = NULL;
-	return (array);
+    if (!s)
+        return NULL;
+
+    array = ft_gc_malloc(gc, (ft_words(s, c) + 1) * sizeof(char *));
+    if (!array)
+        return NULL;
+
+    assign(&i, &j, &index, &quote);
+    while (i <= ft_strlen(s))
+    {
+        handle_quote_split(s, i, &quote);
+        if ((s[i] != c || quote == true) && index < 0)
+            index = i;
+        else if (((s[i] == c && quote == false) || i == ft_strlen(s)) && index >= 0)
+        {
+            array[j++] = ft_allocate(gc, s, index, i);
+            index = -1;
+        }
+        i++;
+    }
+    array[j] = NULL;
+    return array;
 }

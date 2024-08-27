@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/22 17:46:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:32:10 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,112 +42,124 @@
 
 extern char		**environ;
 
-// Global instance of signal management struct
+// TokenType enum
 typedef enum TokenType
 {
-	WORD,                // Generic word (command or argument)
-	REDIRECTION_OUT,     // >
-	REDIRECTION_IN,      // <
-	REDIRECTION_APPEND,  // >>
-	HEREDOC,             // <<
-	PIPE,                // |
-	AND,                 // &&
-	OR,                  // ||
-	OPEN_PAREN,          // (
-	CLOSE_PAREN,         // )
-	DOUBLE_QUOTED_STRING, // Double-quoted string
-	SINGLE_QUOTED_STRING, // Single-quoted string
-	ENV_VARIABLE,        // Environment variable (like $HOME)
-	END                  // End of input
+    WORD,                // Generic word (command or argument)
+    REDIRECTION_OUT,     // >
+    REDIRECTION_IN,      // <
+    REDIRECTION_APPEND,  // >>
+    HEREDOC,             // <<
+    PIPE,                // |
+    DOUBLE_QUOTED_STRING, // Double-quoted string
+    SINGLE_QUOTED_STRING, // Single-quoted string
+    ENV_VARIABLE,        // Environment variable (like $HOME)
+    END                  // End of input
 } TokenType;
 
 // Argument struct
 typedef struct s_arg
 {
-	char *arg;
-	enum TokenType type;
-	struct s_arg *prev;
-	struct s_arg *next;
+    char *arg;
+    TokenType type;
+    struct s_arg *prev;
+    struct s_arg *next;
 } t_arg;
+
+// Command struct
+typedef struct s_command
+{
+    t_arg *args_head;    // Head of the arguments list for this command
+    struct s_command *next; // Pointer to the next command in the pipeline
+    int stdin_fd;        // File descriptor for stdin redirection
+    int stdout_fd;       // File descriptor for stdout redirection
+} t_command;
 
 // Token struct
 typedef struct {
-	char *arg;
-	TokenType type;
+    char *arg;
+    TokenType type;
 } Token;
 
 // Garbage collector struct
 typedef struct s_garbage
 {
-	void *ptr;
-	struct s_garbage *next;
+    void *ptr;
+    struct s_garbage *next;
 } t_garbage;
 
 typedef struct s_gc
 {
-	t_garbage *head;
+    t_garbage *head;
 } t_gc;
 
-//garbage collector
-void	*ft_gc_malloc(t_gc *gc, size_t size);
-void	ft_gc_free(t_gc *gc);
+// Main shell struct
+typedef struct s_shell
+{
+    t_gc gc;            // Garbage collector
+    char **env;         // Environment variables
+    t_command *cmds_head; // Head of the commands list
+    volatile sig_atomic_t signal_received; // Signal handling
+} t_shell;
 
-//split
-void	handle_quote_split(const char *s, size_t i, bool *quote);
-void	skip_quoted_string(const char **s, bool *quote, char *quote_char);
-void	assign(size_t *i, size_t *j, int *index, bool *quote);
-char	**ft_shell_split(t_gc *gc, char const *s, char c);
-int		ft_quotes_not_closed(char *line);
+// Function prototypes for garbage collector
+void ft_gc_init(t_gc *gc);
+void ft_gc_free(t_gc *gc);
+void *ft_gc_malloc(t_gc *gc, size_t size);
 
-//expansion
-char	*expand_string(t_gc *gc, char *input);
+// Function prototypes for string manipulation
+char *ft_shell_strdup(t_gc *gc, const char *s);
+char *ft_shell_strndup(t_gc *gc, const char *s, size_t n);
+char *ft_shell_substr(t_gc *gc, const char *s, unsigned int start, size_t len);
+char *ft_shell_strjoin(t_gc *gc, char *s1, char *s2);
+char **ft_shell_split(t_gc *gc, const char *s, char c);
+// Function prototypes for parsing
+void handle_quote_split(const char *s, size_t i, bool *quote);
+void skip_quoted_string(const char **s, bool *quote, char *quote_char);
+void assign(size_t *i, size_t *j, int *index, bool *quote);
+int ft_quotes_not_closed(char *line);
 
-//lexer
-char	*ft_shell_strdup(t_gc *gc, const char *s1);
-char	*ft_shell_strndup(t_gc *gc, const char *s1, size_t n);
-char	*ft_shell_strjoin(t_gc *gc, char *s1, char *s2);
-t_arg	*tokenizer(t_gc *gc, char *line);
+// Expansion
+char *expand_string(t_gc *gc, char *input);
 
-//syntax
-int		word_syntax(t_arg *head);
-int		logical_syntax(t_arg	*head);
-int		pipe_syntax(t_arg *head);
-int		redirection_syntax(t_arg *head);
-int		ft_isoperator(TokenType type);
-int		syntax_checker(t_arg *head);
+// Syntax analysis
+int syntax_checker(t_arg *head);
+int pipe_syntax(t_arg *head);
+int	redirection_syntax(t_arg *head);
+int word_syntax(t_arg *head);
 
-//added by afoth
-char	*ft_expand_env(t_gc *gc, char *env);
-char	*ft_shell_strjoin(t_gc *gc, char *s1, char *s2);
-char	*ft_shell_substr(t_gc *gc, const char *s, unsigned int start, size_t len);
+// Function prototypes for command processing
+t_arg *tokenizer(t_gc *gc, char *input);
+t_command *create_command(t_gc *gc);
+void add_arg_to_command(t_command *cmd, t_arg *arg);
+t_command *parse_commands(t_gc *gc, t_arg *args_head);
+void print_commands(t_command *cmds_head);
 
-//built_ins
-int		is_built_in(char *cmd);
-void	exec_built_ins(t_gc *gc, t_arg *args_head);
-void	built_in_cd(t_gc *gc, t_arg *args_head, char ***env);
-void	built_in_pwd(void);
-void	built_in_env(char **env);
-void	built_in_echo(t_arg *args_head);
-int		ft_env_len(char **env);
-char	*find_variable(t_gc *gc, const char *arg);
-int		find_var_in_env(char **env, const char *var_name);
-char	**add_env_var(t_gc *gc, char *arg, char **env, int env_len);
-char	**change_or_add_env_var(t_gc *gc, char *arg, char **env);
-void	built_in_export(t_gc *gc, t_arg *args_head, char ***env);
-void	built_in_unset(t_gc *gc, t_arg *args_head, char ***env);
-void	built_in_exit(t_arg *args_head);
+// Function prototypes for built-in commands
+int is_built_in(char *cmd);
+void exec_built_ins(t_shell *shell);
+void built_in_cd(t_shell *shell);
+void built_in_pwd(void);
+void built_in_env(char **env);
+void built_in_echo(t_arg *args_head);
+int ft_env_len(char **env);
+char *find_variable(t_gc *gc, const char *arg);
+int find_var_in_env(char **env, const char *var_name);
+char **add_env_var(t_gc *gc, char *arg, char **env, int env_len);
+char **change_or_add_env_var(t_gc *gc, char *arg, char **env);
+void built_in_export(t_gc *gc, t_arg *args_head, char ***env);
+void built_in_unset(t_gc *gc, t_arg *args_head, char ***env);
+void built_in_exit(t_arg *args_head);
 
-//execve
-void	execve_args(t_gc *gc, t_arg *args_head);
-char	*get_path(t_gc *gc, char *cmd);
-int		count_arguments(t_arg *args_head);
-char	*remove_quotes(t_gc *gc, const char *str);
+// Function prototypes for execve
+void execve_args(t_shell *shell);
+char *get_path(t_gc *gc, char *cmd);
+int count_arguments(t_arg *args_head);
+char *remove_quotes(t_gc *gc, const char *str);
 
-extern volatile sig_atomic_t g_signal_received;
-
+// Signal handling
 void sigint_handler(int signum);
 void set_signals_parent(void);
 void set_signals_child(void);
 
-
-# endif
+#endif // MINISHELL_Hz
