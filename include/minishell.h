@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/27 23:58:03 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/29 17:15:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,13 @@ typedef struct s_arg
 // Command struct
 typedef struct s_command
 {
-    t_arg *args_head;    // Head of the arguments list for this command
-    struct s_command *next; // Pointer to the next command in the pipeline
-    int stdin_fd;        // File descriptor for stdin redirection
-    int stdout_fd;       // File descriptor for stdout redirection
+    char *cmd_name;          // Command name (e.g., "ls")
+    t_arg *args_head;        // Head of the arguments list
+    t_arg *args_tail;        // Tail of the arguments list for easy appending
+    struct s_command *next;  // Next command in the pipeline
+    int stdin_fd;            // File descriptor for stdin redirection
+    int stdout_fd;           // File descriptor for stdout redirection
+    bool append_mode;        // Flag for append mode (1 for >>, 0 for >)
 } t_command;
 
 // Token struct
@@ -96,9 +99,9 @@ typedef struct s_gc
 // Main shell struct
 typedef struct s_shell
 {
-    t_gc gc;            // Garbage collector
-    char **env;         // Environment variables
-    t_command *cmds_head; // Head of the commands list
+    t_gc gc;                // Garbage collector
+    char **env;             // Environment variables
+    t_command *cmds_head;   // Head of the commands list
     volatile sig_atomic_t signal_received; // Signal handling
 } t_shell;
 
@@ -125,19 +128,20 @@ char *expand_string(t_gc *gc, char *input);
 // Syntax analysis
 int syntax_checker(t_arg *head);
 int pipe_syntax(t_arg *head);
-int	redirection_syntax(t_arg *head);
+int redirection_syntax(t_arg *head);
 int word_syntax(t_arg *head);
 
 // Function prototypes for command processing
 t_arg *tokenizer(t_gc *gc, char *input);
-t_command *create_command();
+t_command *create_command(t_gc *gc);
 void add_arg_to_command(t_command *cmd, t_arg *arg);
-t_command *parse_commands(t_gc *gc, t_arg *args_head);
+int count_pipes(t_arg *args_head);
+t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count);
 void print_commands(t_command *cmds_head);
 
 // Function prototypes for redirection handling
-int handle_output_redirection(t_command *cmd, t_arg *arg);
-int handle_input_redirection(t_command *cmd, t_arg *arg);
+bool handle_output_redirection(t_command *cmd, t_arg *arg);
+bool handle_input_redirection(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
@@ -169,4 +173,4 @@ void sigint_handler(int signum);
 void set_signals_parent(void);
 void set_signals_child(void);
 
-#endif // MINISHELL_Hz
+#endif // MINISHELL_H
