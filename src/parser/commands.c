@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:12:24 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 14:03:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 18:26:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,18 @@ bool handle_output_redirection(t_command *cmd, t_arg *arg) {
             return true;
         }
         return true;
+    } else if (arg->type == REDIRECTION_APPEND) {
+        cmd->stdout_fd = open(arg->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (cmd->stdout_fd < 0) {
+            perror("Error opening file for output redirection");
+            return true;
+        }
+        cmd->append_mode = true;
+        return true;
     }
     return false;
 }
+
 
 // Function to handle input redirection
 bool handle_input_redirection(t_command *cmd, t_arg *arg) {
@@ -57,7 +66,7 @@ bool handle_input_redirection(t_command *cmd, t_arg *arg) {
 }
 
 // Function to count the number of pipes
-int count_pipes(t_arg *args_head) {
+int count_pipes_argstruct(t_arg *args_head) {
     int pipe_count = 0;
     t_arg *current_arg = args_head;
 
@@ -121,10 +130,6 @@ void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc) {
     new_args[count] = ft_shell_strdup(gc, arg);
     new_args[count + 1] = NULL;
     
-    // Free old args array and assign new one
-    if (cmd->args) {
-        free(cmd->args);
-    }
     cmd->args = new_args;
 }
 
@@ -135,7 +140,6 @@ void set_command_name(t_command *cmd, const char *name, t_gc *gc) {
 }
 
 
-// Function to create and populate commands from argument list
 t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count) {
     t_command *commands[pipe_count + 1];
     t_command *cmds_head = NULL;
@@ -143,7 +147,7 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
     t_arg *current_arg = args_head;
     int cmd_index = 0;
 
-    // Create commands
+    // Create command nodes
     for (int i = 0; i <= pipe_count; i++) {
         commands[i] = create_command(gc);
         if (i == 0) {
@@ -157,6 +161,7 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
     // Populate commands with arguments
     t_command *current_cmd = cmds_head;
     while (current_arg) {
+        // Handle pipes by moving to the next command
         if (current_arg->type == PIPE) {
             if (cmd_index < pipe_count) {
                 current_cmd = commands[++cmd_index];
@@ -165,27 +170,30 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
             continue;
         }
 
+        // Stop processing if END is encountered
         if (current_arg->type == END) {
             break;
         }
 
-        // Handle the command name, which should be the first argument
+        // Handle command name (first argument)
         if (current_cmd->cmd_name == NULL && current_arg->type == WORD) {
             set_command_name(current_cmd, current_arg->arg, gc);
             current_arg = current_arg->next;
-            continue; // Move to the next argument
+            continue;
         }
 
-        // Handle redirections and arguments
-        if (!handle_output_redirection(current_cmd, current_arg) &&
-            !handle_input_redirection(current_cmd, current_arg)) {
-            if (current_arg->type == REDIRECTION_APPEND) {
-                current_cmd->append_mode = true;
-            } else if (current_arg->type == FLAGS) {
-                add_flag_to_command(current_cmd, current_arg->arg, gc);
-            } else {
-                add_arg_to_command(current_cmd, current_arg->arg, gc);
-            }
+        // Handle redirections
+        if (handle_output_redirection(current_cmd, current_arg) ||
+            handle_input_redirection(current_cmd, current_arg)) {
+            current_arg = current_arg->next;
+            continue;
+        }
+
+        // Handle arguments and flags
+        if (current_arg->type == FLAGS) {
+            add_flag_to_command(current_cmd, current_arg->arg, gc);
+        } else {
+            add_arg_to_command(current_cmd, current_arg->arg, gc);
         }
 
         current_arg = current_arg->next;

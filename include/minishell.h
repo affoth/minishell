@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 13:36:23 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 14:43:24 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,8 @@ t_arg *tokenizer(t_gc *gc, char *input);
 t_command *create_command(t_gc *gc);
 void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
 void set_command_name(t_command *cmd, const char *name, t_gc *gc);
-int count_pipes(t_arg *args_head);
+int count_pipes_argstruct(t_arg *args_head);
+int count_pipes_cmdstruct(t_command *cmds_head);
 t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count);
 void print_commands(t_command *cmds_head);
 
