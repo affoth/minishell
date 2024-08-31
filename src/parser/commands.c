@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 20:12:24 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 13:23:58 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 14:03:34 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,60 +70,70 @@ int count_pipes(t_arg *args_head) {
     return pipe_count;
 }
 
-// Add an argument to the command's flags array
 void add_flag_to_command(t_command *cmd, const char *flag, t_gc *gc) {
-    char **new_flags;
-    int i = 0;
-
+    int count = 0;
+    
+    // Count existing flags
+    if (cmd->flags) {
+        while (cmd->flags[count]) count++;
+    }
+    
     // Allocate space for new flags array
-    if (cmd->flags == NULL) {
-        cmd->flags = (char **)ft_gc_malloc(gc, sizeof(char *));
-        cmd->flags[0] = ft_shell_strdup(gc, flag);
-        cmd->flags[1] = NULL; // NULL-terminated
-    } else {
-        // Count existing flags
-        while (cmd->flags[i] != NULL) {
-            i++;
-        }
-        new_flags = (char **)ft_gc_malloc(gc, (i + 2) * sizeof(char *));
-        for (int j = 0; j < i; j++) {
-            new_flags[j] = cmd->flags[j];
-        }
-        new_flags[i] = ft_shell_strdup(gc, flag);
-        new_flags[i + 1] = NULL;
-        cmd->flags = new_flags;
+    char **new_flags = (char **)ft_gc_malloc(gc, sizeof(char *) * (count + 2));
+    if (!new_flags) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
     }
+    
+    // Copy existing flags
+    for (int i = 0; i < count; i++) {
+        new_flags[i] = cmd->flags[i];
+    }
+    new_flags[count] = ft_shell_strdup(gc, flag);
+    new_flags[count + 1] = NULL;
+    
+    // Free old flags array and assign new one
+    if (cmd->flags) {
+        free(cmd->flags);
+    }
+    cmd->flags = new_flags;
 }
 
-// Add an argument to the command's args array
 void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc) {
-    char **new_args;
-    int i = 0;
-
+    int count = 0;
+    
+    // Count existing args
+    if (cmd->args) {
+        while (cmd->args[count]) count++;
+    }
+    
     // Allocate space for new args array
-    if (cmd->args == NULL) {
-        cmd->args = (char **)ft_gc_malloc(gc, sizeof(char *));
-        cmd->args[0] = ft_shell_strdup(gc, arg);
-        cmd->args[1] = NULL; // NULL-terminated
-    } else {
-        // Count existing args
-        while (cmd->args[i] != NULL) {
-            i++;
-        }
-        new_args = (char **)ft_gc_malloc(gc, (i + 2) * sizeof(char *));
-        for (int j = 0; j < i; j++) {
-            new_args[j] = cmd->args[j];
-        }
-        new_args[i] = ft_shell_strdup(gc, arg);
-        new_args[i + 1] = NULL;
-        cmd->args = new_args;
+    char **new_args = (char **)ft_gc_malloc(gc, sizeof(char *) * (count + 2));
+    if (!new_args) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    
+    // Copy existing args
+    for (int i = 0; i < count; i++) {
+        new_args[i] = cmd->args[i];
+    }
+    new_args[count] = ft_shell_strdup(gc, arg);
+    new_args[count + 1] = NULL;
+    
+    // Free old args array and assign new one
+    if (cmd->args) {
+        free(cmd->args);
+    }
+    cmd->args = new_args;
+}
+
+void set_command_name(t_command *cmd, const char *name, t_gc *gc) {
+    if (cmd->cmd_name == NULL) {  // Ensure it's only set if not already set
+        cmd->cmd_name = ft_shell_strdup(gc, name);
     }
 }
 
-// Set the command name
-void set_command_name(t_command *cmd, const char *name, t_gc *gc) {
-    cmd->cmd_name = ft_shell_strdup(gc, name);
-}
 
 // Function to create and populate commands from argument list
 t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count) {

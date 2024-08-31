@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 13:44:23 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 14:09:30 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void execute_command(t_shell *shell, t_command *cmd)
     if (is_built_in(cmd->cmd_name))
     {
         exec_built_ins(shell);
-        return;
     }
 
     pid_t pid = fork();
@@ -51,14 +50,24 @@ void execute_command(t_shell *shell, t_command *cmd)
         }
 
         // Prepare arguments for execve
-        int argc = count_arguments(cmd->args);
-        char **args = (char **)malloc(sizeof(char *) * (argc + 2)); // +2 for cmd_name and NULL
+        int flags_count = 0;
+        while (cmd->flags && cmd->flags[flags_count]) {
+            flags_count++;
+        }
+        
+        int args_count = 0;
+        while (cmd->args && cmd->args[args_count]) {
+            args_count++;
+        }
+        
+        char **args = (char **)malloc(sizeof(char *) * (flags_count + args_count + 2)); // +2 for cmd_name and NULL
         if (!args)
         {
             perror("malloc");
             exit(EXIT_FAILURE);
         }
 
+        // Set the command name
         args[0] = strdup(cmd->cmd_name);
         if (!args[0])
         {
@@ -66,16 +75,28 @@ void execute_command(t_shell *shell, t_command *cmd)
             exit(EXIT_FAILURE);
         }
 
-        for (int i = 0; i < argc; i++)
+        // Copy the flags
+        for (int i = 0; i < flags_count; i++)
         {
-            args[i + 1] = strdup(cmd->args[i]);
+            args[i + 1] = strdup(cmd->flags[i]);
             if (!args[i + 1])
             {
                 perror("strdup");
                 exit(EXIT_FAILURE);
             }
         }
-        args[argc + 1] = NULL;
+
+        // Copy the arguments
+        for (int i = 0; i < args_count; i++)
+        {
+            args[flags_count + 1 + i] = strdup(cmd->args[i]);
+            if (!args[flags_count + 1 + i])
+            {
+                perror("strdup");
+                exit(EXIT_FAILURE);
+            }
+        }
+        args[flags_count + args_count + 1] = NULL;
 
         // Get the path of the command
         char *path = get_path(&shell->gc, args[0]);

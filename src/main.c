@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 13:40:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 14:02:53 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,17 @@ void init_shell(t_shell *shell, char **envp)
     set_signals_parent(); // Ensure signal handling is properly set
 }
 
-// Function to print command arguments (for debugging)
-void print_cmd_args(char **args) {
+void print_cmd_args(char **args, const char *label) {
     if (args) {
+        printf("%s:\n", label);
         for (int i = 0; args[i]; i++) {
-            printf("Arg %d: %s\n", i, args[i]);
+            printf("  Arg %d: %s\n", i, args[i]);
         }
     } else {
-        printf("Args: NULL\n");
+        printf("%s: NULL\n", label);
     }
 }
 
-// Function to print commands (for debugging)
 void print_commands(t_command *cmds_head) {
     t_command *cmd = cmds_head;
 
@@ -61,8 +60,10 @@ void print_commands(t_command *cmds_head) {
         printf("  stdout_fd: %d\n", cmd->stdout_fd);
         printf("  Append mode: %s\n", cmd->append_mode ? "true" : "false");
         printf("  Command name: %s\n", cmd->cmd_name);
-        print_cmd_args(cmd->args);
-
+        
+        print_cmd_args(cmd->flags, "Flags");
+        print_cmd_args(cmd->args, "Args");
+        
         cmd = cmd->next;
         printf("-----\n");
     }
@@ -93,7 +94,7 @@ void execute_shell(t_shell *shell) {
         print_commands(cmds_head);
 
         // Commented out the execution of commands
-        /*
+        
         if (cmds_head)
         {
             if (needs_piping(cmds_head))
@@ -105,7 +106,7 @@ void execute_shell(t_shell *shell) {
                 execute_commands_without_pipes(shell, cmds_head);
             }
         }
-        */
+        
 
         // Free allocated memory for arguments and commands
         free(input);
