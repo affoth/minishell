@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:51:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/27 22:51:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 13:44:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,13 @@ char *get_path(t_gc *gc, char *cmd)
     return NULL;
 }
 
-// Function to count the number of arguments in args_head
-int count_arguments(t_arg *args_head)
+// Function to count arguments
+int count_arguments(char **args)
 {
     int count = 0;
-    while (args_head) {
+
+    while (args[count])
         count++;
-        args_head = args_head->next;
-    }
     return count;
 }
 

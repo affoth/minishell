@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/03 18:28:26 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/28 00:06:47 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/08/31 13:28:07 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/08/31 13:28:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ bool is_number(const char *str)
 {
     if (*str == '-' || *str == '+')
         str++;
+    if (*str == '\0')
+        return false; // Empty string is not a number
     while (*str)
     {
         if (!ft_isdigit(*str))
@@ -27,27 +29,30 @@ bool is_number(const char *str)
 }
 
 // Exit built-in command
-void built_in_exit(t_arg *args_head)
+void built_in_exit(t_shell *shell)
 {
+    t_command *cmd = shell->cmds_head;
+    char **args = cmd->args; // Arguments are stored in the args array
     int exit_code = 0;
 
-    if (args_head->next)
+    if (args[1])
     {
-        if (!is_number(args_head->next->arg))
+        if (!is_number(args[1]))
         {
-            ft_printf("exit: %s: numeric argument required\n", args_head->next->arg);
+            ft_printf("exit: %s: numeric argument required\n", args[1]);
             exit_code = 255;
         }
-        else if (args_head->next->next)
+        else if (args[2]) // Check for too many arguments
         {
             ft_printf("exit: too many arguments\n");
             return;
         }
         else
         {
-            exit_code = ft_atoi(args_head->next->arg);
+            exit_code = ft_atoi(args[1]);
         }
     }
+
     ft_printf("exit\n");
     exit(exit_code);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/28 00:00:46 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/08/31 12:54:56 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/08/31 13:18:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,39 +19,55 @@ void built_in_cd(t_shell *shell)
     char *oldpwd;
     char *newpwd;
 
+    if (!shell || !shell->cmds_head) {
+        ft_printf("Error: shell or command list is NULL.\n");
+        return;
+    }
+
     oldpwd = getcwd(NULL, 0);
-    if (!oldpwd)
-    {
+    if (!oldpwd) {
         perror("getcwd");
         return;
     }
 
     // Determine the target directory based on the argument
-    if (shell->cmds_head->args_head->next)
+    if (shell->cmds_head->args)
     {
-        target_dir = shell->cmds_head->args_head->next->arg;
+        char **args = shell->cmds_head->args;
+
+        if (args[1])
+        {
+            target_dir = args[1];
+        }
+        else
+        {
+            target_dir = getenv("HOME");
+            if (!target_dir)
+            {
+                ft_printf("Error: HOME environment variable not set or empty.\n");
+                free(oldpwd);
+                return;
+            }
+        }
     }
     else
     {
         target_dir = getenv("HOME");
         if (!target_dir)
         {
-            ft_printf("Error: HOME environment variable not set.\n");
+            ft_printf("Error: HOME environment variable not set or empty.\n");
             free(oldpwd);
             return;
         }
     }
 
-    // Attempt to change directory
-    if (chdir(target_dir) == -1)
+    if (chdir(target_dir) != 0)
     {
-        // Print error message along with the target directory and error details
-        ft_printf("Error changing directory to %s: %s\n", target_dir, strerror(errno));
+        perror("chdir");
         free(oldpwd);
         return;
     }
 
-    // Update the PWD environment variable
     newpwd = getcwd(NULL, 0);
     if (!newpwd)
     {
@@ -60,10 +76,10 @@ void built_in_cd(t_shell *shell)
         return;
     }
 
+    // Update the PWD and OLDPWD environment variables
     shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("OLDPWD=", oldpwd), shell->env);
     shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("PWD=", newpwd), shell->env);
 
     free(oldpwd);
     free(newpwd);
 }
-

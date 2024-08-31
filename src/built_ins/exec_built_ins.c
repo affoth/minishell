@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/28 00:01:43 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 13:28:59 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// is built-in command
+// Function to check if a command is a built-in
 int is_built_in(char *arg)
 {
     if (ft_strcmp(arg, "cd") == 0)
@@ -35,21 +35,31 @@ int is_built_in(char *arg)
 // Function to execute built-in commands
 void exec_built_ins(t_shell *shell)
 {
-    t_arg *args_head = shell->cmds_head->args_head;
+    t_command *cmd = shell->cmds_head;
+    char *cmd_name;
+    
+    if (cmd == NULL)
+        return;
 
-    printf("exec_built_ins\n");
-    if (ft_strcmp(args_head->arg, "cd") == 0)
+    // Extract command name and arguments
+    cmd_name = cmd->cmd_name;
+
+    if (cmd_name == NULL)
+        return;
+
+    if (ft_strcmp(cmd_name, "cd") == 0)
         built_in_cd(shell);
-    if (ft_strcmp(args_head->arg, "echo") == 0)
-        built_in_echo(args_head);
-    if (ft_strcmp(args_head->arg, "pwd") == 0)
+    else if (ft_strcmp(cmd_name, "echo") == 0)
+        built_in_echo(shell);  // Pass args directly if echo uses them
+    else if (ft_strcmp(cmd_name, "pwd") == 0)
         built_in_pwd();
-    if (ft_strcmp(args_head->arg, "env") == 0)
-        built_in_env(shell->env);
-    if (ft_strcmp(args_head->arg, "export") == 0)
-        built_in_export(&shell->gc, args_head, &shell->env);
-    if (ft_strcmp(args_head->arg, "unset") == 0)
-        built_in_unset(&shell->gc, args_head, &shell->env);
-    if (ft_strcmp(args_head->arg, "exit") == 0)
-        built_in_exit(args_head);
+    else if (ft_strcmp(cmd_name, "env") == 0)
+        built_in_env(shell);
+    else if (ft_strcmp(cmd_name, "export") == 0)
+        built_in_export(shell);  // Pass args directly if export uses them
+    else if (ft_strcmp(cmd_name, "unset") == 0)
+        built_in_unset(shell);  // Pass args directly if unset uses them
+    else if (ft_strcmp(cmd_name, "exit") == 0)
+        built_in_exit(shell);  // Pass args directly if exit uses them
+
 }

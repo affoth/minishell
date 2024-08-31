@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 13:35:41 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/29 13:55:26 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 12:13:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ TokenType get_token_type(char *arg)
             return typeMap[i].type;
         }
         i++;
+    }
+    // Check if the argument is a flag
+    if (arg[0] == '-')
+    {
+        return FLAGS;
     }
     // Default to WORD if no other type matches
     return WORD;

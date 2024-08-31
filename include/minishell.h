@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/29 17:15:02 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 13:36:23 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ extern char		**environ;
 typedef enum TokenType
 {
     WORD,                // Generic word (command or argument)
+    FLAGS,                // Command flag (e.g., -l)
     REDIRECTION_OUT,     // >
     REDIRECTION_IN,      // <
     REDIRECTION_APPEND,  // >>
@@ -70,8 +71,8 @@ typedef struct s_arg
 typedef struct s_command
 {
     char *cmd_name;          // Command name (e.g., "ls")
-    t_arg *args_head;        // Head of the arguments list
-    t_arg *args_tail;        // Tail of the arguments list for easy appending
+    char **flags;         // Command flags (e.g., "-l")
+    char **args;          // Command arguments (e.g., "file.txt")
     struct s_command *next;  // Next command in the pipeline
     int stdin_fd;            // File descriptor for stdin redirection
     int stdout_fd;           // File descriptor for stdout redirection
@@ -134,7 +135,8 @@ int word_syntax(t_arg *head);
 // Function prototypes for command processing
 t_arg *tokenizer(t_gc *gc, char *input);
 t_command *create_command(t_gc *gc);
-void add_arg_to_command(t_command *cmd, t_arg *arg);
+void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
+void set_command_name(t_command *cmd, const char *name, t_gc *gc);
 int count_pipes(t_arg *args_head);
 t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count);
 void print_commands(t_command *cmds_head);
@@ -148,20 +150,20 @@ int is_built_in(char *cmd);
 void exec_built_ins(t_shell *shell);
 void built_in_cd(t_shell *shell);
 void built_in_pwd(void);
-void built_in_env(char **env);
-void built_in_echo(t_arg *args_head);
+void built_in_env(t_shell *shell);
+void built_in_echo(t_shell *shell);
 int ft_env_len(char **env);
 char *find_variable(t_gc *gc, const char *arg);
 int find_var_in_env(char **env, const char *var_name);
 char **add_env_var(t_gc *gc, char *arg, char **env, int env_len);
 char **change_or_add_env_var(t_gc *gc, char *arg, char **env);
-void built_in_export(t_gc *gc, t_arg *args_head, char ***env);
-void built_in_unset(t_gc *gc, t_arg *args_head, char ***env);
-void built_in_exit(t_arg *args_head);
+void built_in_export(t_shell *shell);
+void built_in_unset(t_shell *shell);
+void built_in_exit(t_shell *shell);
 
 // Function prototypes for execve
 char *get_path(t_gc *gc, char *cmd);
-int count_arguments(t_arg *args_head);
+int count_arguments(char **args);
 char *remove_quotes(t_gc *gc, const char *str);
 int needs_piping(t_command *cmds_head);
 void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);

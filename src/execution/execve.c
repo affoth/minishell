@@ -6,22 +6,33 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 19:18:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/27 23:21:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/08/31 13:44:23 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Function to execute a single command
-void execute_command(t_shell *shell, t_command *cmd) {
+void execute_command(t_shell *shell, t_command *cmd)
+{
+    // Check if the command is a built-in
+    if (is_built_in(cmd->cmd_name))
+    {
+        exec_built_ins(shell);
+        return;
+    }
+
     pid_t pid = fork();
 
-    if (pid == 0) {
+    if (pid == 0)
+    {
         // Child process
 
         // Handle input redirection
-        if (cmd->stdin_fd != STDIN_FILENO) {
-            if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0) {
+        if (cmd->stdin_fd != STDIN_FILENO)
+        {
+            if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
+            {
                 perror("dup2 stdin");
                 exit(EXIT_FAILURE);
             }
@@ -29,8 +40,10 @@ void execute_command(t_shell *shell, t_command *cmd) {
         }
 
         // Handle output redirection
-        if (cmd->stdout_fd != STDOUT_FILENO) {
-            if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0) {
+        if (cmd->stdout_fd != STDOUT_FILENO)
+        {
+            if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
+            {
                 perror("dup2 stdout");
                 exit(EXIT_FAILURE);
             }
@@ -38,29 +51,36 @@ void execute_command(t_shell *shell, t_command *cmd) {
         }
 
         // Prepare arguments for execve
-        int argc = count_arguments(cmd->args_head);
-        char **args = (char **)malloc(sizeof(char *) * (argc + 1));
-        if (!args) {
+        int argc = count_arguments(cmd->args);
+        char **args = (char **)malloc(sizeof(char *) * (argc + 2)); // +2 for cmd_name and NULL
+        if (!args)
+        {
             perror("malloc");
             exit(EXIT_FAILURE);
         }
 
-        t_arg *current_arg = cmd->args_head;
-        int i = 0;
-        while (current_arg) {
-            args[i] = strdup(remove_quotes(&shell->gc, current_arg->arg));
-            if (!args[i]) {
+        args[0] = strdup(cmd->cmd_name);
+        if (!args[0])
+        {
+            perror("strdup");
+            exit(EXIT_FAILURE);
+        }
+
+        for (int i = 0; i < argc; i++)
+        {
+            args[i + 1] = strdup(cmd->args[i]);
+            if (!args[i + 1])
+            {
                 perror("strdup");
                 exit(EXIT_FAILURE);
             }
-            current_arg = current_arg->next;
-            i++;
         }
-        args[i] = NULL;
+        args[argc + 1] = NULL;
 
         // Get the path of the command
         char *path = get_path(&shell->gc, args[0]);
-        if (!path) {
+        if (!path)
+        {
             fprintf(stderr, "Command not found: %s\n", args[0]);
             exit(EXIT_FAILURE);
         }
@@ -68,23 +88,30 @@ void execute_command(t_shell *shell, t_command *cmd) {
         execve(path, args, shell->env);
         perror("execve");
         exit(EXIT_FAILURE);
-    } else if (pid < 0) {
+    }
+    else if (pid < 0)
+    {
         // Fork failed
         perror("fork");
+        exit(EXIT_FAILURE);
     }
     // Parent process: no need to handle pipes here; handled in the caller function
 }
 
 // Function to execute commands with piping
-void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head) {
+void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
+{
     t_command *current_cmd = cmds_head;
     int pipe_fds[2];
     int prev_fd = -1;
 
-    while (current_cmd) {
-        if (current_cmd->next) {
+    while (current_cmd)
+    {
+        if (current_cmd->next)
+        {
             // Create a pipe for the next command
-            if (pipe(pipe_fds) == -1) {
+            if (pipe(pipe_fds) == -1)
+            {
                 perror("pipe");
                 exit(EXIT_FAILURE);
             }
@@ -92,32 +119,39 @@ void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head) {
 
         // Fork the process
         pid_t pid = fork();
-        if (pid == 0) {
+        if (pid == 0)
+        {
             // Child process
-            if (prev_fd != -1) {
+            if (prev_fd != -1)
+            {
                 dup2(prev_fd, STDIN_FILENO);
                 close(prev_fd);
             }
 
-            if (current_cmd->next) {
+            if (current_cmd->next)
+            {
                 dup2(pipe_fds[1], STDOUT_FILENO);
+                close(pipe_fds[1]);
             }
 
             // Close all pipe file descriptors in the child
             close(pipe_fds[0]);
-            close(pipe_fds[1]);
 
             execute_command(shell, current_cmd);
-        } else if (pid < 0) {
+        }
+        else if (pid < 0)
+        {
             perror("fork");
             exit(EXIT_FAILURE);
         }
 
         // Parent process
-        if (prev_fd != -1) {
+        if (prev_fd != -1)
+        {
             close(prev_fd);
         }
-        if (current_cmd->next) {
+        if (current_cmd->next)
+        {
             close(pipe_fds[1]);
             prev_fd = pipe_fds[0];
         }
@@ -126,7 +160,8 @@ void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head) {
     }
 
     // Close the last file descriptor
-    if (prev_fd != -1) {
+    if (prev_fd != -1)
+    {
         close(prev_fd);
     }
 
@@ -135,10 +170,12 @@ void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head) {
 }
 
 // Function to execute commands without pipes
-void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head) {
+void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head)
+{
     t_command *current_cmd = cmds_head;
 
-    while (current_cmd) {
+    while (current_cmd)
+    {
         execute_command(shell, current_cmd);
         current_cmd = current_cmd->next;
     }

@@ -5,60 +5,73 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/20 16:46:30 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/28 00:03:01 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/08/31 12:53:58 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/08/31 13:30:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// Remove the environment variable at the given index
-char **remove_env_var(t_gc *gc, char **env, int env_idx)
+// Helper function to remove an environment variable from the environment array
+char **remove_env_var(t_gc *gc, char **env, int index)
 {
-    int env_len;
-    int i;
+    int i, j;
+    int env_len = ft_env_len(env);
+    char **new_env = ft_gc_malloc(gc, sizeof(char *) * env_len);
 
-    env_len = ft_env_len(env);
-    char **new_env = ft_gc_malloc(gc, ((env_len) * sizeof(char *)));
     if (!new_env)
     {
-        perror("No memory left for new_env");
-        exit(EXIT_FAILURE);
+        ft_printf("Error: Memory allocation failed\n");
+        return env;
     }
 
-    i = 0;
-    while (i < env_idx)
+    for (i = 0, j = 0; i < env_len; i++)
     {
-        new_env[i] = env[i];
-        i++;
+        if (i != index)
+        {
+            new_env[j++] = env[i];
+        }
     }
-    while (env[i])
-    {
-        new_env[i] = env[i + 1];
-        i++;
-    }
-    new_env[env_len - 1] = NULL;
+    new_env[j] = NULL;
+
     return new_env;
 }
 
-// Handle the unset built-in command
-void built_in_unset(t_gc *gc, t_arg *args_head, char ***env)
+// Function to remove an environment variable
+void built_in_unset(t_shell *shell)
 {
-    t_arg *tmp;
-    int env_idx;
+    t_gc *gc;
+    char **args;
+    char ***env;
+    int var_index;
 
-    tmp = args_head->next;
-    while (tmp)
+    if (!shell || !shell->cmds_head || !shell->cmds_head->args)
     {
-        if (strchr(tmp->arg, '=') || tmp->arg[0] == '=' || tmp->arg[strlen(tmp->arg) - 1] == '=')
+        ft_printf("Error: Invalid shell structure\n");
+        return;
+    }
+
+    gc = &shell->gc;
+    env = &shell->env;
+    args = shell->cmds_head->args;  // Get the arguments array
+
+    if (!args[1])
+    {
+        ft_printf("unset: not enough arguments\n");
+        return;
+    }
+
+    for (int i = 1; args[i]; i++)
+    {
+        var_index = find_var_in_env(*env, args[i]);
+        if (var_index != -1)
         {
-            ft_printf("UNSET: VARNAME needs to exist in env. NOT FOUND:`%s'\n", tmp->arg);
+            // Remove the environment variable
+            *env = remove_env_var(gc, *env, var_index);
         }
-        env_idx = find_var_in_env(*env, tmp->arg);
-        if (env_idx != -1)
+        else
         {
-            *env = remove_env_var(gc, *env, env_idx);
+            ft_printf("unset: `%s': not a valid identifier\n", args[i]);
         }
-        tmp = tmp->next;
     }
 }
