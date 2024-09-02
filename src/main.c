@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/02 19:11:13 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:58:25 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,11 @@ void execute_shell(t_shell *shell)
         print_commands(shell->cmds_head);
 
         // Execute commands
-        // Uncomment this part to test execution when ready
-        
-        if (shell->cmds_head)
+        if (needs_piping(shell->cmds_head))
+        {
+            execute_commands_with_pipes(shell, shell->cmds_head);
+        }
+        else
         {
             execute_commands_without_pipes(shell, shell->cmds_head);
         }
