@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 13:35:41 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 12:13:05 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/09/02 18:05:34 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/09/02 18:34:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,25 @@ TokenType get_token_type(char *arg)
 {
     int i;
 
+    // Special cases
+    if (ft_strcmp(arg, "<<") == 0)
+        return HEREDOC;
+    if (ft_strcmp(arg, ">>") == 0)
+        return REDIRECTION_APPEND;
+
+    // Default cases
     i = 0;
     while (typeMap[i].arg != NULL)
     {
-        // heredoc and append redirections are special cases
-        if (ft_strcmp(arg, "<<") == 0)
-        {
-            return HEREDOC;
-        }
-        if (ft_strcmp(arg, ">>") == 0)
-        {
-            return REDIRECTION_APPEND;
-        }
-        // Check if the token string is a substring of the argument
         if (ft_strcmp(arg, typeMap[i].arg) == 0)
-        {
             return typeMap[i].type;
-        }
         i++;
     }
-    // Check if the argument is a flag
+
+    // Flags or other unrecognized tokens
     if (arg[0] == '-')
-    {
         return FLAGS;
-    }
-    // Default to WORD if no other type matches
+
     return WORD;
 }
 
@@ -75,7 +69,7 @@ t_arg *create_arg_node(t_gc *gc, char *arg)
     if (node->arg == NULL)
     {
         perror("Memory allocation failed");
-        ft_gc_free(gc);
+        ft_gc_free(gc);  // Ensure this frees all relevant memory
         exit(EXIT_FAILURE);
     }
     node->type = get_token_type(arg);
@@ -88,32 +82,29 @@ t_arg *create_arg_node(t_gc *gc, char *arg)
 void add_arg_to_list(t_gc *gc, t_arg **head, char *arg)
 {
     t_arg *new_node = create_arg_node(gc, arg);
-    if (*head == NULL) {
+    if (*head == NULL)
+    {
         *head = new_node;
         return;
     }
     t_arg *current_node = *head;
-    while (current_node->next != NULL) {
+    while (current_node->next != NULL)
+    {
         current_node = current_node->next;
     }
     current_node->next = new_node;
     new_node->prev = current_node;
 }
 
-// Print list from head to end to check if arguments are added correctly
-void print_args(t_arg *head)
-{
-    t_arg *current_node = head;
-    while (current_node != NULL)
-    {
-        ft_printf("Argument: %s, Type: %d\n", current_node->arg, current_node->type);
-        current_node = current_node->next;
-    }
-}
-
 // Tokenize the input line into arguments
 t_arg *tokenizer(t_gc *gc, char *line)
 {
+    if (!line)
+    {
+        write(STDERR_FILENO, "Error: Null input line\n", 23);
+        return NULL;
+    }
+
     if (ft_quotes_not_closed(line))
     {
         write(STDERR_FILENO, "Error: Quotes not closed\n", 25);
@@ -127,10 +118,9 @@ t_arg *tokenizer(t_gc *gc, char *line)
         exit(EXIT_FAILURE);
     }
 
-    int i;
+    int i = 0;
     t_arg *args_head = NULL;
 
-    i = 0;
     while (split_args[i] != NULL)
     {
         // Skip empty arguments
@@ -141,19 +131,12 @@ t_arg *tokenizer(t_gc *gc, char *line)
         i++;
     }
 
-    // Free split_args array
-    for (i = 0; split_args[i] != NULL; i++)
-    {
-        free(split_args[i]);
-    }
-    free(split_args);
-
-    // Syntax check the list FOR OPERATORS aka. types PIPE, AND, OR, REDIRECTION_OUT, REDIRECTION_IN, REDIRECTION_APPEND, HEREDOC
-    if (syntax_checker(args_head) == 1)
+    // Syntax check the list
+    if (syntax_checker(args_head) != 0)
     {
         write(STDERR_FILENO, "Error: Syntax checker not passed\n", 33);
         return NULL;
     }
-    print_args(args_head);
+
     return args_head;
 }

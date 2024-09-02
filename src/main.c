@@ -6,11 +6,40 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 19:39:59 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:11:13 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+char **init_env(char **envp, t_gc *gc)
+{
+    char **env_copy;
+    int env_len;
+    int i;
+
+    // Calculate the length of the environment array
+    env_len = ft_env_len(envp);
+
+    // Allocate memory for the copy
+    env_copy = (char **)ft_gc_malloc(gc, sizeof(char *) * (env_len + 1));
+    if (!env_copy)
+    {
+        perror("Failed to allocate memory for environment copy");
+        exit(EXIT_FAILURE);
+    }
+
+    // Copy the environment variables
+    i = 0;
+    while (i < env_len)
+    {
+        env_copy[i] = ft_shell_strdup(gc, envp[i]);
+        i++;
+    }
+    env_copy[env_len] = NULL;
+
+    return env_copy;
+}
 
 char *get_input()
 {
@@ -32,13 +61,18 @@ char *get_input()
 void init_shell(t_shell *shell, char **envp)
 {
     ft_gc_init(&shell->gc);
-    shell->env = envp;
+
+    // Initialize the environment
+    shell->env = init_env(envp, &shell->gc);
+
     shell->cmds_head = NULL;
     shell->signal_received = 0;
     set_signals_parent(); // Ensure signal handling is properly set
 }
 
-void print_cmd_args(char **args, const char *label) {
+
+void print_cmd_args(char **args, const char *label) 
+{
     if (args) {
         printf("%s:\n", label);
         for (int i = 0; args[i]; i++) {
@@ -49,7 +83,8 @@ void print_cmd_args(char **args, const char *label) {
     }
 }
 
-void print_commands(t_command *cmds_head) {
+void print_commands(t_command *cmds_head) 
+{
     t_command *cmd = cmds_head;
 
     while (cmd) {
@@ -67,11 +102,11 @@ void print_commands(t_command *cmds_head) {
     }
 }
 
-void execute_shell(t_shell *shell) {
+void execute_shell(t_shell *shell) 
+{
     char *input;
     char *expanded_input;
     t_arg *args_head;
-    t_command *cmds_head;
     int pipe_count;
 
     while (1) // Main loop for shell
@@ -88,21 +123,20 @@ void execute_shell(t_shell *shell) {
         // Tokenize and parse commands
         args_head = tokenizer(&shell->gc, expanded_input);
         pipe_count = count_pipes_argstruct(args_head);
-        cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count);
-        print_commands(cmds_head);
+        shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count);
+        print_commands(shell->cmds_head);
 
         // Execute commands
         // Uncomment this part to test execution when ready
-        /*
-        if (cmds_head)
+        
+        if (shell->cmds_head)
         {
-            execute_commands_without_pipes(shell, cmds_head);
+            execute_commands_without_pipes(shell, shell->cmds_head);
         }
-        */
 
         // Free allocated memory for arguments and commands
         free(input);
-    }
+        }
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 20:11:18 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/02 17:44:19 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void built_in_cd(t_shell *shell)
     char *target_dir = NULL;
     char *oldpwd = NULL;
     char *newpwd = NULL;
-    int ret = 0;
 
     // Ensure shell and command list are not NULL
     if (!shell || !shell->cmds_head) {
@@ -25,48 +24,43 @@ void built_in_cd(t_shell *shell)
         return;
     }
 
-    // Get the current working directory
+    // Get the current working directory and save it as OLDPWD
     oldpwd = getcwd(NULL, 0);
     if (!oldpwd) {
         perror("getcwd");
         return;
     }
-    printf("oldpwd: %s\n", oldpwd);
 
     // Determine the target directory
-    if (shell->cmds_head->args && shell->cmds_head->args[1]) {
-        target_dir = shell->cmds_head->args[1];
-        printf("Target directory from args: %s\n", target_dir);
+    if (shell->cmds_head->args && shell->cmds_head->args[0]) {
+        target_dir = shell->cmds_head->args[0];
     } else {
         target_dir = getenv("HOME");
         if (!target_dir) {
-            ft_printf("Error: HOME environment variable not set or empty.\n");
-            ret = 1;
-        } else {
-            printf("Target directory from HOME: %s\n", target_dir);
+            ft_printf("cd: HOME not set\n");
+            free(oldpwd);
+            return;
         }
     }
 
-    // Change to the target directory if valid
-    if (ret == 0) {
-        if (chdir(target_dir) != 0) {
-            perror("chdir");
-            ret = 1;
-        } else {
-            // Get the new working directory
-            newpwd = getcwd(NULL, 0);
-            if (!newpwd) {
-                perror("getcwd");
-                ret = 1;
-            } else {
-                printf("newpwd: %s\n", newpwd);
-                // Update environment variables
-                shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("OLDPWD=", oldpwd), shell->env);
-                shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("PWD=", newpwd), shell->env);
-                free(newpwd);
-            }
-        }
+    // Change to the target directory
+    if (chdir(target_dir) != 0) {
+        perror("cd");
+        free(oldpwd);
+        return;
     }
+
+    // Get the new working directory and update PWD and OLDPWD
+    newpwd = getcwd(NULL, 0);
+    if (!newpwd) {
+        perror("getcwd");
+        free(oldpwd);
+        return;
+    }
+
+    shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("OLDPWD=", oldpwd), shell->env);
+    shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("PWD=", newpwd), shell->env);
 
     free(oldpwd);
+    free(newpwd);
 }

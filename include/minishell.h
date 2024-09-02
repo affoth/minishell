@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 14:43:24 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/02 18:13:54 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct s_shell
     t_gc gc;                // Garbage collector
     char **env;             // Environment variables
     t_command *cmds_head;   // Head of the commands list
+    int exit_status;        // Exit status of the shell
     volatile sig_atomic_t signal_received; // Signal handling
 } t_shell;
 
