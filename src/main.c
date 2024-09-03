@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 14:18:29 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:16:53 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void init_shell(t_shell *shell, char **envp)
 
 	// Initialize the environment
 	shell->env = init_env(envp, &shell->gc);
-
+	shell->exit_status = 0;
 	shell->cmds_head = NULL;
 	shell->signal_received = 0;
 	set_signals_parent(); // Ensure signal handling is properly set

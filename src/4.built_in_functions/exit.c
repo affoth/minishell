@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 13:28:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/02 17:53:42 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:21:15 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void built_in_exit(t_shell *shell)
 {
     t_command *cmd = shell->cmds_head;
     char **args = NULL; // Initialize args to NULL to safely check later
-    int exit_code = 0;
 
     // Ensure shell and command list are not NULL
     if (!shell || !cmd)
@@ -47,12 +46,12 @@ void built_in_exit(t_shell *shell)
     // Check if the command arguments are valid
     if (args)
     {
-        if (args[1])
+        if (args[0])
         {
-            if (!is_number(args[1]))
+            if (!is_number(args[0]))
             {
                 ft_printf("exit: %s: numeric argument required\n", args[1]);
-                exit_code = 255; // Default exit code for numeric argument error
+                shell->exit_status = 255; // Default exit code for numeric argument error
             }
             else if (args[2]) // Check for too many arguments
             {
@@ -62,7 +61,7 @@ void built_in_exit(t_shell *shell)
             }
             else
             {
-                exit_code = ft_atoi(args[1]);
+                shell->exit_status = ft_atoi(args[0]);
             }
         }
     }
@@ -71,7 +70,7 @@ void built_in_exit(t_shell *shell)
         // No arguments provided, default exit code is 0
         ft_printf("exit\n");
     }
-    
     // Exit the shell
-    exit(exit_code);
+    printf("Exiting shell with exit code %d\n", shell->exit_status);
+    exit(shell->exit_status);
 }

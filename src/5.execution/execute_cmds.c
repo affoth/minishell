@@ -6,20 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:07:46 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:36:08 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 void execute_command(t_shell *shell, t_command *cmd)
 {
-    if (is_built_in(cmd->cmd_name))
-    {
-        exec_built_ins(shell);
-        return; // No need to fork or execute external commands
-    }
-
     pid_t pid = fork();
     if (pid == 0)
     {
@@ -44,6 +37,7 @@ void execute_command(t_shell *shell, t_command *cmd)
             close(cmd->stdout_fd);
         }
 
+        // Prepare command arguments
         int flags_count = 0;
         while (cmd->flags && cmd->flags[flags_count])
             flags_count++;
@@ -59,14 +53,6 @@ void execute_command(t_shell *shell, t_command *cmd)
             exit(EXIT_FAILURE);
         }
 
-        args[0] = strdup(cmd->cmd_name);
-        if (!args[0])
-        {
-            perror("strdup");
-            free(args);
-            exit(EXIT_FAILURE);
-        }
-
         int i = 0;
         while (i < flags_count)
         {
@@ -74,12 +60,19 @@ void execute_command(t_shell *shell, t_command *cmd)
             if (!args[i + 1])
             {
                 perror("strdup");
-                while (i >= 0)
-                    free(args[i--]);
+                while (i >= 0) free(args[i--]);
                 free(args);
                 exit(EXIT_FAILURE);
             }
             i++;
+        }
+        args[0] = strdup(cmd->cmd_name);
+        if (!args[0])
+        {
+            perror("strdup");
+            while (i >= 0) free(args[i--]);
+            free(args);
+            exit(EXIT_FAILURE);
         }
 
         int j = 0;
@@ -89,10 +82,8 @@ void execute_command(t_shell *shell, t_command *cmd)
             if (!args[flags_count + 1 + j])
             {
                 perror("strdup");
-                while (i >= 0)
-                    free(args[i--]);
-                while (j >= 0)
-                    free(args[flags_count + 1 + j--]);
+                while (i >= 0) free(args[i--]);
+                while (j >= 0) free(args[flags_count + 1 + j--]);
                 free(args);
                 exit(EXIT_FAILURE);
             }
@@ -100,13 +91,13 @@ void execute_command(t_shell *shell, t_command *cmd)
         }
         args[flags_count + args_count + 1] = NULL;
 
+        // Resolve the command path
         char *path = get_path(&shell->gc, args[0]);
         if (!path)
         {
             fprintf(stderr, "Command not found: %s\n", args[0]);
             int k = 0;
-            while (args[k])
-                free(args[k++]);
+            while (args[k]) free(args[k++]);
             free(args);
             exit(EXIT_FAILURE);
         }
@@ -115,8 +106,7 @@ void execute_command(t_shell *shell, t_command *cmd)
         perror("execve");
 
         int k = 0;
-        while (args[k])
-            free(args[k++]);
+        while (args[k]) free(args[k++]);
         free(args);
         exit(EXIT_FAILURE);
     }
@@ -125,6 +115,9 @@ void execute_command(t_shell *shell, t_command *cmd)
         perror("fork");
         exit(EXIT_FAILURE);
     }
+
+    // Parent process should wait for the child process to complete
+    while (wait(NULL) > 0);
 }
 
 void create_pipes(int num_pipes, int *pipe_descriptors)

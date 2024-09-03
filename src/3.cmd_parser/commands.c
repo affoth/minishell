@@ -20,14 +20,14 @@ t_command *create_command(t_gc *gc) {
 // Function to handle output redirection
 bool handle_output_redirection(t_command *cmd, t_arg *arg) {
 	if (arg->type == REDIRECTION_OUT) {
-		cmd->stdout_fd = open(arg->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->stdout_fd < 0) {
 			perror("Error opening file for output redirection");
 			return true;
 		}
 		return true;
 	} else if (arg->type == REDIRECTION_APPEND) {
-		cmd->stdout_fd = open(arg->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (cmd->stdout_fd < 0) {
 			perror("Error opening file for output redirection");
 			return true;
@@ -41,7 +41,7 @@ bool handle_output_redirection(t_command *cmd, t_arg *arg) {
 // Function to handle input redirection
 bool handle_input_redirection(t_command *cmd, t_arg *arg) {
 	if (arg->type == REDIRECTION_IN) {
-		cmd->stdin_fd = open(arg->arg, O_RDONLY);
+		cmd->stdin_fd = open(arg->next->arg, O_RDONLY);
 		if (cmd->stdin_fd < 0) {
 			perror("Error opening file for input redirection");
 			return true;
