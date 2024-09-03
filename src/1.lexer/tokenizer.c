@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 18:05:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/02 18:34:16 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:04:25 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ t_arg *tokenizer(t_gc *gc, char *line)
     if (syntax_checker(args_head) != 0)
     {
         write(STDERR_FILENO, "Error: Syntax checker not passed\n", 33);
-        return NULL;
     }
 
     return args_head;
