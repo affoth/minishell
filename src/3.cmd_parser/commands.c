@@ -179,7 +179,8 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
 
 		// Handle redirections
 		if (handle_output_redirection(current_cmd, current_arg) ||
-			handle_input_redirection(current_cmd, current_arg)) {
+			handle_input_redirection(current_cmd, current_arg))
+		{
 			current_arg = current_arg->next;
 			continue;
 		}

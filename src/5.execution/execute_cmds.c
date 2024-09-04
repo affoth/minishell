@@ -3,39 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:36:08 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/04 16:05:01 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 void execute_command(t_shell *shell, t_command *cmd)
 {
+    if (cmd->stdin_fd != STDIN_FILENO)
+    {
+        if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
+        {
+            perror("dup2 stdin");
+            exit(EXIT_FAILURE);
+        }
+        //close(cmd->stdin_fd);
+    }
+    if (cmd->stdout_fd != STDOUT_FILENO)
+    {
+        if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
+        {
+            perror("dup2 stdout");
+            exit(EXIT_FAILURE);
+        }
+       //close(cmd->stdout_fd);
+    }
     pid_t pid = fork();
     if (pid == 0)
     {
         // Child process
-        if (cmd->stdin_fd != STDIN_FILENO)
-        {
-            if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
-            {
-                perror("dup2 stdin");
-                exit(EXIT_FAILURE);
-            }
-            close(cmd->stdin_fd);
-        }
-
-        if (cmd->stdout_fd != STDOUT_FILENO)
-        {
-            if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
-            {
-                perror("dup2 stdout");
-                exit(EXIT_FAILURE);
-            }
-            close(cmd->stdout_fd);
-        }
 
         // Prepare command arguments
         int flags_count = 0;
@@ -92,7 +91,7 @@ void execute_command(t_shell *shell, t_command *cmd)
         args[flags_count + args_count + 1] = NULL;
 
         // Resolve the command path
-        char *path = get_path(&shell->gc, args[0]);
+        char *path = get_path(&shell->gc,  &cmd->cmd_name[0]);
         if (!path)
         {
             fprintf(stderr, "Command not found: %s\n", args[0]);
@@ -101,7 +100,7 @@ void execute_command(t_shell *shell, t_command *cmd)
             free(args);
             exit(EXIT_FAILURE);
         }
-
+		dprintf(2, "path: %s\n", path);
         execve(path, args, shell->env);
         perror("execve");
 

@@ -1,0 +1,7 @@
+t.txt
+[?2004hminishell$ www^C[?2004l
+minishell$ [?2004hd^C[?2004l
+minishell$ [?2004hc^C[?2004l
+minishell$ [?2004h^C[?2004l
+minishell$ [?2004h[?2004l
+exit
