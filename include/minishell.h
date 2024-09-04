@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:05:45 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/04 16:30:43 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ void print_commands(t_command *cmds_head);
 // Function prototypes for redirection handling
 bool handle_output_redirection(t_command *cmd, t_arg *arg);
 bool handle_input_redirection(t_command *cmd, t_arg *arg);
+bool parse_heredoc(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
@@ -167,7 +168,6 @@ void built_in_exit(t_shell *shell);
 void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head);
 void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
 
-void execute_builtin_with_redirection(t_shell *shell, t_command *cmd);
 void execute_command(t_shell *shell, t_command *cmd);
 void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes);
 

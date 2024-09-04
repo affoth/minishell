@@ -170,6 +170,12 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
 			break;
 		}
 
+		  // Handle heredocs
+        if (parse_heredoc(current_cmd, current_arg)) {
+            current_arg = current_arg->next;
+            continue;
+        }
+
 		// Handle command name (first argument)
 		if (current_cmd->cmd_name == NULL && current_arg->type == WORD) {
 			set_command_name(current_cmd, current_arg->arg, gc);
