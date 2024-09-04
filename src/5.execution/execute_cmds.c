@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/04 18:18:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:56:22 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,15 @@ void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descript
         setup_redirections(cmd_index, num_pipes, pipe_descriptors);
         close_pipes(num_pipes, pipe_descriptors);
 
-        execute_command(shell, cmd);
+        if (is_built_in(cmd->cmd_name))
+        {
+            // Execute built-in command with proper redirection
+            exec_built_ins(shell);
+        }
+        else
+        {
+            execute_command(shell, cmd);
+        }
         exit(EXIT_FAILURE); // Ensure to exit after executing the command
     }
     else if (pid < 0)
@@ -194,15 +202,16 @@ void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
     {
         if (is_built_in(current_cmd->cmd_name))
         {
-            // Execute built-in commands in the parent process
-            setup_redirections(cmd_index, num_pipes, pipe_descriptors);
-            exec_built_ins(shell);
+            // Special case: Execute built-in command in the pipeline
+            fork_and_execute_command(shell, current_cmd, pipe_descriptors, cmd_index, num_pipes);
         }
         else
         {
+            // External command; fork and execute
             fork_and_execute_command(shell, current_cmd, pipe_descriptors, cmd_index, num_pipes);
         }
 
+        // Close the pipe ends not needed anymore
         if (cmd_index > 0)
         {
             close(pipe_descriptors[(cmd_index - 1) * 2]);
@@ -216,20 +225,48 @@ void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
         cmd_index++;
     }
 
+    // Close all pipe descriptors
     close_pipes(num_pipes, pipe_descriptors);
 
+    // Wait for all child processes to complete
     while (wait(NULL) > 0);
 }
 
+// setup redirections for input and output without pipes
+void setup_redirection_without_pipes(t_command *cmd)
+{
+    if (cmd->stdin_fd != STDIN_FILENO)
+    {
+        if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
+        {
+            perror("dup2 stdin");
+            exit(EXIT_FAILURE);
+        }
+        close(cmd->stdin_fd);
+    }
+
+    if (cmd->stdout_fd != STDOUT_FILENO)
+    {
+        if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
+        {
+            perror("dup2 stdout");
+            exit(EXIT_FAILURE);
+        }
+        close(cmd->stdout_fd);
+    }
+}
+
+// Execute commands without pipes
 void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head)
 {
     t_command *current_cmd = cmds_head;
 
     while (current_cmd)
     {
+        setup_redirection_without_pipes(current_cmd);
         if (is_built_in(current_cmd->cmd_name))
         {
-            // Execute built-in commands in the parent process
+            // Execute built-in commands directly
             exec_built_ins(shell);
         }
         else
@@ -241,5 +278,7 @@ void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head)
         current_cmd = current_cmd->next;
     }
 
+    // Wait for all child processes to complete
     while (wait(NULL) > 0);
 }
+

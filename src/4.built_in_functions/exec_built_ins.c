@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/04 18:15:05 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:48:32 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void exec_built_ins(t_shell *shell)
 {
     t_command *cmd = shell->cmds_head;
     char *cmd_name;
-    printf("Executing built-in command\n");
+
     if (cmd == NULL)
         return;
 
@@ -45,7 +45,6 @@ void exec_built_ins(t_shell *shell)
     cmd_name = cmd->cmd_name;
     if (cmd_name == NULL)
         return;
-
 
     if (ft_strcmp(cmd_name, "cd") == 0)
         built_in_cd(shell);

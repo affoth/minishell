@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:43:12 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/31 12:33:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:43:46 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void built_in_env(t_shell *shell)
 
 	while (*env)
 	{
-		ft_printf("%s\n", *env);
+		write(STDOUT_FILENO, *env, ft_strlen(*env));
+		write(STDOUT_FILENO, "\n", 1);
 		env++;
 	}
 }
