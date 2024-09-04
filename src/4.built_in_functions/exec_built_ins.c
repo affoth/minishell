@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/02 16:00:06 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/04 18:15:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void exec_built_ins(t_shell *shell)
 
     // Extract command name and arguments
     cmd_name = cmd->cmd_name;
-    printf("Command name: %s\n", cmd_name);
     if (cmd_name == NULL)
         return;
+
 
     if (ft_strcmp(cmd_name, "cd") == 0)
         built_in_cd(shell);
