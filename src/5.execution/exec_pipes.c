@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 19:17:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 19:19:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descript
     {
         // Child process
         setup_redirections(cmd_index, num_pipes, pipe_descriptors);
-        /*if (cmd->next == NULL)
+        if (cmd->next == NULL)
         {
             // Last command in the pipeline
-            if (cmd->stdin_fd != STDIN_FILENO)
+            /*if (cmd->stdin_fd != STDIN_FILENO)
             {
                 if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
                 {
