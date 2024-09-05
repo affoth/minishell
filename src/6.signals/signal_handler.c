@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 18:23:26 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/05 18:24:43 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ void handle_signal(int sig)
         rl_redisplay();
     }
 }
-void handle_eof(void) {
+/* void handle_eof(void) {
     if (isatty(STDIN_FILENO)) {
         write(STDOUT_FILENO, "exit\n", 5);
         exit(0);
     }
-}
+} */
 
 /* void sigint_handler(int signum)
 {
