@@ -1,3 +1,9 @@
+signals
+exit codes
+$?
+norminette
+
+
 1. Basic Shell Framework
  Implement the main loop to read commands.
  Set up basic signal handling (e.g., SIGINT, SIGQUIT).

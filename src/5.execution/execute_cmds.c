@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/04 16:15:38 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/04 17:24:54 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ void execute_command(t_shell *shell, t_command *cmd)
             free(args);
             exit(EXIT_FAILURE);
         }
+
+		dprintf(3, "args[0]: %s\n", args[0]);
 
         execve(path, args, shell->env);
         perror("execve");

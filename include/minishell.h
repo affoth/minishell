@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:05:45 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:20:16 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,22 @@ typedef struct s_shell
     char **env;             // Environment variables
     t_command *cmds_head;   // Head of the commands list
     int exit_status;        // Exit status of the shell
-    volatile sig_atomic_t signal_received; // Signal handling
+    //volatile sig_atomic_t signal_received; // Signal handling
+    void (*(signal_handler))(int);        // Pointer to the signal handler function
+	//sigset_t sa_mask;               // Set of signals to be blocked during handler execution
 } t_shell;
+
+
+// Struct for signal handling
+/* typedef struct s_sigaction
+{
+    void (*sa_handler)(int);        // Pointer to the signal handler function
+    //void (*sa_sigaction)(int, siginfo_t *, void *);  // Alternative signal handler with more info
+    sigset_t sa_mask;               // Set of signals to be blocked during handler execution
+    //int sa_flags;                   // Flags to modify signal handling behavior
+}t_sigaction; */
+//work in progress
+void handle_signal(int sig);
 
 // Function prototypes for garbage collector
 void ft_gc_init(t_gc *gc);

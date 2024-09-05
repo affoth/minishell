@@ -3,17 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/04 17:06:22 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 18:23:26 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* Ctrl-C (SIGINT): Interrupts the current command and returns to the prompt.
+Ctrl-D (EOF): Exits the shell if the input is empty.
+Ctrl-\ (SIGQUIT): Typically causes the process to quit and dump core,
+but in interactive shells, it is often ignored.
+int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
+
+Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
+•In interactive mode:
+◦ctrl-C displays a new prompt on a new line.
+◦ctrl-D exits the shell.
+◦ctrl-\ does nothing.
+ */
 // Signal handler for SIGINT
-void sigint_handler(int signum)
+// Signal handler function
+void handle_signal(int sig)
+{
+    if (sig == SIGINT)
+	{
+        // Handle Ctrl-C (SIGINT)
+        write(STDOUT_FILENO, "\n", 1);
+        rl_replace_line("", 0);
+        rl_on_new_line();
+        rl_redisplay();
+    }
+}
+void handle_eof(void) {
+    if (isatty(STDIN_FILENO)) {
+        write(STDOUT_FILENO, "exit\n", 5);
+        exit(0);
+    }
+}
+
+/* void sigint_handler(int signum)
 {
 	(void)signum; // Cast to void to suppress unused parameter warning
 	if (isatty(STDIN_FILENO))
@@ -49,3 +80,4 @@ void set_signals_child(void) {
 	signal(SIGINT, SIG_DFL); // Default behavior for SIGINT in child
 	signal(SIGQUIT, SIG_IGN); // Ignore SIGQUIT in heredoc child
 }
+ */

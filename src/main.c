@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:16:53 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 16:28:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,13 @@ char *get_input()
 
 void init_shell(t_shell *shell, char **envp)
 {
+
 	ft_gc_init(&shell->gc);
 
 	// Initialize the environment
 	shell->env = init_env(envp, &shell->gc);
 	shell->exit_status = 0;
 	shell->cmds_head = NULL;
-	shell->signal_received = 0;
-	set_signals_parent(); // Ensure signal handling is properly set
 }
 
 
@@ -109,6 +108,7 @@ void execute_shell(t_shell *shell)
 	t_arg *args_head;
 	int pipe_count;
 
+
 	while (1) // Main loop for shell
 	{
 		input = get_input(); // Get user input
@@ -148,8 +148,19 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 
 	t_shell shell;
+	struct sigaction sa;
+
+    // Initialize the sigaction struct
+    sa.sa_handler = handle_signal;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
 
 	init_shell(&shell, envp);
+	if (sigaction(SIGINT, &sa, NULL) == -1) {
+    perror("sigaction");
+    return 1;
+}
 	execute_shell(&shell); // Main shell execution loop
 
 	// Clean up
