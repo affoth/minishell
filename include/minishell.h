@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/04 16:30:43 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:04:46 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ void built_in_unset(t_shell *shell);
 void built_in_exit(t_shell *shell);
 
 // Function prototypes for executing commands
-void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head);
+void execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
 void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
 
 void execute_command(t_shell *shell, t_command *cmd);
@@ -175,8 +175,7 @@ char *remove_quotes(t_gc *gc, const char *str);
 char *get_path(t_gc *gc, char *cmd);
 int count_arguments(char **args);
 int needs_piping(t_command *cmds_head);
-void setup_input_redirection(int cmd_index, int *pipe_descriptors);
-void setup_output_redirection(int cmd_index, int num_pipes, int *pipe_descriptors);
+void setup_redirections(int cmd_index, int num_pipes, int *pipe_descriptors);
 void create_pipes(int num_pipes, int *pipe_descriptors);
 void close_pipes(int num_pipes, int *pipe_descriptors);
 

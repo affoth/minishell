@@ -23,6 +23,7 @@ bool handle_output_redirection(t_command *cmd, t_arg *arg) {
 		cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->stdout_fd < 0) {
 			perror("Error opening file for output redirection");
+			printf("Failed to open file: %s\n", arg->next->arg); 
 			return true;
 		}
 		return true;
