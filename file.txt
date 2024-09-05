@@ -1,0 +1,10 @@
+Makefile
+OPERATOR_LIST.txt
+README.md
+file.txt
+include
+libft copy
+libs
+orga
+src
+tesfiles

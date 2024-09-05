@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 17:35:28 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/04 18:06:32 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:47:19 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ void print_echo_arguments(char **args, bool skip_n_flag)
 	while (args[i])
 	{
 		write(STDOUT_FILENO, args[i], strlen(args[i]));
+		if (args[i + 1])
+		{
+			write(STDOUT_FILENO, " ", 1);
+		}
 		i++;
 	}
 }
