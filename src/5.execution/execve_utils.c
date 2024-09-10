@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   execve_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:51:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 17:08:01 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:04:35 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,24 +75,3 @@ char *get_path(t_gc *gc, char *cmd)
     return NULL;
 }
 
-// Function to count arguments
-int count_arguments(char **args)
-{
-    int count = 0;
-
-    while (args[count])
-        count++;
-    return count;
-}
-
-// Function to check if piping is needed
-int needs_piping(t_command *cmds_head) {
-    t_command *current_cmd = cmds_head;
-    while (current_cmd) {
-        if (current_cmd->next) {
-            return 1; // There is at least one pipe needed
-        }
-        current_cmd = current_cmd->next;
-    }
-    return 0; // No pipes needed
-}

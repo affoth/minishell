@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   commands.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/09/05 15:59:48 by mokutucu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to create a new command node
@@ -23,6 +35,7 @@ bool handle_output_redirection(t_command *cmd, t_arg *arg) {
 		cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->stdout_fd < 0) {
 			perror("Error opening file for output redirection");
+			printf("Failed to open file: %s\n", arg->next->arg); 
 			return true;
 		}
 		return true;
@@ -169,6 +182,12 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
 		if (current_arg->type == END) {
 			break;
 		}
+
+		  // Handle heredocs
+        if (parse_heredoc(current_cmd, current_arg)) {
+            current_arg = current_arg->next;
+            continue;
+        }
 
 		// Handle command name (first argument)
 		if (current_cmd->cmd_name == NULL && current_arg->type == WORD) {

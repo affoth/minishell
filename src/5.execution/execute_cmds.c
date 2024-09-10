@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 14:42:44 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 15:35:23 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,3 +266,4 @@ void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head)
 
     while (wait(NULL) > 0);
 }
+

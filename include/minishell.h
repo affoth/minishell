@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 14:43:45 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 15:29:16 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,6 @@ typedef struct s_shell
     char **env;             // Environment variables
     t_command *cmds_head;   // Head of the commands list
     int exit_status;        // Exit status of the shell
-    //volatile sig_atomic_t signal_received; // Signal handling
-    void (*(signal_handler))(int);        // Pointer to the signal handler function
-	//sigset_t sa_mask;               // Set of signals to be blocked during handler execution
 } t_shell;
 
 
@@ -163,6 +160,7 @@ void print_commands(t_command *cmds_head);
 // Function prototypes for redirection handling
 bool handle_output_redirection(t_command *cmd, t_arg *arg);
 bool handle_input_redirection(t_command *cmd, t_arg *arg);
+bool parse_heredoc(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
@@ -181,10 +179,9 @@ void built_in_unset(t_shell *shell);
 void built_in_exit(t_shell *shell);
 
 // Function prototypes for executing commands
-void execute_commands_without_pipes(t_shell *shell, t_command *cmds_head);
+void execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
 void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
 
-void execute_builtin_with_redirection(t_shell *shell, t_command *cmd);
 void execute_command(t_shell *shell, t_command *cmd);
 void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes);
 
@@ -192,8 +189,7 @@ char *remove_quotes(t_gc *gc, const char *str);
 char *get_path(t_gc *gc, char *cmd);
 int count_arguments(char **args);
 int needs_piping(t_command *cmds_head);
-void setup_input_redirection(int cmd_index, int *pipe_descriptors);
-void setup_output_redirection(int cmd_index, int num_pipes, int *pipe_descriptors);
+void setup_redirections(int cmd_index, int num_pipes, int *pipe_descriptors);
 void create_pipes(int num_pipes, int *pipe_descriptors);
 void close_pipes(int num_pipes, int *pipe_descriptors);
 

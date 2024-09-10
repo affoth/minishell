@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/02 17:44:19 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:41:07 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,29 @@ void built_in_cd(t_shell *shell)
     }
 
     // Determine the target directory
-    if (shell->cmds_head->args && shell->cmds_head->args[0]) {
+    if (shell->cmds_head->args && shell->cmds_head->args[0]) 
+    {
         target_dir = shell->cmds_head->args[0];
-    } else {
-        target_dir = getenv("HOME");
-        if (!target_dir) {
+    } 
+    else if (shell->cmds_head->flags && shell->cmds_head->flags[0] && ft_strcmp(shell->cmds_head->flags[0], "-") == 0) 
+    {
+        // Retrieve OLDPWD from the shell's environment
+        int index = find_var_in_env(shell->env, "OLDPWD");
+        if (index != -1) {
+            target_dir = strchr(shell->env[index], '=') + 1;
+        } else {
+            ft_printf("cd: OLDPWD not set\n");
+            free(oldpwd);
+            return;
+        }
+    }
+    else
+    {
+        // Retrieve HOME from the shell's environment
+        int index = find_var_in_env(shell->env, "HOME");
+        if (index != -1) {
+            target_dir = strchr(shell->env[index], '=') + 1;
+        } else {
             ft_printf("cd: HOME not set\n");
             free(oldpwd);
             return;
@@ -58,6 +76,7 @@ void built_in_cd(t_shell *shell)
         return;
     }
 
+    // Update environment variables
     shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("OLDPWD=", oldpwd), shell->env);
     shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("PWD=", newpwd), shell->env);
 
