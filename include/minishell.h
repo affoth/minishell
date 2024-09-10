@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 15:04:46 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:36:56 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@
 # include <termios.h>    // POSIX Terminal I/O Library
 
 extern char		**environ;
+
+// Forward declaration of t_shell for gc
+typedef struct s_shell t_shell;
 
 // TokenType enum
 typedef enum TokenType
@@ -92,9 +95,11 @@ typedef struct s_garbage
     struct s_garbage *next;
 } t_garbage;
 
+// Garbage collector struct with shell pointer
 typedef struct s_gc
 {
     t_garbage *head;
+    t_shell *shell;  // Pointer to the shell struct
 } t_gc;
 
 // Main shell struct
@@ -108,7 +113,7 @@ typedef struct s_shell
 } t_shell;
 
 // Function prototypes for garbage collector
-void ft_gc_init(t_gc *gc);
+void ft_gc_init(t_gc *gc, t_shell *shell);
 void ft_gc_free(t_gc *gc);
 void *ft_gc_malloc(t_gc *gc, size_t size);
 
@@ -125,7 +130,7 @@ void assign(size_t *i, size_t *j, int *index, bool *quote);
 int ft_quotes_not_closed(char *line);
 
 // Expansion
-char *expand_string(t_gc *gc, char *input);
+char *expand_string(t_gc *gc, char *input, int exit_status);
 
 // Syntax analysis
 int syntax_checker(t_arg *head);
@@ -134,7 +139,7 @@ int redirection_syntax(t_arg *head);
 int word_syntax(t_arg *head);
 
 // Function prototypes for command processing
-t_arg *tokenizer(t_gc *gc, char *input);
+t_arg *tokenizer(t_shell *shell, char *input);
 t_command *create_command(t_gc *gc);
 void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
 void set_command_name(t_command *cmd, const char *name, t_gc *gc);

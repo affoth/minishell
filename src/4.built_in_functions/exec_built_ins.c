@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/04 19:48:32 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:06:23 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,19 @@ void exec_built_ins(t_shell *shell)
     t_command *cmd = shell->cmds_head;
     char *cmd_name;
 
-    if (cmd == NULL)
+    if (cmd == NULL) 
+    {
+        shell->exit_status = 1;  // No command to execute
         return;
+    }
 
     // Extract command name and arguments
     cmd_name = cmd->cmd_name;
-    if (cmd_name == NULL)
+    if (cmd_name == NULL) 
+    {
+        shell->exit_status = 1;  // Invalid command
         return;
+    }
 
     if (ft_strcmp(cmd_name, "cd") == 0)
         built_in_cd(shell);
@@ -59,6 +65,8 @@ void exec_built_ins(t_shell *shell)
     else if (ft_strcmp(cmd_name, "unset") == 0)
         built_in_unset(shell);  // Pass args directly if unset uses them
     else if (ft_strcmp(cmd_name, "exit") == 0)
-        built_in_exit(shell);  // Pass args directly if exit uses them
+        built_in_exit(shell);  // Pass args directly if exit uses 
+    else
+        shell->exit_status = 1; 
 
 }

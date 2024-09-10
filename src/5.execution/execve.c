@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 16:00:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:36:29 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void execute_command(t_shell *shell, t_command *cmd)
     pid_t pid = fork();
     if (pid == 0)
     {
-        // Prepare command arguments
+        // Child process
         int flags_count = 0;
         while (cmd->flags && cmd->flags[flags_count])
             flags_count++;
@@ -54,7 +54,7 @@ void execute_command(t_shell *shell, t_command *cmd)
         int j = 0;
         while (j < args_count)
         {
-            args[flags_count + 1 + j] = remove_quotes(&shell->gc,strdup(cmd->args[j]));
+            args[flags_count + 1 + j] = remove_quotes(&shell->gc, strdup(cmd->args[j]));
             if (!args[flags_count + 1 + j])
             {
                 perror("strdup");
@@ -79,9 +79,30 @@ void execute_command(t_shell *shell, t_command *cmd)
     else if (pid < 0)
     {
         perror("fork");
-        exit(EXIT_FAILURE);
+        shell->exit_status = 1;  // Set exit status to indicate failure
+        return;
     }
 
-    // Parent process should wait for the child process to complete
-    while (wait(NULL) > 0);
+    // Parent process
+    int status;
+    if (waitpid(pid, &status, 0) == -1)
+    {
+        perror("waitpid");
+        shell->exit_status = 1;  // Set exit status to indicate failure
+    }
+    else
+    {
+        if (WIFEXITED(status))
+        {
+            shell->exit_status = WEXITSTATUS(status);  // Set exit status to the command's exit status
+        }
+        else if (WIFSIGNALED(status))
+        {
+            shell->exit_status = 128 + WTERMSIG(status);  // Set exit status to the signal number causing termination
+        }
+        else
+        {
+            shell->exit_status = 1;  // Default to 1 for other cases
+        }
+    }
 }

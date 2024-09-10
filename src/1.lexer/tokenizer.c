@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 18:05:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 14:04:25 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:32:32 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,26 +96,39 @@ void add_arg_to_list(t_gc *gc, t_arg **head, char *arg)
     new_node->prev = current_node;
 }
 
-// Tokenize the input line into arguments
-t_arg *tokenizer(t_gc *gc, char *line)
+void print_tokens(t_arg *head)
+{
+    t_arg *current = head;
+    while (current != NULL)
+    {
+        printf("Token: %s, Type: %d\n", current->arg, current->type);
+        current = current->next;
+    }
+}
+
+
+t_arg *tokenizer(t_shell *shell, char *line)
 {
     if (!line)
     {
         write(STDERR_FILENO, "Error: Null input line\n", 23);
+        shell->exit_status = 1;  // Set exit status to indicate an error
         return NULL;
     }
 
     if (ft_quotes_not_closed(line))
     {
         write(STDERR_FILENO, "Error: Quotes not closed\n", 25);
+        shell->exit_status = 1;  // Set exit status to indicate an error
         return NULL;
     }
 
-    char **split_args = ft_shell_split(gc, line, ' ');
+    char **split_args = ft_shell_split(&shell->gc, line, ' ');
     if (!split_args)
     {
         perror("Split failed");
-        exit(EXIT_FAILURE);
+        shell->exit_status = 1;  // Set exit status to indicate an error
+        return NULL;
     }
 
     int i = 0;
@@ -126,7 +139,7 @@ t_arg *tokenizer(t_gc *gc, char *line)
         // Skip empty arguments
         if (ft_strlen(split_args[i]) > 0)
         {
-            add_arg_to_list(gc, &args_head, split_args[i]);
+            add_arg_to_list(&shell->gc, &args_head, split_args[i]);
         }
         i++;
     }
@@ -135,7 +148,10 @@ t_arg *tokenizer(t_gc *gc, char *line)
     if (syntax_checker(args_head) != 0)
     {
         write(STDERR_FILENO, "Error: Syntax checker not passed\n", 33);
+        shell->exit_status = 1;  // Set exit status to indicate an error
     }
+    
+    print_tokens(args_head);
 
     return args_head;
 }

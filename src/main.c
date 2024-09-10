@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 18:56:36 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:37:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ char *get_input()
 
 void init_shell(t_shell *shell, char **envp)
 {
-    ft_gc_init(&shell->gc);
+    ft_gc_init(&shell->gc, shell);
 
     // Initialize the environment
     shell->env = init_env(envp, &shell->gc);
     shell->cmds_head = NULL;
     shell->signal_received = 0;
+    shell->exit_status = 0;
     set_signals_parent(); // Ensure signal handling is properly set
 }
 
@@ -130,9 +131,9 @@ void execute_shell(t_shell *shell)
         }
         
         // Expand variables
-        expanded_input = expand_string(&shell->gc, input);
+        expanded_input = expand_string(&shell->gc, input, shell->exit_status);
         // Tokenize and parse commands
-        args_head = tokenizer(&shell->gc, expanded_input);
+        args_head = tokenizer(shell, expanded_input);
         pipe_count = count_pipes_argstruct(args_head);
         shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count);
         print_commands(shell->cmds_head);
