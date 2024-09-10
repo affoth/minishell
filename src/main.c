@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 16:28:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 14:42:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,19 +148,12 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 
 	t_shell shell;
-	struct sigaction sa;
-
+	setup_signals();
     // Initialize the sigaction struct
-    sa.sa_handler = handle_signal;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
 
 
 	init_shell(&shell, envp);
-	if (sigaction(SIGINT, &sa, NULL) == -1) {
-    perror("sigaction");
-    return 1;
-}
+
 	execute_shell(&shell); // Main shell execution loop
 
 	// Clean up
@@ -168,3 +161,5 @@ int main(int argc, char **argv, char **envp)
 
 	return 0;
 }
+
+

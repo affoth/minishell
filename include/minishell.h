@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 13:20:16 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 14:43:45 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,9 @@ typedef struct s_shell
 }t_sigaction; */
 //work in progress
 void handle_signal(int sig);
+void child_handle_signal(int sig);
+void setup_signals(void);
+void setup_child_signals(void);
 
 // Function prototypes for garbage collector
 void ft_gc_init(t_gc *gc);

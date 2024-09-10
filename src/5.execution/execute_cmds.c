@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/04 17:24:54 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 14:42:44 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void execute_command(t_shell *shell, t_command *cmd)
     if (pid == 0)
     {
         // Child process
+		setup_child_signals();
+
         if (cmd->stdin_fd != STDIN_FILENO)
         {
             if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)

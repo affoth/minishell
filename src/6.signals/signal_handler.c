@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 18:24:43 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 14:47:34 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,72 @@ Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
  */
 // Signal handler for SIGINT
 // Signal handler function
+void setup_signals(void)
+{
+	struct sigaction sa;
+
+	sa.sa_handler = handle_signal;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+
+	if (sigaction(SIGINT, &sa, NULL) == -1)
+	{
+	perror("sigaction");
+	return;
+	}
+	if (sigaction(SIGQUIT, &sa, NULL) == -1)
+	{
+	perror("sigaction");
+	return;
+	}
+}
+void setup_child_signals(void)
+{
+	struct sigaction sa;
+
+	sa.sa_handler = child_handle_signal;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	if (sigaction(SIGINT, &sa, NULL) == -1)
+	{
+	perror("sigaction");
+	exit(1);
+	}
+	// if (sigaction(SIGQUIT, &sa, NULL) == -1)
+	// {
+	// perror("sigaction");
+	// exit(1);
+	// }
+}
+
+
 void handle_signal(int sig)
 {
-    if (sig == SIGINT)
+	if (sig == SIGINT)
 	{
-        // Handle Ctrl-C (SIGINT)
-        write(STDOUT_FILENO, "\n", 1);
-        rl_replace_line("", 0);
-        rl_on_new_line();
-        rl_redisplay();
-    }
+	// Handle Ctrl-C (SIGINT)
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	}
+	if (sig == SIGQUIT)
+		return;
+}
+void child_handle_signal(int sig)
+{
+	if (sig == SIGINT)
+	{
+	// Handle Ctrl-C (SIGINT)
+		exit(0);
+	}
+// 	if (sig == SIGQUIT)
+// 		exit(0);
 }
 /* void handle_eof(void) {
     if (isatty(STDIN_FILENO)) {
-        write(STDOUT_FILENO, "exit\n", 5);
-        exit(0);
+    write(STDOUT_FILENO, "exit\n", 5);
+    exit(0);
     }
 } */
 
