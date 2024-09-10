@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 15:32:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 15:36:30 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ void init_shell(t_shell *shell, char **envp)
     // Initialize the environment
     shell->env = init_env(envp, &shell->gc);
     shell->cmds_head = NULL;
-    shell->signal_received = 0;
-    set_signals_parent(); // Ensure signal handling is properly set
 }
 
 
