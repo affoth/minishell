@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 18:05:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 17:32:32 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 19:21:49 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,8 @@ t_arg *tokenizer(t_shell *shell, char *line)
         write(STDERR_FILENO, "Error: Syntax checker not passed\n", 33);
         shell->exit_status = 1;  // Set exit status to indicate an error
     }
-    
-    print_tokens(args_head);
+
+    //print_tokens(args_head);
 
     return args_head;
 }

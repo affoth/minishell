@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 17:36:29 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 19:10:14 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void execute_command(t_shell *shell, t_command *cmd)
+int execute_command(t_shell *shell, t_command *cmd)
 {
     pid_t pid = fork();
     if (pid == 0)
@@ -69,18 +69,17 @@ void execute_command(t_shell *shell, t_command *cmd)
         if (!path)
         {
             fprintf(stderr, "Command not found: %s\n", args[0]);
-            exit(EXIT_FAILURE);
+            exit(EXIT_COMMAND_NOT_FOUND);
         }
 
         execve(path, args, shell->env);
         perror("execve");
-        exit(EXIT_FAILURE);
+        exit(EXIT_EXECVE_FAILED);
     }
     else if (pid < 0)
     {
         perror("fork");
-        shell->exit_status = 1;  // Set exit status to indicate failure
-        return;
+        return 1; // Return failure status
     }
 
     // Parent process
@@ -88,21 +87,22 @@ void execute_command(t_shell *shell, t_command *cmd)
     if (waitpid(pid, &status, 0) == -1)
     {
         perror("waitpid");
-        shell->exit_status = 1;  // Set exit status to indicate failure
+        return 1; // Return failure status
     }
     else
     {
         if (WIFEXITED(status))
         {
-            shell->exit_status = WEXITSTATUS(status);  // Set exit status to the command's exit status
+            return WEXITSTATUS(status); // Return the command's exit status
         }
         else if (WIFSIGNALED(status))
         {
-            shell->exit_status = 128 + WTERMSIG(status);  // Set exit status to the signal number causing termination
+            return 128 + WTERMSIG(status); // Return the signal number causing termination
         }
         else
         {
-            shell->exit_status = 1;  // Default to 1 for other cases
+            return 1; // Default to 1 for other cases
         }
     }
 }
+

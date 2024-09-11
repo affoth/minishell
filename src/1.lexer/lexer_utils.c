@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 20:53:40 by afoth             #+#    #+#             */
-/*   Updated: 2024/08/22 16:20:59 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 20:26:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,29 @@ void	assign(size_t *i, size_t *j, int *index, bool *quote)
 	*quote = false;
 }
 
-int ft_quotes_not_closed(char *line)
+int	ft_quotes_not_closed(const char *line)
 {
-	int i;
-	int single_quotes;
-	int double_quotes;
-
-	i = 0;
-	single_quotes = 0;
-	double_quotes = 0;
+	bool	in_single_quote = false;
+	bool	in_double_quote = false;
+	size_t	i = 0;
 
 	while (line[i] != '\0')
 	{
-		if (line[i] == '\'')
-			single_quotes++;
-		if (line[i] == '"')
-			double_quotes++;
+		if (line[i] == '\'' && !in_double_quote)
+			in_single_quote = !in_single_quote; // Toggle single quote
+		else if (line[i] == '\"' && !in_single_quote)
+			in_double_quote = !in_double_quote; // Toggle double quote
 		i++;
 	}
-	if (single_quotes % 2 != 0 || double_quotes % 2 != 0)
+
+	// If either single or double quote is still open, return an error
+	if (in_single_quote || in_double_quote)
 	{
-		ft_printf("Quotations not closed\n");
-		return (1);
+		ft_printf("Error: Quotes not closed\n");
+		return (1); // Return error code for unclosed quotes
 	}
-	return (0);
+
+	return (0); // No unclosed quotes
 }
+
+

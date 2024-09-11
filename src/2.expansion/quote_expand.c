@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 13:45:27 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 20:42:54 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ int check_if_in_single_quote(char *input, size_t i)
 	return (0);
 }
 
-#include <stdlib.h> // For itoa
-
 // Function to calculate the length of the expanded string
 size_t calculate_expanded_length(t_gc *gc, char *input, int exit_status)
 {
@@ -50,11 +48,14 @@ size_t calculate_expanded_length(t_gc *gc, char *input, int exit_status)
     size_t i = 0;
     char *env;
     char *expanded;
-    char exit_status_str[12]; // Enough for a 32-bit integer
+    char *exit_status_str;
+    size_t exit_status_len;
 
     // Convert exit_status to string and get its length
-    snprintf(exit_status_str, sizeof(exit_status_str), "%d", exit_status);
-    size_t exit_status_len = strlen(exit_status_str);
+    exit_status_str = ft_itoa(exit_status);
+    if (!exit_status_str)
+        return 0; // Handle memory allocation failure
+    exit_status_len = ft_strlen(exit_status_str);
 
     while (input[i])
     {
@@ -85,6 +86,7 @@ size_t calculate_expanded_length(t_gc *gc, char *input, int exit_status)
             i++;
         }
     }
+    free(exit_status_str); // Free the allocated memory for the exit status string
     return len;
 }
 
@@ -117,10 +119,13 @@ char *expand_string(t_gc *gc, char *input, int exit_status)
             {
                 // Handle $?
                 expanded = ft_itoa(exit_status);
-                ft_strlcpy(result + j, expanded, len - (j - 1));
-                j += ft_strlen(expanded);
-                i += 2; // Skip "$?"
-                free(expanded);
+                if (expanded)
+                {
+                    ft_strlcpy(result + j, expanded, len - j + 1);
+                    j += ft_strlen(expanded);
+                    i += 2; // Skip "$?"
+                    free(expanded);
+                }
             }
             else
             {
@@ -128,9 +133,11 @@ char *expand_string(t_gc *gc, char *input, int exit_status)
                     start++;
                 env = ft_shell_substr(gc, input, (i + 1), (start - i - 1));
                 expanded = ft_expand_env(gc, env);
-                ft_strlcpy(result + j, expanded, len - (j - 1));
+                ft_strlcpy(result + j, expanded, len - j + 1);
                 j += ft_strlen(expanded);
                 i = start;
+                free(env);
+                free(expanded);
             }
         }
         else

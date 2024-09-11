@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 17:06:23 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 19:04:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,43 @@ int is_built_in(char *arg)
     return 0;
 }
 
-// Function to execute built-in commands
-void exec_built_ins(t_shell *shell)
+int exec_built_ins(t_shell *shell)
 {
     t_command *cmd = shell->cmds_head;
     char *cmd_name;
+    int status;
 
-    if (cmd == NULL) 
+    if (cmd == NULL)
     {
-        shell->exit_status = 1;  // No command to execute
-        return;
+        return 1;
     }
 
-    // Extract command name and arguments
+    // Extract command name
     cmd_name = cmd->cmd_name;
-    if (cmd_name == NULL) 
+    if (cmd_name == NULL)
     {
-        shell->exit_status = 1;  // Invalid command
-        return;
+        return 1;
     }
 
+    // Execute the built-in command and capture the status
     if (ft_strcmp(cmd_name, "cd") == 0)
-        built_in_cd(shell);
+        status = built_in_cd(shell);
     else if (ft_strcmp(cmd_name, "echo") == 0)
-        built_in_echo(shell);  // Pass args directly if echo uses them
+        status = built_in_echo(shell);
     else if (ft_strcmp(cmd_name, "pwd") == 0)
-        built_in_pwd();
+        status = built_in_pwd();
     else if (ft_strcmp(cmd_name, "env") == 0)
-        built_in_env(shell);
+        status = built_in_env(shell);
     else if (ft_strcmp(cmd_name, "export") == 0)
-        built_in_export(shell);  // Pass args directly if export uses them
+        status = built_in_export(shell);
     else if (ft_strcmp(cmd_name, "unset") == 0)
-        built_in_unset(shell);  // Pass args directly if unset uses them
+        status = built_in_unset(shell);
     else if (ft_strcmp(cmd_name, "exit") == 0)
-        built_in_exit(shell);  // Pass args directly if exit uses 
+        status = built_in_exit(shell);
     else
-        shell->exit_status = 1; 
+    {
+        return 1;
+    }
 
+    return 0;
 }

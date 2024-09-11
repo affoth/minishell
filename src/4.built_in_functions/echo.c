@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 17:35:28 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 15:47:19 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 20:30:35 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool check_initial_n_flag(char **flags)
 
 	while (flags[i])
 	{
-		if (strcmp(flags[i], "-n") == 0)
+		if (ft_strcmp(flags[i], "-n") == 0)
 		{
 			suppress_newline = true;
 		}
@@ -50,7 +50,7 @@ void print_echo_arguments(char **args, bool skip_n_flag)
 
 	while (args[i])
 	{
-		write(STDOUT_FILENO, args[i], strlen(args[i]));
+		write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
 		if (args[i + 1])
 		{
 			write(STDOUT_FILENO, " ", 1);
@@ -60,13 +60,13 @@ void print_echo_arguments(char **args, bool skip_n_flag)
 }
 
 // echo built-in
-void built_in_echo(t_shell *shell)
+int built_in_echo(t_shell *shell)
 {
 	t_command *cmd = shell->cmds_head;
 	if (!cmd || !cmd->args)
 	{
-		printf("\n");  // Print a newline if no arguments are provided
-		return;
+		write(STDOUT_FILENO, "\n", 1);  // Print a newline if no arguments are provided
+		return 0;  // Success code
 	}
 
 	// Check for -n flags in the flags array
@@ -78,4 +78,6 @@ void built_in_echo(t_shell *shell)
 	// Print newline if not suppressed
 	if (!suppress_newline)
 		write(STDOUT_FILENO, "\n", 1);
+
+	return 0;  // Success code
 }

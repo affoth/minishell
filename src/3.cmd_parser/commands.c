@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 15:59:48 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 20:41:53 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool handle_output_redirection(t_command *cmd, t_arg *arg) {
 		cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->stdout_fd < 0) {
 			perror("Error opening file for output redirection");
-			printf("Failed to open file: %s\n", arg->next->arg); 
+			printf("Failed to open file: %s\n", arg->next->arg);
 			return true;
 		}
 		return true;

@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 17:41:07 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:31:15 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void built_in_cd(t_shell *shell)
+int built_in_cd(t_shell *shell)
 {
     char *target_dir = NULL;
     char *oldpwd = NULL;
@@ -21,22 +21,22 @@ void built_in_cd(t_shell *shell)
     // Ensure shell and command list are not NULL
     if (!shell || !shell->cmds_head) {
         ft_printf("Error: shell or command list is NULL.\n");
-        return;
+        return 1; // Error code
     }
 
     // Get the current working directory and save it as OLDPWD
     oldpwd = getcwd(NULL, 0);
     if (!oldpwd) {
         perror("getcwd");
-        return;
+        return 1; // Error code
     }
 
     // Determine the target directory
-    if (shell->cmds_head->args && shell->cmds_head->args[0]) 
+    if (shell->cmds_head->args && shell->cmds_head->args[0])
     {
         target_dir = shell->cmds_head->args[0];
-    } 
-    else if (shell->cmds_head->flags && shell->cmds_head->flags[0] && ft_strcmp(shell->cmds_head->flags[0], "-") == 0) 
+    }
+    else if (shell->cmds_head->flags && shell->cmds_head->flags[0] && ft_strcmp(shell->cmds_head->flags[0], "-") == 0)
     {
         // Retrieve OLDPWD from the shell's environment
         int index = find_var_in_env(shell->env, "OLDPWD");
@@ -45,7 +45,7 @@ void built_in_cd(t_shell *shell)
         } else {
             ft_printf("cd: OLDPWD not set\n");
             free(oldpwd);
-            return;
+            return 1; // Error code
         }
     }
     else
@@ -57,7 +57,7 @@ void built_in_cd(t_shell *shell)
         } else {
             ft_printf("cd: HOME not set\n");
             free(oldpwd);
-            return;
+            return 1; // Error code
         }
     }
 
@@ -65,7 +65,7 @@ void built_in_cd(t_shell *shell)
     if (chdir(target_dir) != 0) {
         perror("cd");
         free(oldpwd);
-        return;
+        return 1; // Error code
     }
 
     // Get the new working directory and update PWD and OLDPWD
@@ -73,7 +73,7 @@ void built_in_cd(t_shell *shell)
     if (!newpwd) {
         perror("getcwd");
         free(oldpwd);
-        return;
+        return 1; // Error code
     }
 
     // Update environment variables
@@ -82,4 +82,6 @@ void built_in_cd(t_shell *shell)
 
     free(oldpwd);
     free(newpwd);
+
+    return 0; // Success code
 }

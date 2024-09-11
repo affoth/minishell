@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 17:37:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 20:11:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void init_shell(t_shell *shell, char **envp)
 }
 
 
-void print_cmd_args(char **args, const char *label) 
+void print_cmd_args(char **args, const char *label)
 {
     if (args) {
         printf("%s:\n", label);
@@ -83,7 +83,7 @@ void print_cmd_args(char **args, const char *label)
     }
 }
 
-void print_commands(t_command *cmds_head) 
+void print_commands(t_command *cmds_head)
 {
     t_command *cmd = cmds_head;
 
@@ -93,10 +93,10 @@ void print_commands(t_command *cmds_head)
         printf("  stdout_fd: %d\n", cmd->stdout_fd);
         printf("  Append mode: %s\n", cmd->append_mode ? "true" : "false");
         printf("  Command name: %s\n", cmd->cmd_name);
-        
+
         print_cmd_args(cmd->flags, "Flags");
         print_cmd_args(cmd->args, "Args");
-        
+
         cmd = cmd->next;
         printf("-----\n");
     }
@@ -114,7 +114,7 @@ int needs_piping(t_command *cmds_head) {
     return 0; // No pipes needed
 }
 
-void execute_shell(t_shell *shell) 
+void execute_shell(t_shell *shell)
 {
     char *input;
     char *expanded_input;
@@ -129,27 +129,27 @@ void execute_shell(t_shell *shell)
             free(input);
             continue;
         }
-        
+
         // Expand variables
         expanded_input = expand_string(&shell->gc, input, shell->exit_status);
         // Tokenize and parse commands
         args_head = tokenizer(shell, expanded_input);
         pipe_count = count_pipes_argstruct(args_head);
         shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count);
-        print_commands(shell->cmds_head);
+        //print_commands(shell->cmds_head);
 
         // Execute commands
         if (needs_piping(shell->cmds_head))
         {
-            printf("Executing commands with pipes\n");
-            execute_commands_with_pipes(shell, shell->cmds_head);
+            //printf("Executing commands with pipes\n");
+            shell->exit_status = execute_commands_with_pipes(shell, shell->cmds_head);
         }
         else
         {
-            printf("Executing commands without pipes\n");
-            execute_command_without_pipes(shell, shell->cmds_head);
+            //printf("Executing commands without pipes\n");
+            shell->exit_status = execute_command_without_pipes(shell, shell->cmds_head);
         }
-
+        //printf("Exit status: %d\n", shell->exit_status);
         // Free allocated memory for arguments and commands
         free(input);
         }
@@ -162,7 +162,7 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
 
     t_shell shell;
-    
+
     init_shell(&shell, envp);
     execute_shell(&shell); // Main shell execution loop
 

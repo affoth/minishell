@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 17:36:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 20:23:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@
 # include <readline/history.h>   // GNU Readline Library
 
 # include <termios.h>    // POSIX Terminal I/O Library
+
+// Define exit status codes
+#define EXIT_COMMAND_NOT_FOUND 127
+#define EXIT_PERMISSION_DENIED 126
+#define EXIT_INVALID_COMMAND 2
+#define EXIT_FORK_FAILED 1
+#define EXIT_EXECVE_FAILED 1
+#define EXIT_FAILURE 1
+#define EXIT_SUCCESS 0
 
 extern char		**environ;
 
@@ -127,7 +136,7 @@ char **ft_shell_split(t_gc *gc, const char *s, char c);
 void handle_quote_split(const char *s, size_t i, bool *quote);
 void skip_quoted_string(const char **s, bool *quote, char *quote_char);
 void assign(size_t *i, size_t *j, int *index, bool *quote);
-int ft_quotes_not_closed(char *line);
+int ft_quotes_not_closed(const char *line);
 
 // Expansion
 char *expand_string(t_gc *gc, char *input, int exit_status);
@@ -155,26 +164,26 @@ bool parse_heredoc(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
-void exec_built_ins(t_shell *shell);
-void built_in_cd(t_shell *shell);
-void built_in_pwd(void);
-void built_in_env(t_shell *shell);
-void built_in_echo(t_shell *shell);
+int exec_built_ins(t_shell *shell);
+int built_in_cd(t_shell *shell);
+int built_in_pwd(void);
+int built_in_env(t_shell *shell);
+int built_in_echo(t_shell *shell);
 int ft_env_len(char **env);
 char *find_variable(t_gc *gc, const char *arg);
 int find_var_in_env(char **env, const char *var_name);
 char **add_env_var(t_gc *gc, char *arg, char **env, int env_len);
 char **change_or_add_env_var(t_gc *gc, char *arg, char **env);
-void built_in_export(t_shell *shell);
-void built_in_unset(t_shell *shell);
-void built_in_exit(t_shell *shell);
+int built_in_export(t_shell *shell);
+int built_in_unset(t_shell *shell);
+int built_in_exit(t_shell *shell);
 
 // Function prototypes for executing commands
-void execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
-void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
+int execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
+int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
 
-void execute_command(t_shell *shell, t_command *cmd);
-void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes);
+int execute_command(t_shell *shell, t_command *cmd);
+int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes);
 
 char *remove_quotes(t_gc *gc, const char *str);
 char *get_path(t_gc *gc, char *cmd);

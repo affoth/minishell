@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 19:19:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/11 19:59:52 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes)
+int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes)
 {
     pid_t pid = fork();
     if (pid == 0)
@@ -21,16 +21,6 @@ void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descript
         setup_redirections(cmd_index, num_pipes, pipe_descriptors);
         if (cmd->next == NULL)
         {
-            // Last command in the pipeline
-            /*if (cmd->stdin_fd != STDIN_FILENO)
-            {
-                if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
-                {
-                    perror("dup2 stdin");
-                    exit(EXIT_FAILURE);
-                }
-                close(cmd->stdin_fd);
-            }*/
             if (cmd->stdout_fd != STDOUT_FILENO)
             {
                 if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
@@ -43,37 +33,43 @@ void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descript
         }
         close_pipes(num_pipes, pipe_descriptors);
 
+        int status;
         if (is_built_in(cmd->cmd_name))
         {
-            // Execute built-in command with proper redirection
-            exec_built_ins(shell);
+            status = exec_built_ins(shell);
         }
         else
         {
-            execute_command(shell, cmd);
+            status = execute_command(shell, cmd);
         }
-        exit(EXIT_FAILURE); // Ensure to exit after executing the command
+        exit(status); // Exit with the command's status
     }
     else if (pid < 0)
     {
         perror("fork");
-        exit(EXIT_FAILURE);
+        exit(EXIT_FORK_FAILED);
     }
+    return 0; // Return 0 to indicate success in fork
 }
-
-void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
+int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
 {
     int num_pipes = count_pipes_cmdstruct(cmds_head);
     int pipe_descriptors[2 * num_pipes];
+    int status = 0;  // To track the exit status
 
+    // Create pipes
     create_pipes(num_pipes, pipe_descriptors);
 
     t_command *current_cmd = cmds_head;
     int cmd_index = 0;
 
+    // Iterate over commands
     while (current_cmd)
     {
-        fork_and_execute_command(shell, current_cmd, pipe_descriptors, cmd_index, num_pipes);
+        if (fork_and_execute_command(shell, current_cmd, pipe_descriptors, cmd_index, num_pipes) != 0)
+        {
+            status = 1;  // If forking fails, set status to non-zero
+        }
 
         // Close the pipe ends not needed anymore
         if (cmd_index > 0)
@@ -93,5 +89,22 @@ void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
     close_pipes(num_pipes, pipe_descriptors);
 
     // Wait for all child processes to complete
-    while (wait(NULL) > 0);
+    int child_status;
+    while (wait(&child_status) > 0)
+    {
+        if (WIFEXITED(child_status))
+        {
+            int exit_code = WEXITSTATUS(child_status);
+            if (exit_code != 0)  // If any command failed, set status to the last non-zero exit code
+            {
+                status = exit_code;
+            }
+        }
+        else if (WIFSIGNALED(child_status))
+        {
+            status = 128 + WTERMSIG(child_status); // Capture signal-based exit status
+        }
+    }
+
+    return status;  // Return the exit status
 }
