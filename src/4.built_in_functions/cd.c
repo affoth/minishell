@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 14:38:16 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:42:08 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int built_in_cd(t_shell *shell)
 
     // Check if the target directory is a valid directory
     if (access(target_dir, F_OK) != 0) {
-        ft_putstr_fd("cd: no such file or directory\n", STDERR_FILENO);
+        ft_putstr_fd("cd: No such file or directory\n", STDERR_FILENO);
         free(oldpwd);
         return 1; // Error code
     }

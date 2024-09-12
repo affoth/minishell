@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 14:24:11 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 19:09:11 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int built_in_export(t_shell *shell)
             if (arg[0] == '=' || arg[ft_strlen(arg) - 1] == '=')
             {
                 // Invalid format if it starts or ends with '='
-                //ft_printf("export: `%s': not a valid identifier\n", arg);
+                ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
                 has_errors = 1; // Indicate an error
             }
             else

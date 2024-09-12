@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 16:58:03 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 22:09:27 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ const Token typeMap[] = {
     {"\"", DOUBLE_QUOTED_STRING},
     {"'", SINGLE_QUOTED_STRING},
     {"$", ENV_VARIABLE},
+    {"<<", HEREDOC},
+    {">>", REDIRECTION_APPEND},
+    {"<", REDIRECTION_IN},
+    {">", REDIRECTION_OUT},
     {NULL, WORD}
 };
 
@@ -100,62 +104,92 @@ t_arg *tokenizer(t_shell *shell, char *input)
         return NULL;
     }
 
-    // This function splits the input into tokens by spaces
-    char **split_args = ft_shell_split(&shell->gc, input, ' ');
-    if (!split_args)
-    {
-        perror("Split failed");
-        shell->exit_status = 1;
-        return NULL;
-    }
-
-    int i = 0;
     t_arg *args_head = NULL;
+    char buffer[256];  // Adjust buffer size as needed
+    int buffer_len = 0;
 
-    while (split_args[i] != NULL)
+    char *current = input;
+    while (*current)
     {
-        // Skip empty arguments
-        if (ft_strlen(split_args[i]) > 0)
+        // Handle quotes
+        if (*current == '"')
         {
-            // Handle potential redirection tokens and their associated file names
-            char *arg = split_args[i];
-            int length = ft_strlen(arg);
-
-            // Split based on redirection characters
-            if (arg[0] == '<' || arg[0] == '>')
+            current++;
+            while (*current && *current != '"')
             {
-                if (length > 1)
-                {
-                    // Handle the case where there is more than one character after '<' or '>'
-                    char redirection_char[2] = { arg[0], '\0' };
-                    add_arg_to_list(&shell->gc, &args_head, redirection_char);
+                buffer[buffer_len++] = *current++;
+            }
+            if (*current == '"')
+                current++;
+            buffer[buffer_len] = '\0';
+            add_arg_to_list(&shell->gc, &args_head, buffer);
+            buffer_len = 0;
+            continue;
+        }
+        else if (*current == '\'')
+        {
+            current++;
+            while (*current && *current != '\'')
+            {
+                buffer[buffer_len++] = *current++;
+            }
+            if (*current == '\'')
+                current++;
+            buffer[buffer_len] = '\0';
+            add_arg_to_list(&shell->gc, &args_head, buffer);
+            buffer_len = 0;
+            continue;
+        }
 
-                    char *remaining = arg + 1;
-                    if (ft_strlen(remaining) > 0)
-                    {
-                        add_arg_to_list(&shell->gc, &args_head, remove_quotes(&shell->gc, remaining));
-                    }
-                }
-                else
-                {
-                    // Handle single character redirection tokens
-                    add_arg_to_list(&shell->gc, &args_head, arg);
-                }
-                i++;
+        // Handle redirection operators
+        if (*current == '>' || *current == '<')
+        {
+            if (current[1] == *current) // Handle multi-character redirection tokens
+            {
+                buffer[buffer_len++] = *current++;
+                buffer[buffer_len++] = *current++;
+                buffer[buffer_len] = '\0';
+                add_arg_to_list(&shell->gc, &args_head, buffer);
+                buffer_len = 0;
             }
             else
             {
-                add_arg_to_list(&shell->gc, &args_head, split_args[i]);
-                i++;
+                buffer[buffer_len++] = *current++;
+                buffer[buffer_len] = '\0';
+                add_arg_to_list(&shell->gc, &args_head, buffer);
+                buffer_len = 0;
             }
+            continue;
         }
-        else
+
+        // Handle spaces as token delimiters
+        if (*current == ' ')
         {
-            i++;
+            if (buffer_len > 0)
+            {
+                buffer[buffer_len] = '\0';
+                char *arg = remove_quotes(&shell->gc, buffer);
+                add_arg_to_list(&shell->gc, &args_head, arg);
+                buffer_len = 0;
+            }
+            current++;
+            continue;
         }
+
+        // Accumulate characters into buffer
+        buffer[buffer_len++] = *current++;
     }
 
-    print_tokens(args_head);
+    // Add any remaining buffer contents as the last token
+    if (buffer_len > 0)
+    {
+        buffer[buffer_len] = '\0';
+        char *arg = remove_quotes(&shell->gc, buffer);
+        add_arg_to_list(&shell->gc, &args_head, arg);
+    }
+
+    // Optionally print tokens for debugging
+    //print_tokens(args_head);
 
     return args_head;
 }

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:45:00 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 14:30:53 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 19:10:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ int built_in_unset(t_shell *shell)
         else
         {
             // Print an error message if variable not found
-            write(STDERR_FILENO, "unset: ", 7);
-            write(STDERR_FILENO, args[i], ft_strlen(args[i]));
-            write(STDERR_FILENO, ": not found\n", 12);
+            //write(STDERR_FILENO, "unset: ", 7);
+            //write(STDERR_FILENO, args[i], ft_strlen(args[i]));
+            //write(STDERR_FILENO, ": not found\n", 12);
         }
         i++;
     }

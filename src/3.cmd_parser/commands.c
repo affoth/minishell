@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 14:56:14 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:47:20 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,40 +29,56 @@ t_command *create_command(t_gc *gc) {
 	return new_cmd;
 }
 
-// Function to handle output redirection
-bool handle_output_redirection(t_command *cmd, t_arg *arg) {
-	if (arg->type == REDIRECTION_OUT) {
-		cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (cmd->stdout_fd < 0) {
-			perror("Error opening file for output redirection");
-			printf("Failed to open file: %s\n", arg->next->arg);
-			return true;
-		}
-		return true;
-	} else if (arg->type == REDIRECTION_APPEND) {
-		cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (cmd->stdout_fd < 0) {
-			perror("Error opening file for output redirection");
-			return true;
-		}
-		cmd->append_mode = true;
-		return true;
-	}
-	return false;
+int handle_output_redirection(t_command *cmd, t_arg *arg, t_shell *shell) {
+    if (arg->type == REDIRECTION_OUT) {
+        // Close previous output file descriptor if already redirected
+        if (cmd->stdout_fd != STDOUT_FILENO) {
+            close(cmd->stdout_fd);
+        }
+
+        cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (cmd->stdout_fd < 0) {
+            perror("Error opening file for output redirection");
+            shell->exit_status = 1; // Update exit status on error
+            return 1; // Return failure
+        }
+        return 0; // Success
+    } else if (arg->type == REDIRECTION_APPEND) {
+        // Handle append mode
+        if (cmd->stdout_fd != STDOUT_FILENO) {
+            close(cmd->stdout_fd);
+        }
+
+        cmd->stdout_fd = open(arg->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (cmd->stdout_fd < 0) {
+            perror("Error opening file for append redirection");
+            shell->exit_status = 1; // Update exit status on error
+            return 1; // Return failure
+        }
+        cmd->append_mode = true;
+        return 0; // Success
+    }
+    return 0;
 }
 
-// Function to handle input redirection
-bool handle_input_redirection(t_command *cmd, t_arg *arg) {
-	if (arg->type == REDIRECTION_IN) {
-		cmd->stdin_fd = open(arg->next->arg, O_RDONLY);
-		if (cmd->stdin_fd < 0) {
-			perror("Error opening file for input redirection");
-			return true;
-		}
-		return true;
-	}
-	return false;
+int handle_input_redirection(t_command *cmd, t_arg *arg, t_shell *shell) {
+    if (arg->type == REDIRECTION_IN) {
+        // Close previous input file descriptor if already redirected
+        if (cmd->stdin_fd != STDIN_FILENO) {
+            close(cmd->stdin_fd);
+        }
+
+        cmd->stdin_fd = open(arg->next->arg, O_RDONLY);
+        if (cmd->stdin_fd < 0) {
+            perror("Error opening file for input redirection");
+            shell->exit_status = 1; // Update exit status on error
+            return 1; // Return failure
+        }
+        return 0; // Success
+    }
+    return 0;
 }
+
 
 // Function to count the number of pipes
 int count_pipes_argstruct(t_arg *args_head) {
@@ -183,75 +199,86 @@ char *strip_redundant_quotes(t_gc *gc, const char *str)
     return result;
 }
 
+t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count, t_shell *shell) {
+    t_command *commands[pipe_count + 1];
+    t_command *cmds_head = NULL;
+    t_command *last_cmd = NULL;
+    t_arg *current_arg = args_head;
+    int cmd_index = 0;
 
+    // Create command nodes
+    int i = 0;
+    while (i <= pipe_count) {
+        commands[i] = create_command(gc);
+        if (i == 0) {
+            cmds_head = commands[i];
+        } else {
+            last_cmd->next = commands[i];
+        }
+        last_cmd = commands[i];
+        i++;
+    }
 
-t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count) {
-	t_command *commands[pipe_count + 1];
-	t_command *cmds_head = NULL;
-	t_command *last_cmd = NULL;
-	t_arg *current_arg = args_head;
-	int cmd_index = 0;
+    // Populate commands with arguments
+    t_command *current_cmd = cmds_head;
+    while (current_arg) {
+        // Handle pipes by moving to the next command
+        if (current_arg->type == PIPE) {
+            if (cmd_index < pipe_count) {
+                current_cmd = commands[++cmd_index];
+            }
+            current_arg = current_arg->next;
+            continue;
+        }
 
-	// Create command nodes
-	int i = 0;
-	while (i <= pipe_count) {
-		commands[i] = create_command(gc);
-		if (i == 0) {
-			cmds_head = commands[i];
-		} else {
-			last_cmd->next = commands[i];
-		}
-		last_cmd = commands[i];
-		i++;
-	}
+        // Stop processing if END is encountered
+        if (current_arg->type == END) {
+            break;
+        }
 
-	// Populate commands with arguments
-	t_command *current_cmd = cmds_head;
-	while (current_arg) {
-		// Handle pipes by moving to the next command
-		if (current_arg->type == PIPE) {
-			if (cmd_index < pipe_count) {
-				current_cmd = commands[++cmd_index];
-			}
-			current_arg = current_arg->next;
-			continue;
-		}
-
-		// Stop processing if END is encountered
-		if (current_arg->type == END) {
-			break;
-		}
-
-		  // Handle heredocs
+        // Handle heredocs
         if (parse_heredoc(current_cmd, current_arg)) {
             current_arg = current_arg->next;
             continue;
         }
 
-		// Handle command name (first argument)
-		if (current_cmd->cmd_name == NULL && current_arg->type == WORD) {
-			set_command_name(current_cmd, current_arg->arg, gc);
-			current_arg = current_arg->next;
-			continue;
-		}
-
-		// Handle redirections
-		if (handle_output_redirection(current_cmd, current_arg) ||
-			handle_input_redirection(current_cmd, current_arg)) {
-			current_arg = current_arg->next->next;
-			continue;
-		}
-
-		// Handle arguments and flags
-		char *cleaned_arg = strip_redundant_quotes(gc, current_arg->arg);
-        if (current_arg->type == FLAGS) {
-            add_flag_to_command(current_cmd, cleaned_arg, gc);
-        } else {
-            add_arg_to_command(current_cmd, cleaned_arg, gc);
+        // Handle command name (first argument)
+        if (current_cmd->cmd_name == NULL && current_arg->type == WORD) {
+            set_command_name(current_cmd, current_arg->arg, gc);
+            current_arg = current_arg->next;
+            continue;
         }
 
-		current_arg = current_arg->next;
-	}
+        // Handle redirections and update shell exit status
+        if (current_arg->type == REDIRECTION_IN) {
+            if (handle_input_redirection(current_cmd, current_arg, shell) != 0) {
+                // Set shell exit status and stop on error
+                shell->exit_status = 1;
+                return cmds_head;
+            }
+            current_arg = current_arg->next->next;
+            continue;
+        }
+        if (current_arg->type == REDIRECTION_OUT || current_arg->type == REDIRECTION_APPEND) {
+            if (handle_output_redirection(current_cmd, current_arg, shell) != 0) {
+                // Set shell exit status and stop on error
+                shell->exit_status = 1;
+                return cmds_head;
+            }
+            current_arg = current_arg->next->next;
+            continue;
+        }
 
-	return cmds_head;
+        // Handle arguments and flags
+        //char *cleaned_arg = strip_redundant_quotes(gc, current_arg->arg);
+        if (current_arg->type == FLAGS) {
+            add_flag_to_command(current_cmd, current_arg->arg, gc);
+        } else {
+            add_arg_to_command(current_cmd, current_arg->arg, gc);
+        }
+
+        current_arg = current_arg->next;
+    }
+
+    return cmds_head;
 }

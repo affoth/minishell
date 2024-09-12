@@ -1,1 +1,22 @@
-aspas ->"
+Makefile
+OPERATOR_LIST.txt
+README.md
+file.txt
+he aha afe.txt
+include
+libft copy
+libs
+loop.sh
+minishell
+minishell_tester
+myfile.txt
+next
+no_exec_file.sh
+
+o.txt
+obj
+orga
+src
+tesfiles
+test.txt
+wc.txt

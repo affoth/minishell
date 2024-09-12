@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 13:39:59 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:15:35 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,13 +155,13 @@ void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
 void set_command_name(t_command *cmd, const char *name, t_gc *gc);
 int count_pipes_argstruct(t_arg *args_head);
 int count_pipes_cmdstruct(t_command *cmds_head);
-t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count);
+t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count, t_shell *shell);
 void print_commands(t_command *cmds_head);
 
 
 // Function prototypes for redirection handling
-bool handle_output_redirection(t_command *cmd, t_arg *arg);
-bool handle_input_redirection(t_command *cmd, t_arg *arg);
+int handle_output_redirection(t_command *cmd, t_arg *arg, t_shell *shell);
+int handle_input_redirection(t_command *cmd, t_arg *arg, t_shell *shell);
 bool parse_heredoc(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
