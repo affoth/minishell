@@ -5,71 +5,57 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 18:05:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 19:21:49 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/09/12 16:58:03 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Mapping struct for token types that are required by subject pdf
-const Token typeMap[] =
-{
+const Token typeMap[] = {
     {"|", PIPE},
-    {">", REDIRECTION_OUT},
-    {"<", REDIRECTION_IN},
-    {">>", REDIRECTION_APPEND},
-    {"<<", HEREDOC},
     {"\"", DOUBLE_QUOTED_STRING},
     {"'", SINGLE_QUOTED_STRING},
     {"$", ENV_VARIABLE},
     {NULL, WORD}
 };
 
-int ft_isspace(int c) {
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
-}
-
-TokenType get_token_type(char *arg)
+TokenType get_token_type(const char *arg)
 {
-    int i;
-
-    // Special cases
-    if (ft_strcmp(arg, "<<") == 0)
+    if (strcmp(arg, "<<") == 0)
         return HEREDOC;
-    if (ft_strcmp(arg, ">>") == 0)
+    if (strcmp(arg, ">>") == 0)
         return REDIRECTION_APPEND;
+    if (strcmp(arg, "<") == 0)
+        return REDIRECTION_IN;
+    if (strcmp(arg, ">") == 0)
+        return REDIRECTION_OUT;
 
-    // Default cases
-    i = 0;
-    while (typeMap[i].arg != NULL)
+    for (int i = 0; typeMap[i].arg != NULL; i++)
     {
-        if (ft_strcmp(arg, typeMap[i].arg) == 0)
+        if (strcmp(arg, typeMap[i].arg) == 0)
             return typeMap[i].type;
-        i++;
     }
 
-    // Flags or other unrecognized tokens
-    if (arg[0] == '-')
+    if (arg[0] == '-' && arg[1] != '\0' && isalpha((unsigned char)arg[1]))
         return FLAGS;
 
     return WORD;
 }
 
-// Create a new argument node
-t_arg *create_arg_node(t_gc *gc, char *arg)
+t_arg *create_arg_node(t_gc *gc, const char *arg)
 {
-    t_arg *node = (t_arg *)ft_gc_malloc(gc, sizeof(t_arg));
+    t_arg *node = ft_gc_malloc(gc, sizeof(t_arg));  // Adjust memory management according to your GC
     if (node == NULL)
     {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
-    node->arg = ft_shell_strdup(gc, arg);
+    node->arg = strdup(arg);  // Adjust memory management according to your GC
     if (node->arg == NULL)
     {
         perror("Memory allocation failed");
-        ft_gc_free(gc);  // Ensure this frees all relevant memory
         exit(EXIT_FAILURE);
     }
     node->type = get_token_type(arg);
@@ -78,8 +64,7 @@ t_arg *create_arg_node(t_gc *gc, char *arg)
     return node;
 }
 
-// Add the argument to the end of the list
-void add_arg_to_list(t_gc *gc, t_arg **head, char *arg)
+void add_arg_to_list(t_gc *gc, t_arg **head, const char *arg)
 {
     t_arg *new_node = create_arg_node(gc, arg);
     if (*head == NULL)
@@ -106,28 +91,21 @@ void print_tokens(t_arg *head)
     }
 }
 
-
-t_arg *tokenizer(t_shell *shell, char *line)
+t_arg *tokenizer(t_shell *shell, char *input)
 {
-    if (!line)
+    if (!input)
     {
         write(STDERR_FILENO, "Error: Null input line\n", 23);
-        shell->exit_status = 1;  // Set exit status to indicate an error
+        shell->exit_status = 1;
         return NULL;
     }
 
-    if (ft_quotes_not_closed(line))
-    {
-        write(STDERR_FILENO, "Error: Quotes not closed\n", 25);
-        shell->exit_status = 1;  // Set exit status to indicate an error
-        return NULL;
-    }
-
-    char **split_args = ft_shell_split(&shell->gc, line, ' ');
+    // This function splits the input into tokens by spaces
+    char **split_args = ft_shell_split(&shell->gc, input, ' ');
     if (!split_args)
     {
         perror("Split failed");
-        shell->exit_status = 1;  // Set exit status to indicate an error
+        shell->exit_status = 1;
         return NULL;
     }
 
@@ -139,19 +117,45 @@ t_arg *tokenizer(t_shell *shell, char *line)
         // Skip empty arguments
         if (ft_strlen(split_args[i]) > 0)
         {
-            add_arg_to_list(&shell->gc, &args_head, split_args[i]);
+            // Handle potential redirection tokens and their associated file names
+            char *arg = split_args[i];
+            int length = ft_strlen(arg);
+
+            // Split based on redirection characters
+            if (arg[0] == '<' || arg[0] == '>')
+            {
+                if (length > 1)
+                {
+                    // Handle the case where there is more than one character after '<' or '>'
+                    char redirection_char[2] = { arg[0], '\0' };
+                    add_arg_to_list(&shell->gc, &args_head, redirection_char);
+
+                    char *remaining = arg + 1;
+                    if (ft_strlen(remaining) > 0)
+                    {
+                        add_arg_to_list(&shell->gc, &args_head, remove_quotes(&shell->gc, remaining));
+                    }
+                }
+                else
+                {
+                    // Handle single character redirection tokens
+                    add_arg_to_list(&shell->gc, &args_head, arg);
+                }
+                i++;
+            }
+            else
+            {
+                add_arg_to_list(&shell->gc, &args_head, split_args[i]);
+                i++;
+            }
         }
-        i++;
+        else
+        {
+            i++;
+        }
     }
 
-    // Syntax check the list
-    if (syntax_checker(args_head) != 0)
-    {
-        write(STDERR_FILENO, "Error: Syntax checker not passed\n", 33);
-        shell->exit_status = 1;  // Set exit status to indicate an error
-    }
-
-    //print_tokens(args_head);
+    print_tokens(args_head);
 
     return args_head;
 }

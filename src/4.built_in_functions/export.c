@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 18:43:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:24:11 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,21 @@ void print_export_env(t_gc *gc, char **env)
     }
 }
 
+// Helper function to check if a string is a valid environment variable identifier
+int is_valid_identifier(const char *str)
+{
+    if (!str || !*str || (!ft_isalpha((unsigned char)*str) && *str != '_'))
+        return 0; // Must start with a letter or underscore
+
+    while (*str)
+    {
+        if (!ft_isalnum((unsigned char)*str) && *str != '_')
+            return 0; // Must be alphanumeric or underscore
+        str++;
+    }
+    return 1;
+}
+
 // Export built-in command
 int built_in_export(t_shell *shell)
 {
@@ -107,16 +122,46 @@ int built_in_export(t_shell *shell)
     while (args[i])
     {
         char *arg = args[i];
+        
         // Validate and update environment variable
-        if (arg && ft_strchr(arg, '=') && arg[0] != '=' && arg[ft_strlen(arg) - 1] != '=')
+        if (arg && ft_strchr(arg, '='))
         {
-            ft_printf("Adding or updating env var: %s\n", arg);
-            env = change_or_add_env_var(gc, arg, env); // Update env directly
+            if (arg[0] == '=' || arg[ft_strlen(arg) - 1] == '=')
+            {
+                // Invalid format if it starts or ends with '='
+                //ft_printf("export: `%s': not a valid identifier\n", arg);
+                has_errors = 1; // Indicate an error
+            }
+            else
+            {
+                char *var_name = find_variable(gc, arg);
+                if (is_valid_identifier(var_name))
+                {
+                    env = change_or_add_env_var(gc, arg, env); // Update env directly
+                }
+                else
+                {
+                    ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
+                    has_errors = 1; // Indicate an error
+                }
+                free(var_name);
+            }
         }
         else
         {
-            ft_printf("export: `%s': not a valid identifier\n", arg);
-            has_errors = 1; // Indicate an error
+            // If no '=' in argument, treat it as a variable to set with an empty value
+            if (is_valid_identifier(arg))
+            {
+                char *export_arg = ft_shell_strjoin(gc, arg, "=");
+                export_arg = ft_shell_strjoin(gc, export_arg, "");
+                env = change_or_add_env_var(gc, export_arg, env); // Update env directly
+                free(export_arg);
+            }
+            else
+            {
+                ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
+                has_errors = 1; // Indicate an error
+            }
         }
         i++; // Move to the next argument
     }

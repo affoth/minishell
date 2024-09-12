@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 20:23:55 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:39:59 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_shell
 void ft_gc_init(t_gc *gc, t_shell *shell);
 void ft_gc_free(t_gc *gc);
 void *ft_gc_malloc(t_gc *gc, size_t size);
+void *ft_gc_realloc(t_gc *gc, void *ptr, size_t old_size, size_t new_size);
 
 // Function prototypes for string manipulation
 char *ft_shell_strdup(t_gc *gc, const char *s);
@@ -138,7 +139,7 @@ void skip_quoted_string(const char **s, bool *quote, char *quote_char);
 void assign(size_t *i, size_t *j, int *index, bool *quote);
 int ft_quotes_not_closed(const char *line);
 
-// Expansion
+// Expand environment variables
 char *expand_string(t_gc *gc, char *input, int exit_status);
 
 // Syntax analysis
@@ -156,6 +157,7 @@ int count_pipes_argstruct(t_arg *args_head);
 int count_pipes_cmdstruct(t_command *cmds_head);
 t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count);
 void print_commands(t_command *cmds_head);
+
 
 // Function prototypes for redirection handling
 bool handle_output_redirection(t_command *cmd, t_arg *arg);

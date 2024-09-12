@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 19:04:16 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:42:06 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int exec_built_ins(t_shell *shell)
     t_command *cmd = shell->cmds_head;
     char *cmd_name;
     int status;
+
+    status = 0;
 
     if (cmd == NULL)
     {
@@ -70,5 +72,5 @@ int exec_built_ins(t_shell *shell)
         return 1;
     }
 
-    return 0;
+    return status;
 }

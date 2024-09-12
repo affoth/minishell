@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 20:11:09 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 16:57:58 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int needs_piping(t_command *cmds_head) {
 void execute_shell(t_shell *shell)
 {
     char *input;
-    char *expanded_input;
+    char *expanded_vars;
     t_arg *args_head;
     int pipe_count;
 
@@ -131,17 +131,17 @@ void execute_shell(t_shell *shell)
         }
 
         // Expand variables
-        expanded_input = expand_string(&shell->gc, input, shell->exit_status);
+        expanded_vars = expand_string(&shell->gc, input, shell->exit_status);
         // Tokenize and parse commands
-        args_head = tokenizer(shell, expanded_input);
+        args_head = tokenizer(shell, expanded_vars);
         pipe_count = count_pipes_argstruct(args_head);
         shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count);
-        //print_commands(shell->cmds_head);
+        print_commands(shell->cmds_head);
 
         // Execute commands
         if (needs_piping(shell->cmds_head))
         {
-            //printf("Executing commands with pipes\n");
+            //printf("Executing commands with pipes\n");so i 
             shell->exit_status = execute_commands_with_pipes(shell, shell->cmds_head);
         }
         else

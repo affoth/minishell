@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:50:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 17:29:13 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:26:59 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,33 @@ void *ft_gc_malloc(t_gc *gc, size_t size)
     gc->head = new_node;
 
     return ptr;
+}
+
+void *ft_gc_realloc(t_gc *gc, void *ptr, size_t old_size, size_t new_size)
+{
+    // Check for valid input
+    if (new_size == 0)
+    {
+        free(ptr);
+        return NULL;
+    }
+    if (!ptr)
+    {
+        return ft_gc_malloc(gc, new_size);
+    }
+    
+    // Allocate new memory
+    void *new_ptr = ft_gc_malloc(gc, new_size);
+    if (!new_ptr)
+        return NULL;
+    
+    // Copy old data to new memory
+    ft_memcpy(new_ptr, ptr, old_size < new_size ? old_size : new_size);
+
+    // Free old memory
+    free(ptr);
+
+    return new_ptr;
 }
 
 void ft_gc_free(t_gc *gc)

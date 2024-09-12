@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 20:42:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:02:32 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ char *expand_string(t_gc *gc, char *input, int exit_status)
         if (input[i] == '$' && check_if_in_single_quote(input, i) == 0)
         {
             size_t start = i + 1;
+
+            // Check for $? or environment variable
             if (input[start] == '?')
             {
                 // Handle $?
@@ -129,15 +131,27 @@ char *expand_string(t_gc *gc, char *input, int exit_status)
             }
             else
             {
+                // Check if the next character is a valid variable name or end of string
                 while (input[start] && (isalnum(input[start]) || input[start] == '_'))
                     start++;
-                env = ft_shell_substr(gc, input, (i + 1), (start - i - 1));
-                expanded = ft_expand_env(gc, env);
-                ft_strlcpy(result + j, expanded, len - j + 1);
-                j += ft_strlen(expanded);
-                i = start;
-                free(env);
-                free(expanded);
+                
+                if (start == i + 1)
+                {
+                    // No variable name after $, so treat it as a literal $
+                    result[j++] = '$';
+                    i++;
+                }
+                else
+                {
+                    // Handle environment variable
+                    env = ft_shell_substr(gc, input, (i + 1), (start - i - 1));
+                    expanded = ft_expand_env(gc, env);
+                    ft_strlcpy(result + j, expanded, len - j + 1);
+                    j += ft_strlen(expanded);
+                    i = start;
+                    free(env);
+                    free(expanded);
+                }
             }
         }
         else

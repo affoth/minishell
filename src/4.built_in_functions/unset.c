@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:45:00 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 18:45:01 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:30:53 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char **remove_env_var(t_gc *gc, char **env, int index)
 
     if (!new_env)
     {
-        ft_printf("Error: Memory allocation failed\n");
+        write(STDERR_FILENO, "unset: memory allocation failed\n", 32);
         return env;
     }
 
@@ -40,17 +40,13 @@ char **remove_env_var(t_gc *gc, char **env, int index)
     return new_env;
 }
 
-// Return codes
-#define UNSET_SUCCESS 0
-#define UNSET_ERROR 1
-#define UNSET_NOT_ENOUGH_ARGS 2
-
 int built_in_unset(t_shell *shell)
 {
     t_gc *gc;
     char **args;
     char **env;
     int var_index;
+    int i;
 
     gc = &shell->gc;
     env = shell->env;
@@ -58,11 +54,10 @@ int built_in_unset(t_shell *shell)
 
     if (!args || !args[0])  // Check if there are arguments to unset
     {
-        ft_printf("unset: not enough arguments\n");
-        return UNSET_NOT_ENOUGH_ARGS;  // Return code for insufficient arguments
+        return 0;  // Return success code
     }
 
-    int i = 0;
+    i = 0;
     while (args[i])
     {
         var_index = find_var_in_env(env, args[i]);
@@ -73,11 +68,14 @@ int built_in_unset(t_shell *shell)
         }
         else
         {
-            ft_printf("unset: `%s': not a valid identifier\n", args[i]);
+            // Print an error message if variable not found
+            write(STDERR_FILENO, "unset: ", 7);
+            write(STDERR_FILENO, args[i], ft_strlen(args[i]));
+            write(STDERR_FILENO, ": not found\n", 12);
         }
         i++;
     }
 
     shell->env = env; // Update the shell's environment pointer
-    return UNSET_SUCCESS; // Return success code
+    return 0; // Always return success
 }

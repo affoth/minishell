@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 13:28:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 19:29:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:11:56 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// Function to check if a string is a number
+// Function to check if a string is a valid integer number
 bool is_number(const char *str)
 {
     if (*str == '-' || *str == '+')
@@ -32,47 +32,51 @@ bool is_number(const char *str)
 int built_in_exit(t_shell *shell)
 {
     t_command *cmd = shell->cmds_head;
-    char **args = NULL; // Initialize args to NULL to safely check later
+    char **args = NULL;
 
     // Ensure shell and command list are not NULL
     if (!shell || !cmd)
     {
-        //ft_printf("Error: shell or command is NULL.\n");
         return 1; // Return 1 for internal error
     }
 
-    args = cmd->args; // Arguments are stored in the args array
+    args = cmd->args;
 
-    // Check if the command arguments are valid
-    if (args)
+    // Check if there are arguments
+    if (args && args[0])
     {
-        if (args[0])
+        if (!is_number(args[0]))
         {
-            if (!is_number(args[0]))
-            {
-                //ft_printf("exit: %s: numeric argument required\n", args[0]);
-                //shell->exit_status = 255; // Default exit code for numeric argument error
-                return 255; // Return 255 for numeric argument error
-            }
-            else if (args[1]) // Check for too many arguments
-            {
-                //ft_printf("exit: too many arguments\n");
-                //shell->exit_status = 1; // Set exit status to 1 for error
-                return 1; // Return 1 for too many arguments error
-            }
-            else
-            {
-                shell->exit_status = ft_atoi(args[0]);
-                return shell->exit_status; // Return the exit code from atoi
-            }
+            // Numeric argument required error
+            ft_putstr_fd("exit: ", STDERR_FILENO);
+            ft_putstr_fd(args[0], STDERR_FILENO);
+            ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+            // Set the exit status for numeric argument error
+            return 2; // Return the exit code
+        }
+        else if (args[1]) // Check for too many arguments
+        {
+            ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
+            // Set the exit status for too many arguments error
+            return 1; // Return the exit code
+        }
+        else
+        {
+            // Convert the argument to an integer
+            int exit_code = ft_atoi(args[0]);
+            // Normalize exit code to the range 0-255
+            if (exit_code < 0)
+                exit_code = 256 + (exit_code % 256); // Handle negative exit codes
+            else if (exit_code > 255)
+                exit_code = exit_code % 256; // Handle exit codes above 255
+
+            return exit_code; // Return the exit code
         }
     }
     else
     {
-        exit(shell->exit_status); // Exit with the current exit status
+        // No arguments, use the current exit status
+        // Default exit status if no arguments
+        return 0;
     }
-
-    // Exit the shell
-    //ft_printf("Exiting shell with exit code %d\n", shell->exit_status);
-    return shell->exit_status; // Return the exit status
 }

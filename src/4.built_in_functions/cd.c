@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 15:31:15 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:38:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,17 @@ int built_in_cd(t_shell *shell)
     char *newpwd = NULL;
 
     // Ensure shell and command list are not NULL
-    if (!shell || !shell->cmds_head) {
-        ft_printf("Error: shell or command list is NULL.\n");
+    if (!shell || !shell->cmds_head || !shell->cmds_head->args) {
+        ft_putstr_fd("cd: internal error\n", STDERR_FILENO);
         return 1; // Error code
     }
 
+    // Check for too many arguments
+    if (shell->cmds_head->args[1]) {
+        ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
+        return 1; // Error code
+    }
+    
     // Get the current working directory and save it as OLDPWD
     oldpwd = getcwd(NULL, 0);
     if (!oldpwd) {
@@ -43,7 +49,7 @@ int built_in_cd(t_shell *shell)
         if (index != -1) {
             target_dir = strchr(shell->env[index], '=') + 1;
         } else {
-            ft_printf("cd: OLDPWD not set\n");
+            ft_putstr_fd("cd: OLDPWD not set\n", STDERR_FILENO);
             free(oldpwd);
             return 1; // Error code
         }
@@ -55,10 +61,17 @@ int built_in_cd(t_shell *shell)
         if (index != -1) {
             target_dir = strchr(shell->env[index], '=') + 1;
         } else {
-            ft_printf("cd: HOME not set\n");
+            ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
             free(oldpwd);
             return 1; // Error code
         }
+    }
+
+    // Check if the target directory is a valid directory
+    if (access(target_dir, F_OK) != 0) {
+        ft_putstr_fd("cd: no such file or directory\n", STDERR_FILENO);
+        free(oldpwd);
+        return 1; // Error code
     }
 
     // Change to the target directory

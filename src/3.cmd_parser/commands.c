@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 20:41:53 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:56:14 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,45 @@ void set_command_name(t_command *cmd, const char *name, t_gc *gc) {
 	}
 }
 
+// Simplified function if `t_command` is not required
+char *strip_redundant_quotes(t_gc *gc, const char *str)
+{
+    int len = ft_strlen(str);
+    char *result = ft_shell_strdup(gc, "");  // Start with an empty string
+
+    if (!result)
+        return NULL;
+
+    bool in_single_quote = false;
+    bool in_double_quote = false;
+
+    for (int i = 0; i < len; i++)
+    {
+        if (str[i] == '\'' && !in_double_quote)
+        {
+            in_single_quote = !in_single_quote;
+            continue;
+        }
+        if (str[i] == '\"' && !in_single_quote)
+        {
+            in_double_quote = !in_double_quote;
+            continue;
+        }
+        char temp[2] = {str[i], '\0'};
+        char *new_result = ft_shell_strjoin(gc, result, temp);
+        if (!new_result)
+        {
+            ft_gc_free(gc);  // Ensure no memory leaks
+            return NULL;
+        }
+        result = new_result;
+    }
+
+    return result;
+}
+
+
+
 t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count) {
 	t_command *commands[pipe_count + 1];
 	t_command *cmds_head = NULL;
@@ -204,11 +243,12 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
 		}
 
 		// Handle arguments and flags
-		if (current_arg->type == FLAGS) {
-			add_flag_to_command(current_cmd, current_arg->arg, gc);
-		} else {
-			add_arg_to_command(current_cmd, current_arg->arg, gc);
-		}
+		char *cleaned_arg = strip_redundant_quotes(gc, current_arg->arg);
+        if (current_arg->type == FLAGS) {
+            add_flag_to_command(current_cmd, cleaned_arg, gc);
+        } else {
+            add_arg_to_command(current_cmd, cleaned_arg, gc);
+        }
 
 		current_arg = current_arg->next;
 	}
