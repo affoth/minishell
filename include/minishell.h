@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 21:15:35 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:38:56 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,11 @@ char *ft_shell_strdup(t_gc *gc, const char *s);
 char *ft_shell_strndup(t_gc *gc, const char *s, size_t n);
 char *ft_shell_substr(t_gc *gc, const char *s, unsigned int start, size_t len);
 char *ft_shell_strjoin(t_gc *gc, char *s1, char *s2);
+// split stuff
+size_t	ft_words(char const *s, char c);
 char **ft_shell_split(t_gc *gc, const char *s, char c);
+char **ft_split_redirections(t_gc *gc, const char *s);
+
 // Function prototypes for parsing
 void handle_quote_split(const char *s, size_t i, bool *quote);
 void skip_quoted_string(const char **s, bool *quote, char *quote_char);

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 22:09:27 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:36:46 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,88 +104,19 @@ t_arg *tokenizer(t_shell *shell, char *input)
         return NULL;
     }
 
-    t_arg *args_head = NULL;
-    char buffer[256];  // Adjust buffer size as needed
-    int buffer_len = 0;
-
-    char *current = input;
-    while (*current)
+    // Split the input string into tokens
+    char **tokens = ft_split_redirections(&shell->gc, input);
+    if (!tokens)
     {
-        // Handle quotes
-        if (*current == '"')
-        {
-            current++;
-            while (*current && *current != '"')
-            {
-                buffer[buffer_len++] = *current++;
-            }
-            if (*current == '"')
-                current++;
-            buffer[buffer_len] = '\0';
-            add_arg_to_list(&shell->gc, &args_head, buffer);
-            buffer_len = 0;
-            continue;
-        }
-        else if (*current == '\'')
-        {
-            current++;
-            while (*current && *current != '\'')
-            {
-                buffer[buffer_len++] = *current++;
-            }
-            if (*current == '\'')
-                current++;
-            buffer[buffer_len] = '\0';
-            add_arg_to_list(&shell->gc, &args_head, buffer);
-            buffer_len = 0;
-            continue;
-        }
-
-        // Handle redirection operators
-        if (*current == '>' || *current == '<')
-        {
-            if (current[1] == *current) // Handle multi-character redirection tokens
-            {
-                buffer[buffer_len++] = *current++;
-                buffer[buffer_len++] = *current++;
-                buffer[buffer_len] = '\0';
-                add_arg_to_list(&shell->gc, &args_head, buffer);
-                buffer_len = 0;
-            }
-            else
-            {
-                buffer[buffer_len++] = *current++;
-                buffer[buffer_len] = '\0';
-                add_arg_to_list(&shell->gc, &args_head, buffer);
-                buffer_len = 0;
-            }
-            continue;
-        }
-
-        // Handle spaces as token delimiters
-        if (*current == ' ')
-        {
-            if (buffer_len > 0)
-            {
-                buffer[buffer_len] = '\0';
-                char *arg = remove_quotes(&shell->gc, buffer);
-                add_arg_to_list(&shell->gc, &args_head, arg);
-                buffer_len = 0;
-            }
-            current++;
-            continue;
-        }
-
-        // Accumulate characters into buffer
-        buffer[buffer_len++] = *current++;
+        write(STDERR_FILENO, "Error: Memory allocation failed\n", 32);
+        shell->exit_status = 1;
+        return NULL;
     }
 
-    // Add any remaining buffer contents as the last token
-    if (buffer_len > 0)
+    t_arg *args_head = NULL;
+    for (size_t i = 0; tokens[i] != NULL; i++)
     {
-        buffer[buffer_len] = '\0';
-        char *arg = remove_quotes(&shell->gc, buffer);
-        add_arg_to_list(&shell->gc, &args_head, arg);
+        add_arg_to_list(&shell->gc, &args_head, tokens[i]);
     }
 
     // Optionally print tokens for debugging

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 20:03:25 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:25:37 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes)
 {
     pid_t pid = fork();
-    if (pid == 0)
+    if (pid == 0) // Child process
     {
-        signal(SIGPIPE, SIG_IGN);  // Ignore SIGPIPE in the child process
-
         // Set up input redirection
         if (cmd->stdin_fd != STDIN_FILENO) {
             if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0) {
@@ -27,7 +25,7 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
             }
             close(cmd->stdin_fd);
         }
-        else if (cmd_index > 0) {
+        else if (cmd_index > 0) { // If it's not the first command, use the previous pipe
             if (dup2(pipe_descriptors[(cmd_index - 1) * 2], STDIN_FILENO) < 0) {
                 perror("dup2 stdin");
                 exit(EXIT_FAILURE);
@@ -42,7 +40,7 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
             }
             close(cmd->stdout_fd);
         }
-        else if (cmd_index < num_pipes) {
+        else if (cmd_index < num_pipes) { // If it's not the last command, set up the next pipe
             if (dup2(pipe_descriptors[cmd_index * 2 + 1], STDOUT_FILENO) < 0) {
                 perror("dup2 stdout");
                 exit(EXIT_FAILURE);
@@ -56,17 +54,17 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
         int status;
         if (is_built_in(cmd->cmd_name)) {
             status = exec_built_ins(shell);
-        } else 
-        {
+        } else {
             status = execute_command(shell, cmd);
         }
         exit(status);  // Exit with the command's status
     }
-    else if (pid < 0)
+    else if (pid < 0) // Error handling for fork failure
     {
         perror("fork");
         exit(EXIT_FORK_FAILED);
     }
+
     return 0;  // Return 0 to indicate success in fork
 }
 

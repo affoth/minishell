@@ -6,13 +6,13 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 20:30:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:38:48 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static size_t	ft_words(char const *s, char c)
+size_t	ft_words(char const *s, char c)
 {
     size_t count = 0;
     bool in_quote = false;
