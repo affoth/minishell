@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 03:59:10 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 21:05:41 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,8 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
 
     t_shell shell;
-
+	
+	setup_signals();
     init_shell(&shell, envp);
     execute_shell(&shell); // Main shell execution loop
 

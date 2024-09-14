@@ -1,0 +1,2 @@
+changed create pipes, close_pipes from for to while loop
+rewrite setup_redirections(cmd_index, num_pipes, pipe_descriptors);

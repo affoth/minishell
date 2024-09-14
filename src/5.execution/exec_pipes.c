@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 04:06:27 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 21:07:38 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,20 @@
 
 int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes)
 {
+	//debug
+	printf("pipe_descriptors: ");
+	for (int i = 0; i < 2 * num_pipes; i++)
+	{
+		printf("%d ", pipe_descriptors[i]);
+	}
+
+
     pid_t pid = fork();
     if (pid == 0) // Child process
     {
+		setup_child_signals();
         setup_redirections(cmd_index, num_pipes, pipe_descriptors);
-        
+
         // Close all pipe descriptors
         close_pipes(num_pipes, pipe_descriptors);
 
