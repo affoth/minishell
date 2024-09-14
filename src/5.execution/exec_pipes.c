@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 04:06:27 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 15:07:11 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
 
     return 0;  // Return 0 to indicate success in fork
 }
+
 
 int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
 {

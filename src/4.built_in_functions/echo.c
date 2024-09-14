@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:51:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 03:07:41 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 15:14:29 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ bool check_initial_n_flag(char **flags)
 }
 
 // Function to print echo arguments without quote processing
-static void print_echo_arguments(t_gc *gc, char **args, bool skip_n_flag)
+static void print_echo_arguments(t_gc *gc, t_command *cmd, bool skip_n_flag)
 {
+    char **args = cmd->args;
+
     if (!args)
         return;  // Return early if args is NULL
 
@@ -55,14 +57,14 @@ static void print_echo_arguments(t_gc *gc, char **args, bool skip_n_flag)
 
         if (arg)
         {
-            write(STDOUT_FILENO, arg, ft_strlen(arg));
+            write(cmd->stdout_fd, arg, ft_strlen(arg));
             // Free the duplicated argument as it's no longer needed
             // Note: Assuming that ft_gc_malloc handles GC for the arg
         }
 
         if (args[i + 1])
         {
-            write(STDOUT_FILENO, " ", 1);  // Add a space between arguments
+            write(cmd->stdout_fd, " ", 1);  // Add a space between arguments
         }
         i++;
     }
@@ -72,9 +74,10 @@ static void print_echo_arguments(t_gc *gc, char **args, bool skip_n_flag)
 int built_in_echo(t_shell *shell)
 {
     t_command *cmd = shell->cmds_head;
+
     if (!cmd || !cmd->args)
     {
-        write(STDOUT_FILENO, "\n", 1);  // Print a newline if no arguments are provided
+        write(cmd->stdout_fd, "\n", 1);  // Print a newline if no arguments are provided
         return 0;  // Success code
     }
 
@@ -82,11 +85,11 @@ int built_in_echo(t_shell *shell)
     bool suppress_newline = check_initial_n_flag(cmd->flags);
 
     // Print the arguments without quote processing
-    print_echo_arguments(&shell->gc, cmd->args, suppress_newline);
+    print_echo_arguments(&shell->gc, cmd, suppress_newline);
 
     // Print newline if not suppressed
     if (!suppress_newline)
-        write(STDOUT_FILENO, "\n", 1);
+        write(cmd->stdout_fd, "\n", 1);
 
     return 0;  // Success code
 }
