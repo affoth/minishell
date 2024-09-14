@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:21:56 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/13 18:25:43 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 03:51:27 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char *strip_quotes(t_gc *gc, const char *str)
 static void exiting_with(t_shell *shell, int code)
 {
     ft_gc_free(&shell->gc); // Free all memory with garbage collector
-    ft_putstr_fd("exit\n", STDERR_FILENO); // Print 'exit' message
+    ft_putstr_fd("exit\n", STDOUT_FILENO); // Print 'exit' message
     exit(code);
 }
 

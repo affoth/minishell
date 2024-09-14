@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/13 15:25:37 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 04:06:27 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,44 +17,19 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
     pid_t pid = fork();
     if (pid == 0) // Child process
     {
-        // Set up input redirection
-        if (cmd->stdin_fd != STDIN_FILENO) {
-            if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0) {
-                perror("dup2 stdin");
-                exit(EXIT_FAILURE);
-            }
-            close(cmd->stdin_fd);
-        }
-        else if (cmd_index > 0) { // If it's not the first command, use the previous pipe
-            if (dup2(pipe_descriptors[(cmd_index - 1) * 2], STDIN_FILENO) < 0) {
-                perror("dup2 stdin");
-                exit(EXIT_FAILURE);
-            }
-        }
-
-        // Set up output redirection
-        if (cmd->stdout_fd != STDOUT_FILENO) {
-            if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0) {
-                perror("dup2 stdout");
-                exit(EXIT_FAILURE);
-            }
-            close(cmd->stdout_fd);
-        }
-        else if (cmd_index < num_pipes) { // If it's not the last command, set up the next pipe
-            if (dup2(pipe_descriptors[cmd_index * 2 + 1], STDOUT_FILENO) < 0) {
-                perror("dup2 stdout");
-                exit(EXIT_FAILURE);
-            }
-        }
-
+        setup_redirections(cmd_index, num_pipes, pipe_descriptors);
+        
         // Close all pipe descriptors
         close_pipes(num_pipes, pipe_descriptors);
 
         // Execute the command
         int status;
-        if (is_built_in(cmd->cmd_name)) {
-            status = exec_built_ins(shell);
-        } else {
+        if (is_built_in(cmd->cmd_name))
+        {
+            status = exec_built_ins(shell, cmd);
+        }
+        else
+        {
             status = execute_command(shell, cmd);
         }
         exit(status);  // Exit with the command's status
@@ -74,13 +49,11 @@ int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
     int pipe_descriptors[2 * num_pipes];
     int status = 0;  // To track the exit status
 
-    // Create pipes
     create_pipes(num_pipes, pipe_descriptors);
 
     t_command *current_cmd = cmds_head;
     int cmd_index = 0;
 
-    // Iterate over commands
     while (current_cmd)
     {
         if (fork_and_execute_command(shell, current_cmd, pipe_descriptors, cmd_index, num_pipes) != 0)
@@ -88,7 +61,7 @@ int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
             status = 1;  // If forking fails, set status to non-zero
         }
 
-        // Close the pipe ends not needed anymore
+        // Close pipe ends not needed anymore
         if (cmd_index > 0)
         {
             close(pipe_descriptors[(cmd_index - 1) * 2]); // Close the read end of the previous pipe

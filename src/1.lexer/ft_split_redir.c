@@ -6,12 +6,45 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:35:01 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/13 18:47:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 03:04:41 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* 
+ * Function to remove quotes from a string.
+ * It removes both single and double quotes while keeping the content inside intact.
+ */
+static char *strip_quotes(t_gc *gc, const char *str)
+{
+    char *result;
+    size_t i = 0, j = 0;
+    bool in_single_quote = false, in_double_quote = false;
+
+    result = ft_gc_malloc(gc, ft_strlen(str) + 1);
+    if (!result)
+        return NULL;
+
+    while (str[i])
+    {
+        if (str[i] == '\'' && !in_double_quote)
+            in_single_quote = !in_single_quote;
+        else if (str[i] == '\"' && !in_single_quote)
+            in_double_quote = !in_double_quote;
+        else
+        {
+            result[j++] = str[i];
+        }
+        i++;
+    }
+    result[j] = '\0';
+    return result;
+}
+
+/*
+ * Handles the redirection operators, tokenizes them, and manages quotes.
+ */
 static void ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t *index)
 {
     size_t i = 0;
@@ -40,19 +73,15 @@ static void ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t 
         {
             if (i > start) // Add previous token before the redirection operator
             {
-                array[*index] = ft_gc_malloc(gc, i - start + 1);
-                if (!array[*index])
-                    return; // Handle allocation failure
-                strncpy(array[*index], s + start, i - start);
-                array[*index][i - start] = '\0';
+                char *token = ft_shell_strndup(gc, s + start, i - start);
+                array[*index] = strip_quotes(gc, token); // Remove quotes
                 (*index)++;
             }
+
             // Handle double redirection (<< or >>)
             if (s[i + 1] == s[i])
             {
                 array[*index] = ft_gc_malloc(gc, 3); // "<< " or ">> "
-                if (!array[*index])
-                    return; // Handle allocation failure
                 strncpy(array[*index], s + i, 2);
                 array[*index][2] = '\0';
                 (*index)++;
@@ -61,8 +90,6 @@ static void ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t 
             else // Handle single redirection (< or >)
             {
                 array[*index] = ft_gc_malloc(gc, 2); // "< " or "> "
-                if (!array[*index])
-                    return; // Handle allocation failure
                 strncpy(array[*index], s + i, 1);
                 array[*index][1] = '\0';
                 (*index)++;
@@ -73,11 +100,8 @@ static void ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t 
         {
             if (i > start) // Add token before space
             {
-                array[*index] = ft_gc_malloc(gc, i - start + 1);
-                if (!array[*index])
-                    return; // Handle allocation failure
-                strncpy(array[*index], s + start, i - start);
-                array[*index][i - start] = '\0';
+                char *token = ft_shell_strndup(gc, s + start, i - start);
+                array[*index] = strip_quotes(gc, token); // Remove quotes
                 (*index)++;
             }
             start = i + 1; // Update start for next token
@@ -88,15 +112,15 @@ static void ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t 
     // Add the last token if needed
     if (i > start)
     {
-        array[*index] = ft_gc_malloc(gc, i - start + 1);
-        if (!array[*index])
-            return; // Handle allocation failure
-        strncpy(array[*index], s + start, i - start);
-        array[*index][i - start] = '\0';
+        char *token = ft_shell_strndup(gc, s + start, i - start);
+        array[*index] = strip_quotes(gc, token); // Remove quotes
         (*index)++;
     }
 }
 
+/*
+ * Splits the input string into tokens while handling redirections and quotes.
+ */
 char **ft_split_redirections(t_gc *gc, const char *s)
 {
     char **array;

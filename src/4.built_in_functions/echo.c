@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:51:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/13 17:43:41 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 03:07:41 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,63 +35,7 @@ bool check_initial_n_flag(char **flags)
     return suppress_newline;
 }
 
-/* static bool is_quote_closed(const char *str, char quote_char)
-{
-    // Check if there is a matching closing quote in the remaining string
-    while (*str)
-    {
-        if (*str == quote_char)
-            return true;
-        str++;
-    }
-    return false;
-} */
-
-static char *process_quotes(t_gc *gc, const char *s)
-{
-    char *result = ft_shell_strdup(gc, s);
-    if (!result)
-        return NULL;
-
-    char *write_ptr = result;   // Pointer for writing the result
-    const char *read_ptr = s;   // Pointer for reading the input
-    bool in_single_quote = false;
-    bool in_double_quote = false;
-
-    while (*read_ptr)
-    {
-        if (*read_ptr == '\'' && !in_double_quote)
-        {
-            // Toggle single quote state
-            in_single_quote = !in_single_quote;
-        }
-        else if (*read_ptr == '\"' && !in_single_quote)
-        {
-            // Toggle double quote state
-            in_double_quote = !in_double_quote;
-        }
-        else
-        {
-            // Copy characters to the result string if not inside quotes
-            if (!in_single_quote && !in_double_quote)
-            {
-                *write_ptr++ = *read_ptr;
-            }
-            else if (in_single_quote || in_double_quote)
-            {
-                // Include characters inside quotes in the result
-                *write_ptr++ = *read_ptr;
-            }
-        }
-        read_ptr++;
-    }
-    *write_ptr = '\0';
-
-    return result;
-}
-
-
-// Function to print echo arguments with proper handling of quotes
+// Function to print echo arguments without quote processing
 static void print_echo_arguments(t_gc *gc, char **args, bool skip_n_flag)
 {
     if (!args)
@@ -107,13 +51,13 @@ static void print_echo_arguments(t_gc *gc, char **args, bool skip_n_flag)
 
     while (args[i])
     {
-        char *processed_arg = process_quotes(gc, args[i]);
+        char *arg = ft_shell_strdup(gc, args[i]);
 
-        if (processed_arg)
+        if (arg)
         {
-            write(STDOUT_FILENO, processed_arg, ft_strlen(processed_arg));
-            // Free the processed argument as it's no longer needed
-            // Note: Assuming that ft_gc_malloc handles GC for the processed_arg
+            write(STDOUT_FILENO, arg, ft_strlen(arg));
+            // Free the duplicated argument as it's no longer needed
+            // Note: Assuming that ft_gc_malloc handles GC for the arg
         }
 
         if (args[i + 1])
@@ -137,7 +81,7 @@ int built_in_echo(t_shell *shell)
     // Check for -n flags in the flags array
     bool suppress_newline = check_initial_n_flag(cmd->flags);
 
-    // Print the arguments with proper handling of quotes
+    // Print the arguments without quote processing
     print_echo_arguments(&shell->gc, cmd->args, suppress_newline);
 
     // Print newline if not suppressed

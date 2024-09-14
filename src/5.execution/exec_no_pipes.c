@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:58:43 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 20:14:02 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 03:28:36 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int execute_command_without_pipes(t_shell *shell, t_command *cmd)
     // Perform the command execution
     if (is_built_in(cmd->cmd_name))
     {
-        status = exec_built_ins(shell);
+        status = exec_built_ins(shell, cmd);
     }
     else
     {

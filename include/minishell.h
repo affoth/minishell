@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/13 18:38:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 03:28:27 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ bool parse_heredoc(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
-int exec_built_ins(t_shell *shell);
+int exec_built_ins(t_shell *shell, t_command *cmd);
 int built_in_cd(t_shell *shell);
 int built_in_pwd(void);
 int built_in_env(t_shell *shell);

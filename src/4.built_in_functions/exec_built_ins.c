@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 12:42:06 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/14 03:46:34 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,22 @@ int is_built_in(char *arg)
         return 1;
     return 0;
 }
-
-int exec_built_ins(t_shell *shell)
+int exec_built_ins(t_shell *shell, t_command *cmd)
 {
-    t_command *cmd = shell->cmds_head;
     char *cmd_name;
     int status;
 
     status = 0;
 
-    if (cmd == NULL)
+    if (cmd == NULL || cmd->cmd_name == NULL)
     {
         return 1;
     }
 
-    // Extract command name
     cmd_name = cmd->cmd_name;
-    if (cmd_name == NULL)
-    {
-        return 1;
-    }
+
+    // Print debug info
+    //printf("Executing built-in command: %s\n", cmd_name);
 
     // Execute the built-in command and capture the status
     if (ft_strcmp(cmd_name, "cd") == 0)
@@ -69,7 +65,7 @@ int exec_built_ins(t_shell *shell)
         status = built_in_exit(shell);
     else
     {
-        return 1;
+        return 1; // Command not found
     }
 
     return status;
