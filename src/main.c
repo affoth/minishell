@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 21:05:41 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/14 21:12:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ void init_shell(t_shell *shell, char **envp)
     // Initialize the environment
     shell->env = init_env(envp, &shell->gc);
     shell->cmds_head = NULL;
-    shell->signal_received = 0;
     shell->exit_status = 0;
-    set_signals_parent(); // Ensure signal handling is properly set
 }
 
 
@@ -163,7 +161,7 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
 
     t_shell shell;
-	
+
 	setup_signals();
     init_shell(&shell, envp);
     execute_shell(&shell); // Main shell execution loop

@@ -1,2 +1,6 @@
 changed create pipes, close_pipes from for to while loop
-rewrite setup_redirections(cmd_index, num_pipes, pipe_descriptors);
+for echo understood problem->
+rewrite setup_redirections(cmd_index, num_pipes, pipe_descriptors)
+or just check for more arguments
+signals work 
+

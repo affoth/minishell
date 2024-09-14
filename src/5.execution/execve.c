@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 21:07:23 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/14 22:22:10 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 int execute_command(t_shell *shell, t_command *cmd)
 {
     pid_t pid = fork();
+		setup_child_signals();
     if (pid == 0)
     {
         // Child process
-		setup_child_signals();
         int flags_count = 0;
         while (cmd->flags && cmd->flags[flags_count])
             flags_count++;

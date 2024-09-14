@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 21:05:11 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/14 22:30:22 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,18 @@ void setup_child_signals(void)
 	perror("sigaction");
 	exit(1);
 	}
-	// if (sigaction(SIGQUIT, &sa, NULL) == -1)
-	// {
-	// perror("sigaction");
-	// exit(1);
-	// }
+	if (sigaction(SIGQUIT, &sa, NULL) == -1)
+	{
+	perror("sigaction");
+	exit(1);
+	}
+	printf("Child signal setup complete\n");
 }
 
 
 void handle_signal(int sig)
 {
+	// printf("Parent signal\n");
 	if (sig == SIGINT)
 	{
 	// Handle Ctrl-C (SIGINT)
@@ -80,11 +82,52 @@ void handle_signal(int sig)
 }
 void child_handle_signal(int sig)
 {
+	printf("Child signal\n");
 	if (sig == SIGINT)
 	{
 	// Handle Ctrl-C (SIGINT)
+		return;
+		//exit(0);
+	}
+	// Handle Ctrl-\ (SIGQUIT)
+	if (sig == SIGQUIT)
+	{
+		printf("Quit (core dumped)\n");
 		exit(0);
 	}
-// 	if (sig == SIGQUIT)
-// 		exit(0);
 }
+// void	sigint_handler_parent(int num)
+// {
+// 	(void)num;
+// 	write(1, "\n", 1);
+// 	rl_replace_line("", 0);
+// 	rl_on_new_line();
+// 	rl_redisplay();
+// }
+
+
+
+/* void	sigint_handler_child(int num)
+{
+	(void)num;
+	rl_on_new_line();
+}
+
+void	sigquit_handler(int num)
+{
+	(void)num;
+}
+
+void	set_signals_parent(void)
+{
+	signal(SIGINT, sigint_handler_parent);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	set_signals_child(void)
+{
+	signal(SIGINT, sigint_handler_child);
+	signal(SIGQUIT, sigint_handler_child);
+}
+signal(SIGQUIT, sigquit_handler);
+ */
