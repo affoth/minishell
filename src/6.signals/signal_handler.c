@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 15:33:02 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/10 21:39:19 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,36 @@ void setup_signals(void)
 void setup_child_signals(void)
 {
 	struct sigaction sa;
+	printf("Setting up child signal handlers in PID: %d\n", getpid());
 
 	sa.sa_handler = child_handle_signal;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL) == -1)
-	{
-	perror("sigaction");
-	exit(1);
-	}
-	// if (sigaction(SIGQUIT, &sa, NULL) == -1)
-	// {
-	// perror("sigaction");
-	// exit(1);
-	// }
+    if (sigaction(SIGINT, &sa, NULL) == -1)
+    {
+        perror("sigaction (child SIGINT)");
+        exit(1);
+    }
+    else
+    {
+        printf("Child process: SIGINT handler set\n");
+    }
+
+    if (sigaction(SIGQUIT, &sa, NULL) == -1)
+    {
+        perror("sigaction (child SIGQUIT)");
+        exit(1);
+    }
+    else
+    {
+        printf("Child process: SIGQUIT handler set\n");
+    }
 }
 
 
 void handle_signal(int sig)
 {
+	write(STDOUT_FILENO, "parent signal\n", 14);
 	if (sig == SIGINT)
 	{
 	// Handle Ctrl-C (SIGINT)
@@ -76,17 +87,25 @@ void handle_signal(int sig)
 	rl_redisplay();
 	}
 	if (sig == SIGQUIT)
+	{
+		write(STDOUT_FILENO, "USE CTRL-D TO EXIT\n", 20);
 		return;
+	}
 }
 void child_handle_signal(int sig)
 {
+	write(STDOUT_FILENO, "child signal\n", 13);
 	if (sig == SIGINT)
 	{
 	// Handle Ctrl-C (SIGINT)
 		exit(0);
 	}
-// 	if (sig == SIGQUIT)
-// 		exit(0);
+	if (sig == SIGQUIT)
+	{
+		write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
+		exit(0);
+		//exit(0);
+	}
 }
 /* void handle_eof(void) {
     if (isatty(STDIN_FILENO)) {

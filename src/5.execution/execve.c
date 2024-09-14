@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/05 16:00:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/10 21:56:33 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void execute_command(t_shell *shell, t_command *cmd)
     pid_t pid = fork();
     if (pid == 0)
     {
+		setup_child_signals();
         // Prepare command arguments
         int flags_count = 0;
         while (cmd->flags && cmd->flags[flags_count])
