@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 21:11:21 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/15 13:10:55 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,9 @@ typedef struct s_shell
     t_command *cmds_head;   // Head of the commands list
     int exit_status;        // Exit status of the shell
 } t_shell;
+//work in progress
+int heredoc(const char *delimiter);
+
 //signals
 void setup_signals(void);
 void setup_child_signals(void);

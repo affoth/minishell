@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 22:22:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/15 13:01:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
 	}
 
 
-		setup_child_signals();
+	setup_child_signals();
     pid_t pid = fork();
     if (pid == 0) // Child process
     {
