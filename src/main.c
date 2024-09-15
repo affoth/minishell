@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 21:12:17 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/15 14:19:39 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ void execute_shell(t_shell *shell)
         args_head = tokenizer(shell, expanded_vars);
         pipe_count = count_pipes_argstruct(args_head);
         shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count, shell);
-
         print_commands(shell->cmds_head);
 
         // Execute commands

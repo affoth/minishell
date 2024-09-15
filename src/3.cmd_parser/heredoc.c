@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:29:10 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/15 13:23:51 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/15 15:09:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ bool parse_heredoc(t_command *cmd, t_arg *arg)
 			return false;
 		}
 		//IS THIS CORRECT???
+		// dup2(fd, STDIN_FILENO);?
     	cmd->stdin_fd = fd;
 
         if (cmd->stdin_fd < 0)
@@ -106,7 +107,7 @@ int heredoc(const char *delimiter)
 	}
 	return(-1);
 }
-
+ 
 
 
 
@@ -163,3 +164,4 @@ int heredoc(const char *delimiter)
     }
     return false;
 } */
+
