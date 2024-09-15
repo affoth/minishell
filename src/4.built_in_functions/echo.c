@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:51:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 18:02:29 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/15 17:38:06 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,11 @@ static void print_echo_arguments(t_gc *gc,t_command *cmd, char **args, bool skip
         if (arg)
         {
 			//write a debugg message for stdout
+			dprintf(1, "STDOUT is %d\n", STDOUT_FILENO);
 			dprintf(1, "the file descriptor is %d\n", cmd->stdout_fd);
-            write(cmd->stdout_fd, arg, ft_strlen(arg));
+
+            // write(cmd->stdout_fd, arg, ft_strlen(arg));
+			printf("%s", arg);
             // Free the duplicated argument as it's no longer needed
             // Note: Assuming that ft_gc_malloc handles GC for the arg
         }

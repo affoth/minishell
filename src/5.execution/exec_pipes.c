@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/15 13:01:17 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/15 17:28:33 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
         setup_redirections(cmd_index, num_pipes, pipe_descriptors);
 
         // Close all pipe descriptors
-        close_pipes(num_pipes, pipe_descriptors);
+        // close_pipes(num_pipes, pipe_descriptors);
 
         // Execute the command
         int status;

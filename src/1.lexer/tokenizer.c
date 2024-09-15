@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 03:08:15 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/15 15:52:10 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ t_arg *tokenizer(t_shell *shell, char *input)
     }
 
     // Optionally print tokens for debugging
-    //print_tokens(args_head);
+    print_tokens(args_head);
 
     return args_head;
 }
