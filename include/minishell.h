@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 16:42:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:17:25 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ typedef struct s_command
     int stdin_fd;            // File descriptor for stdin redirection
     int stdout_fd;           // File descriptor for stdout redirection
     bool append_mode;        // Flag for append mode (1 for >>, 0 for >)
+    bool valid; // Indicates if the command should be executed
+
 } t_command;
 
 // Token struct
@@ -159,13 +161,13 @@ void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
 void set_command_name(t_command *cmd, const char *name, t_gc *gc);
 int count_pipes_argstruct(t_arg *args_head);
 int count_pipes_cmdstruct(t_command *cmds_head);
-t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count, t_shell *shell);
+t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count);
 void print_commands(t_command *cmds_head);
 
 
 // Function prototypes for redirection handling
-int handle_output_redirection(t_command *cmd, t_arg *arg, t_shell *shell);
-int handle_input_redirection(t_command *cmd, t_arg *arg, t_shell *shell);
+int handle_output_redirection(t_command *cmd, t_arg *arg);
+int handle_input_redirection(t_command *cmd, t_arg *arg);
 bool parse_heredoc(t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
