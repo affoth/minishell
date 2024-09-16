@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 14:46:53 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 17:07:03 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void init_shell(t_shell *shell, char **envp)
     shell->cmds_head = NULL;
     shell->signal_received = 0;
     shell->exit_status = 0;
-    set_signals_parent(); // Ensure signal handling is properly set
+    setup_signals();
 }
 
 
@@ -137,7 +137,7 @@ void execute_shell(t_shell *shell)
         pipe_count = count_pipes_argstruct(args_head);
         shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count, shell);
 
-        print_commands(shell->cmds_head);
+        //print_commands(shell->cmds_head);
 
         // Execute commands
         if (needs_piping(shell->cmds_head))

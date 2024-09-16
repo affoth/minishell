@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 15:33:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:42:54 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,11 @@ void create_pipes(int num_pipes, int *pipe_descriptors);
 void close_pipes(int num_pipes, int *pipe_descriptors);
 
 // Signal handling
-void sigint_handler(int signum);
-void set_signals_parent(void);
-void set_signals_child(void);
+void setup_signals(void);
+void setup_child_signals(void);
+void handle_signal(int sig);
+void child_handle_signal(int sig);
+
+
 
 #endif // MINISHELL_H

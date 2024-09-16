@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 03:49:09 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 17:20:42 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int execute_command(t_shell *shell, t_command *cmd)
 {
+    setup_child_signals();
     pid_t pid = fork();
     if (pid == 0)
     {
