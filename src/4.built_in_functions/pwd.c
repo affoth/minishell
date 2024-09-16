@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:05:32 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/11 18:44:22 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 22:41:35 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 #define PWD_SUCCESS 0
 #define PWD_ERROR 1
 
-int built_in_pwd(void)
+int built_in_pwd(t_shell *shell)
 {
+    (void)shell;
     char *current_dir;
-
-    current_dir = getcwd(NULL, 0);
+    // Get the current working directory from shell strct
+    current_dir = getenv("PWD");
     if (!current_dir)
     {
         perror("getcwd");

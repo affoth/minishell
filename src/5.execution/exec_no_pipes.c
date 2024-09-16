@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:58:43 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 20:13:00 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 22:27:24 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int execute_command_without_pipes(t_shell *shell, t_command *cmd)
     }
     else
     {
-        status = execute_command(shell, cmd);
+        status = execute_command_no_pipes(shell, cmd);
         if (status == -1)
         {
             status = 126; // Command found but not executable

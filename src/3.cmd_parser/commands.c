@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 21:14:57 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 22:12:39 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
         }
 
         // Handle heredocs
-        if (parse_heredoc(current_cmd, current_arg)) {
+        if (parse_heredoc(gc, current_cmd, current_arg)) {
             current_arg = current_arg->next->next;
             continue;
         }

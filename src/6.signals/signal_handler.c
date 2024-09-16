@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 17:41:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 21:48:37 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void setup_signals(void)
         perror("sigaction");
         return;
     }
+	sa.sa_handler = SIG_IGN;
     if (sigaction(SIGQUIT, &sa, NULL) == -1)
     {
         perror("sigaction");
@@ -81,6 +82,7 @@ void handle_signal(int sig)
         // Do nothing to ignore SIGPIPE
     }
 }
+
 void child_handle_signal(int sig)
 {
     if (sig == SIGINT)
@@ -97,4 +99,17 @@ void child_handle_signal(int sig)
     {
         // Do nothing to ignore SIGPIPE
     }
+}
+
+// Restore original signal handlers after heredoc
+void restore_original_signals(void)
+{
+    struct sigaction sa;
+    sa.sa_handler = SIG_DFL;  // Restore default behavior
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
+    // Restore SIGINT and SIGQUIT to default
+    sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGQUIT, &sa, NULL);
 }

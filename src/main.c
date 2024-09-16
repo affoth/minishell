@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 21:16:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 22:24:43 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void init_shell(t_shell *shell, char **envp)
     // Initialize the environment
     shell->env = init_env(envp, &shell->gc);
     shell->cmds_head = NULL;
-    shell->signal_received = 0;
     shell->exit_status = 0;
     setup_signals();
 }
@@ -137,10 +136,9 @@ void execute_shell(t_shell *shell)
         pipe_count = count_pipes_argstruct(args_head);
         shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count);
 
-        // print_commands(shell->cmds_head);
+        //print_commands(shell->cmds_head);
 
-        shell->exit_status = execute_commands_with_pipes(shell, shell->cmds_head);
-        /* // Execute commands
+        // Execute commands
         if (needs_piping(shell->cmds_head))
         {
             //printf("Executing commands with pipes\n");so i
@@ -150,7 +148,7 @@ void execute_shell(t_shell *shell)
         {
             //printf("Executing commands without pipes\n");
             shell->exit_status = execute_command_without_pipes(shell, shell->cmds_head);
-        } */
+        }
         //printf("Exit status: %d\n", shell->exit_status);
         // Free allocated memory for arguments and commands
         free(input);

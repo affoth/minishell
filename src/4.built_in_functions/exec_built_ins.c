@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 15:34:03 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 22:33:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int exec_built_ins(t_shell *shell, t_command *cmd)
     else if (ft_strcmp(cmd_name, "echo") == 0)
         status = built_in_echo(shell, cmd);
     else if (ft_strcmp(cmd_name, "pwd") == 0)
-        status = built_in_pwd();
+        status = built_in_pwd(shell);
     else if (ft_strcmp(cmd_name, "env") == 0)
         status = built_in_env(shell);
     else if (ft_strcmp(cmd_name, "export") == 0)

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 19:46:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 22:33:18 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ typedef struct s_shell
     char **env;             // Environment variables
     t_command *cmds_head;   // Head of the commands list
     int exit_status;        // Exit status of the shell
-    volatile sig_atomic_t signal_received; // Signal handling
 } t_shell;
 
 // Function prototypes for garbage collector
@@ -168,13 +167,13 @@ void print_commands(t_command *cmds_head);
 // Function prototypes for redirection handling
 int handle_output_redirection(t_command *cmd, t_arg *arg);
 int handle_input_redirection(t_command *cmd, t_arg *arg);
-bool parse_heredoc(t_command *cmd, t_arg *arg);
+bool parse_heredoc(t_gc *gc, t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
 int exec_built_ins(t_shell *shell, t_command *cmd);
 int built_in_cd(t_shell *shell);
-int built_in_pwd(void);
+int built_in_pwd(t_shell *shell);
 int built_in_env(t_shell *shell);
 int built_in_echo(t_shell *shell, t_command *cmd);
 int ft_env_len(char **env);
@@ -191,6 +190,8 @@ int execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
 int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
 
 int execute_command(t_shell *shell, t_command *cmd);
+int execute_command_no_pipes(t_shell *shell, t_command *cmd);
+
 int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes);
 
 char *remove_quotes(t_gc *gc, const char *str);
@@ -206,7 +207,7 @@ void setup_signals(void);
 void setup_child_signals(void);
 void handle_signal(int sig);
 void child_handle_signal(int sig);
-
-
+void heredoc_signal_handler(int sig);
+void restore_original_signals(void);
 
 #endif // MINISHELL_H
