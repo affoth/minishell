@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   execve_no_pipes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 21:56:33 by afoth            ###   ########.fr       */
+/*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/09/16 22:29:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void execute_command(t_shell *shell, t_command *cmd)
+int execute_command_no_pipes(t_shell *shell, t_command *cmd)
 {
+    setup_child_signals();
     pid_t pid = fork();
     if (pid == 0)
     {
-		setup_child_signals();
-        // Prepare command arguments
+        // Child process
         int flags_count = 0;
         while (cmd->flags && cmd->flags[flags_count])
             flags_count++;
@@ -55,7 +55,7 @@ void execute_command(t_shell *shell, t_command *cmd)
         int j = 0;
         while (j < args_count)
         {
-            args[flags_count + 1 + j] = remove_quotes(&shell->gc,strdup(cmd->args[j]));
+            args[flags_count + 1 + j] = remove_quotes(&shell->gc, strdup(cmd->args[j]));
             if (!args[flags_count + 1 + j])
             {
                 perror("strdup");
@@ -70,19 +70,41 @@ void execute_command(t_shell *shell, t_command *cmd)
         if (!path)
         {
             fprintf(stderr, "Command not found: %s\n", args[0]);
-            exit(EXIT_FAILURE);
+            exit(EXIT_COMMAND_NOT_FOUND);
         }
 
         execve(path, args, shell->env);
         perror("execve");
-        exit(EXIT_FAILURE);
-    }
+        exit(EXIT_EXECVE_FAILED);
+	}
     else if (pid < 0)
     {
         perror("fork");
-        exit(EXIT_FAILURE);
+        return 1; // Return failure status
     }
 
-    // Parent process should wait for the child process to complete
-    while (wait(NULL) > 0);
+    // Parent process
+    int status;
+    if (waitpid(pid, &status, 0) == -1)
+    {
+        perror("waitpid");
+        return 1; // Return failure status
+    }
+    else
+    {
+        if (WIFEXITED(status))
+        {
+            return WEXITSTATUS(status); // Return the command's exit status
+        }
+        else if (WIFSIGNALED(status))
+        {
+            return 128 + WTERMSIG(status); // Return the signal number causing termination
+        }
+        else
+        {
+            return 1; // Default to 1 for other cases
+        }
+    }
 }
+
+

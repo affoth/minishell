@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/10 15:29:16 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 22:51:26 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,19 @@
 
 # include <termios.h>    // POSIX Terminal I/O Library
 
+// Define exit status codes
+#define EXIT_COMMAND_NOT_FOUND 127
+#define EXIT_PERMISSION_DENIED 126
+#define EXIT_INVALID_COMMAND 2
+#define EXIT_FORK_FAILED 1
+#define EXIT_EXECVE_FAILED 1
+#define EXIT_FAILURE 1
+#define EXIT_SUCCESS 0
+
 extern char		**environ;
+
+// Forward declaration of t_shell for gc
+typedef struct s_shell t_shell;
 
 // TokenType enum
 typedef enum TokenType
@@ -77,6 +89,8 @@ typedef struct s_command
     int stdin_fd;            // File descriptor for stdin redirection
     int stdout_fd;           // File descriptor for stdout redirection
     bool append_mode;        // Flag for append mode (1 for >>, 0 for >)
+    bool valid; // Indicates if the command should be executed
+
 } t_command;
 
 // Token struct
@@ -92,9 +106,11 @@ typedef struct s_garbage
     struct s_garbage *next;
 } t_garbage;
 
+// Garbage collector struct with shell pointer
 typedef struct s_gc
 {
     t_garbage *head;
+    t_shell *shell;  // Pointer to the shell struct
 } t_gc;
 
 // Main shell struct
@@ -122,24 +138,29 @@ void setup_signals(void);
 void setup_child_signals(void);
 
 // Function prototypes for garbage collector
-void ft_gc_init(t_gc *gc);
+void ft_gc_init(t_gc *gc, t_shell *shell);
 void ft_gc_free(t_gc *gc);
 void *ft_gc_malloc(t_gc *gc, size_t size);
+void *ft_gc_realloc(t_gc *gc, void *ptr, size_t old_size, size_t new_size);
 
 // Function prototypes for string manipulation
 char *ft_shell_strdup(t_gc *gc, const char *s);
 char *ft_shell_strndup(t_gc *gc, const char *s, size_t n);
 char *ft_shell_substr(t_gc *gc, const char *s, unsigned int start, size_t len);
 char *ft_shell_strjoin(t_gc *gc, char *s1, char *s2);
+// split stuff
+size_t	ft_words(char const *s, char c);
 char **ft_shell_split(t_gc *gc, const char *s, char c);
+char **ft_split_redirections(t_gc *gc, const char *s);
+
 // Function prototypes for parsing
 void handle_quote_split(const char *s, size_t i, bool *quote);
 void skip_quoted_string(const char **s, bool *quote, char *quote_char);
 void assign(size_t *i, size_t *j, int *index, bool *quote);
-int ft_quotes_not_closed(char *line);
+int ft_quotes_not_closed(const char *line);
 
-// Expansion
-char *expand_string(t_gc *gc, char *input);
+// Expand environment variables
+char *expand_string(t_gc *gc, char *input, int exit_status);
 
 // Syntax analysis
 int syntax_checker(t_arg *head);
@@ -148,7 +169,7 @@ int redirection_syntax(t_arg *head);
 int word_syntax(t_arg *head);
 
 // Function prototypes for command processing
-t_arg *tokenizer(t_gc *gc, char *input);
+t_arg *tokenizer(t_shell *shell, char *input);
 t_command *create_command(t_gc *gc);
 void add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
 void set_command_name(t_command *cmd, const char *name, t_gc *gc);
@@ -157,33 +178,36 @@ int count_pipes_cmdstruct(t_command *cmds_head);
 t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count);
 void print_commands(t_command *cmds_head);
 
+
 // Function prototypes for redirection handling
-bool handle_output_redirection(t_command *cmd, t_arg *arg);
-bool handle_input_redirection(t_command *cmd, t_arg *arg);
-bool parse_heredoc(t_command *cmd, t_arg *arg);
+int handle_output_redirection(t_command *cmd, t_arg *arg);
+int handle_input_redirection(t_command *cmd, t_arg *arg);
+bool parse_heredoc(t_gc *gc, t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int is_built_in(char *cmd);
-void exec_built_ins(t_shell *shell);
-void built_in_cd(t_shell *shell);
-void built_in_pwd(void);
-void built_in_env(t_shell *shell);
-void built_in_echo(t_shell *shell);
+int exec_built_ins(t_shell *shell, t_command *cmd);
+int built_in_cd(t_shell *shell);
+int built_in_pwd(t_shell *shell);
+int built_in_env(t_shell *shell);
+int built_in_echo(t_shell *shell, t_command *cmd);
 int ft_env_len(char **env);
 char *find_variable(t_gc *gc, const char *arg);
 int find_var_in_env(char **env, const char *var_name);
 char **add_env_var(t_gc *gc, char *arg, char **env, int env_len);
 char **change_or_add_env_var(t_gc *gc, char *arg, char **env);
-void built_in_export(t_shell *shell);
-void built_in_unset(t_shell *shell);
-void built_in_exit(t_shell *shell);
+int built_in_export(t_shell *shell);
+int built_in_unset(t_shell *shell);
+int built_in_exit(t_shell *shell);
 
 // Function prototypes for executing commands
-void execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
-void execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
+int execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
+int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
 
-void execute_command(t_shell *shell, t_command *cmd);
-void fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes);
+int execute_command(t_shell *shell, t_command *cmd);
+int execute_command_no_pipes(t_shell *shell, t_command *cmd);
+
+int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes);
 
 char *remove_quotes(t_gc *gc, const char *str);
 char *get_path(t_gc *gc, char *cmd);
@@ -194,8 +218,11 @@ void create_pipes(int num_pipes, int *pipe_descriptors);
 void close_pipes(int num_pipes, int *pipe_descriptors);
 
 // Signal handling
-void sigint_handler(int signum);
-void set_signals_parent(void);
-void set_signals_child(void);
+void setup_signals(void);
+void setup_child_signals(void);
+void handle_signal(int sig);
+void child_handle_signal(int sig);
+void heredoc_signal_handler(int sig);
+void restore_original_signals(void);
 
 #endif // MINISHELL_H

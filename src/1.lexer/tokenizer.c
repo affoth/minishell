@@ -5,71 +5,61 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 18:05:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/03 14:04:25 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/09/14 03:08:15 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Mapping struct for token types that are required by subject pdf
-const Token typeMap[] =
-{
+const Token typeMap[] = {
     {"|", PIPE},
-    {">", REDIRECTION_OUT},
-    {"<", REDIRECTION_IN},
-    {">>", REDIRECTION_APPEND},
-    {"<<", HEREDOC},
     {"\"", DOUBLE_QUOTED_STRING},
     {"'", SINGLE_QUOTED_STRING},
     {"$", ENV_VARIABLE},
+    {"<<", HEREDOC},
+    {">>", REDIRECTION_APPEND},
+    {"<", REDIRECTION_IN},
+    {">", REDIRECTION_OUT},
     {NULL, WORD}
 };
 
-int ft_isspace(int c) {
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
-}
-
-TokenType get_token_type(char *arg)
+TokenType get_token_type(const char *arg)
 {
-    int i;
-
-    // Special cases
-    if (ft_strcmp(arg, "<<") == 0)
+    if (strcmp(arg, "<<") == 0)
         return HEREDOC;
-    if (ft_strcmp(arg, ">>") == 0)
+    if (strcmp(arg, ">>") == 0)
         return REDIRECTION_APPEND;
+    if (strcmp(arg, "<") == 0)
+        return REDIRECTION_IN;
+    if (strcmp(arg, ">") == 0)
+        return REDIRECTION_OUT;
 
-    // Default cases
-    i = 0;
-    while (typeMap[i].arg != NULL)
+    for (int i = 0; typeMap[i].arg != NULL; i++)
     {
-        if (ft_strcmp(arg, typeMap[i].arg) == 0)
+        if (strcmp(arg, typeMap[i].arg) == 0)
             return typeMap[i].type;
-        i++;
     }
 
-    // Flags or other unrecognized tokens
-    if (arg[0] == '-')
+    if (arg[0] == '-' && arg[1] != '\0' && isalpha((unsigned char)arg[1]))
         return FLAGS;
 
     return WORD;
 }
 
-// Create a new argument node
-t_arg *create_arg_node(t_gc *gc, char *arg)
+t_arg *create_arg_node(t_gc *gc, const char *arg)
 {
-    t_arg *node = (t_arg *)ft_gc_malloc(gc, sizeof(t_arg));
+    t_arg *node = ft_gc_malloc(gc, sizeof(t_arg));  // Adjust memory management according to your GC
     if (node == NULL)
     {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
-    node->arg = ft_shell_strdup(gc, arg);
+    node->arg = strdup(arg);  // Adjust memory management according to your GC
     if (node->arg == NULL)
     {
         perror("Memory allocation failed");
-        ft_gc_free(gc);  // Ensure this frees all relevant memory
         exit(EXIT_FAILURE);
     }
     node->type = get_token_type(arg);
@@ -78,8 +68,7 @@ t_arg *create_arg_node(t_gc *gc, char *arg)
     return node;
 }
 
-// Add the argument to the end of the list
-void add_arg_to_list(t_gc *gc, t_arg **head, char *arg)
+void add_arg_to_list(t_gc *gc, t_arg **head, const char *arg)
 {
     t_arg *new_node = create_arg_node(gc, arg);
     if (*head == NULL)
@@ -96,46 +85,42 @@ void add_arg_to_list(t_gc *gc, t_arg **head, char *arg)
     new_node->prev = current_node;
 }
 
-// Tokenize the input line into arguments
-t_arg *tokenizer(t_gc *gc, char *line)
+void print_tokens(t_arg *head)
 {
-    if (!line)
+    t_arg *current = head;
+    while (current != NULL)
+    {
+        printf("Token: %s, Type: %d\n", current->arg, current->type);
+        current = current->next;
+    }
+}
+
+t_arg *tokenizer(t_shell *shell, char *input)
+{
+    if (!input)
     {
         write(STDERR_FILENO, "Error: Null input line\n", 23);
+        shell->exit_status = 1;
         return NULL;
     }
 
-    if (ft_quotes_not_closed(line))
+    // Split the input string into tokens
+    char **tokens = ft_split_redirections(&shell->gc, input);
+    if (!tokens)
     {
-        write(STDERR_FILENO, "Error: Quotes not closed\n", 25);
+        write(STDERR_FILENO, "Error: Memory allocation failed\n", 32);
+        shell->exit_status = 1;
         return NULL;
     }
 
-    char **split_args = ft_shell_split(gc, line, ' ');
-    if (!split_args)
-    {
-        perror("Split failed");
-        exit(EXIT_FAILURE);
-    }
-
-    int i = 0;
     t_arg *args_head = NULL;
-
-    while (split_args[i] != NULL)
+    for (size_t i = 0; tokens[i] != NULL; i++)
     {
-        // Skip empty arguments
-        if (ft_strlen(split_args[i]) > 0)
-        {
-            add_arg_to_list(gc, &args_head, split_args[i]);
-        }
-        i++;
+        add_arg_to_list(&shell->gc, &args_head, tokens[i]);
     }
 
-    // Syntax check the list
-    if (syntax_checker(args_head) != 0)
-    {
-        write(STDERR_FILENO, "Error: Syntax checker not passed\n", 33);
-    }
+    // Optionally print tokens for debugging
+    //print_tokens(args_head);
 
     return args_head;
 }
