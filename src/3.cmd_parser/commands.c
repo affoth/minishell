@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 20:12:58 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 21:14:57 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,17 @@ int handle_output_redirection(t_command *cmd, t_arg *arg) {
 }
 
 int handle_input_redirection(t_command *cmd, t_arg *arg) {
-    if (arg->type == REDIRECTION_IN) {
+    if (arg->type == REDIRECTION_IN)
+	{
         // Close previous input file descriptor if already redirected
-        if (cmd->stdin_fd != STDIN_FILENO) {
+        if (cmd->stdin_fd != STDIN_FILENO)
+		{
             close(cmd->stdin_fd);
         }
 
         int fd = open(arg->next->arg, O_RDONLY);
-        if (fd < 0) {
+        if (fd < 0)
+		{
             // Print error message
             fprintf(stderr, "%s: %s: %s\n",
                     cmd->cmd_name ? cmd->cmd_name : "minishell",
@@ -92,12 +95,37 @@ int handle_input_redirection(t_command *cmd, t_arg *arg) {
                     strerror(errno));
             cmd->valid = false; // Mark command as invalid
             return 1; // Return failure
-        } else {
+        }
+		else
+		{
             cmd->stdin_fd = fd;
             // Do NOT reset cmd->valid to true here
         }
         return 0; // Success
     }
+	if (arg->type == HEREDOC)
+	{
+	    if (cmd->stdin_fd != STDIN_FILENO)
+		{
+        	if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
+        	{
+            	perror("dup2 stdin_fd");
+            	exit(EXIT_FAILURE);
+        	}
+        	close(cmd->stdin_fd);  // Close the original fd after redirection
+    	}
+
+    // Redirect stdout similarly if necessary
+    	if (cmd->stdout_fd != STDOUT_FILENO)
+    	{
+    	    if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
+    	    {
+    	        perror("dup2 stdout_fd");
+    	        exit(EXIT_FAILURE);
+    	    }
+    	    close(cmd->stdout_fd);
+    	}
+	}
     return 0;
 }
 
@@ -259,7 +287,7 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
 
         // Handle heredocs
         if (parse_heredoc(current_cmd, current_arg)) {
-            current_arg = current_arg->next;
+            current_arg = current_arg->next->next;
             continue;
         }
 
