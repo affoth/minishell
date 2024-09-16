@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:29:10 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 22:18:29 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 23:02:20 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void heredoc_signal_handler(int sig)
     }
 }
 
-int heredoc(t_gc *gc, const char *delimiter)
+int heredoc(t_shell *shell, const char *delimiter)
 {
     int pipe_fd[2];
     char *expanded_line;
@@ -66,7 +66,7 @@ int heredoc(t_gc *gc, const char *delimiter)
     while (1)
     {
         //expanded_line = readline("heredoc> ");
-        expanded_line = expand_string(gc, readline("heredoc>"), 0);
+        expanded_line = expand_string(shell, readline("heredoc>"), 0);
         // If Ctrl+C (SIGINT) was caught
         if (heredoc_interrupted)
         {
@@ -103,14 +103,14 @@ int heredoc(t_gc *gc, const char *delimiter)
 }
 
 // Main function to parse and handle heredoc in a command
-bool parse_heredoc(t_gc *gc, t_command *cmd, t_arg *arg)
+bool parse_heredoc(t_shell *shell, t_command *cmd, t_arg *arg)
 {
     int fd;
 
     if (arg->type == HEREDOC)
     {
         const char *delimiter = arg->next->arg;
-        fd = heredoc(gc, delimiter);
+        fd = heredoc(shell, delimiter);
         if (fd < 0)
         {
             perror("heredoc");

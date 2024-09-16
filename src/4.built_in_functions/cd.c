@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 14:41:21 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/12 18:42:08 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/09/16 22:51:53 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/09/16 23:13:48 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,11 @@ int built_in_cd(t_shell *shell)
     char *newpwd = NULL;
 
     // Ensure shell and command list are not NULL
-    if (!shell || !shell->cmds_head || !shell->cmds_head->args) {
+    if (!shell || !shell->cmds_head) {
         ft_putstr_fd("cd: internal error\n", STDERR_FILENO);
         return 1; // Error code
     }
 
-    // Check for too many arguments
-    if (shell->cmds_head->args[1]) {
-        ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
-        return 1; // Error code
-    }
-    
     // Get the current working directory and save it as OLDPWD
     oldpwd = getcwd(NULL, 0);
     if (!oldpwd) {
@@ -38,24 +32,9 @@ int built_in_cd(t_shell *shell)
     }
 
     // Determine the target directory
-    if (shell->cmds_head->args && shell->cmds_head->args[0])
-    {
+    if (shell->cmds_head->args && shell->cmds_head->args[0]) {
         target_dir = shell->cmds_head->args[0];
-    }
-    else if (shell->cmds_head->flags && shell->cmds_head->flags[0] && ft_strcmp(shell->cmds_head->flags[0], "-") == 0)
-    {
-        // Retrieve OLDPWD from the shell's environment
-        int index = find_var_in_env(shell->env, "OLDPWD");
-        if (index != -1) {
-            target_dir = strchr(shell->env[index], '=') + 1;
-        } else {
-            ft_putstr_fd("cd: OLDPWD not set\n", STDERR_FILENO);
-            free(oldpwd);
-            return 1; // Error code
-        }
-    }
-    else
-    {
+    } else {
         // Retrieve HOME from the shell's environment
         int index = find_var_in_env(shell->env, "HOME");
         if (index != -1) {
@@ -67,7 +46,7 @@ int built_in_cd(t_shell *shell)
         }
     }
 
-    // Check if the target directory is a valid directory
+    // Check if the target directory is valid
     if (access(target_dir, F_OK) != 0) {
         ft_putstr_fd("cd: No such file or directory\n", STDERR_FILENO);
         free(oldpwd);
@@ -81,7 +60,7 @@ int built_in_cd(t_shell *shell)
         return 1; // Error code
     }
 
-    // Get the new working directory and update PWD and OLDPWD
+    // Get the new working directory
     newpwd = getcwd(NULL, 0);
     if (!newpwd) {
         perror("getcwd");
@@ -89,8 +68,10 @@ int built_in_cd(t_shell *shell)
         return 1; // Error code
     }
 
-    // Update environment variables
+    // Update OLDPWD in the environment
     shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("OLDPWD=", oldpwd), shell->env);
+
+    // Update PWD in the environment
     shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("PWD=", newpwd), shell->env);
 
     free(oldpwd);

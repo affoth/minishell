@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 22:12:39 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 23:02:57 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ char *strip_redundant_quotes(t_gc *gc, const char *str)
     return result;
 }
 
-t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_count) {
+t_command *create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_head, int pipe_count) {
     t_command *commands[pipe_count + 1];
     t_command *cmds_head = NULL;
     t_command *last_cmd = NULL;
@@ -286,7 +286,7 @@ t_command *create_and_populate_commands(t_gc *gc, t_arg *args_head, int pipe_cou
         }
 
         // Handle heredocs
-        if (parse_heredoc(gc, current_cmd, current_arg)) {
+        if (parse_heredoc(shell, current_cmd, current_arg)) {
             current_arg = current_arg->next->next;
             continue;
         }

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 22:24:43 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 23:06:47 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,18 +125,19 @@ void execute_shell(t_shell *shell)
         input = get_input(); // Get user input
         if (!input) // If input is NULL (empty line), continue the loop
         {
+            shell->exit_status = 0;
             free(input);
             continue;
         }
 
         // Expand variables
-        expanded_vars = expand_string(&shell->gc, input, shell->exit_status);
+        expanded_vars = expand_string(shell, input, shell->exit_status);
         // Tokenize and parse commands
         args_head = tokenizer(shell, expanded_vars);
         pipe_count = count_pipes_argstruct(args_head);
-        shell->cmds_head = create_and_populate_commands(&shell->gc, args_head, pipe_count);
+        shell->cmds_head = create_and_populate_commands(shell, &shell->gc, args_head, pipe_count);
 
-        //print_commands(shell->cmds_head);
+        print_commands(shell->cmds_head);
 
         // Execute commands
         if (needs_piping(shell->cmds_head))
