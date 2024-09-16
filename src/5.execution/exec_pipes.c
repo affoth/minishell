@@ -6,23 +6,40 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 15:09:28 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 16:12:34 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+void handle_file_redirections(t_command *cmd)
+{
+    if (cmd->stdin_fd != STDIN_FILENO)
+    {
+        if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
+        {
+            perror("dup2 stdin_fd");
+            exit(EXIT_FAILURE);
+        }
+        // Close the original file descriptor if it's not standard input
+        if (cmd->stdin_fd != STDIN_FILENO)
+            close(cmd->stdin_fd);
+    }
+    if (cmd->stdout_fd != STDOUT_FILENO)
+    {
+        if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
+        {
+            perror("dup2 stdout_fd");
+            exit(EXIT_FAILURE);
+        }
+        // Close the original file descriptor if it's not standard output
+        if (cmd->stdout_fd != STDOUT_FILENO)
+            close(cmd->stdout_fd);
+    }
+}
 int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes)
 {
-	/* //debug
-	printf("pipe_descriptors: ");
-	for (int i = 0; i < 2 * num_pipes; i++)
-	{
-		printf("%d ", pipe_descriptors[i]);
-	} */
-
-
-	setup_child_signals();
+    setup_child_signals();
     pid_t pid = fork();
     if (pid == 0) // Child process
     {
@@ -30,17 +47,20 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
         // Close all pipe descriptors
         close_pipes(num_pipes, pipe_descriptors);
 
+        // Apply file redirections
+        handle_file_redirections(cmd);
+
         // Execute the command
-        int status;
         if (is_built_in(cmd->cmd_name))
         {
-            status = exec_built_ins(shell, cmd);
+            exec_built_ins(shell, cmd);
         }
         else
         {
-            status = execute_command(shell, cmd);
+            execute_command(shell, cmd);
         }
-        exit(status);  // Exit with the command's status
+        // If exec fails
+        exit(EXIT_FAILURE);
     }
     else if (pid < 0) // Error handling for fork failure
     {

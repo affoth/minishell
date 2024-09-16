@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 16:29:10 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 14:55:42 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 16:06:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,14 @@ bool parse_heredoc(t_command *cmd, t_arg *arg)
             close(fd);
             return false;
         }
-
-        // Write heredoc content to a file for testing
+      // Write heredoc content to a file for testing
         if (!write_heredoc_to_file(fd, "file.txt"))
         {
             return false;
         }
-
         cmd->stdin_fd = fd;
         return true;
     }
-
     return false;
 }
 /* bool parse_heredoc(t_command *cmd, t_arg *arg)

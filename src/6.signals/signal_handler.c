@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 22:30:22 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 16:14:12 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ void setup_child_signals(void)
 	perror("sigaction");
 	exit(1);
 	}
-	printf("Child signal setup complete\n");
+/* 	printf("Child signal setup complete\n");
+ */
 }
 
 
@@ -82,7 +83,7 @@ void handle_signal(int sig)
 }
 void child_handle_signal(int sig)
 {
-	printf("Child signal\n");
+	//printf("Child signal\n");
 	if (sig == SIGINT)
 	{
 	// Handle Ctrl-C (SIGINT)
