@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 18:17:48 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:25:39 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,8 @@ void execute_shell(t_shell *shell)
 
         //print_commands(shell->cmds_head);
 
-        // Execute commands
+        shell->exit_status = execute_commands_with_pipes(shell, shell->cmds_head);
+        /* // Execute commands
         if (needs_piping(shell->cmds_head))
         {
             //printf("Executing commands with pipes\n");so i
@@ -149,7 +150,7 @@ void execute_shell(t_shell *shell)
         {
             //printf("Executing commands without pipes\n");
             shell->exit_status = execute_command_without_pipes(shell, shell->cmds_head);
-        }
+        } */
         //printf("Exit status: %d\n", shell->exit_status);
         // Free allocated memory for arguments and commands
         free(input);

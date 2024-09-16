@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 18:30:51 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:23:22 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ void handle_file_redirections(t_command *cmd)
             perror("dup2 stdin_fd");
             exit(EXIT_FAILURE);
         }
-        // Close the original file descriptor if it's not standard input
-        if (cmd->stdin_fd != STDIN_FILENO)
-            close(cmd->stdin_fd);
+        close(cmd->stdin_fd);
     }
     if (cmd->stdout_fd != STDOUT_FILENO)
     {
@@ -32,9 +30,7 @@ void handle_file_redirections(t_command *cmd)
             perror("dup2 stdout_fd");
             exit(EXIT_FAILURE);
         }
-        // Close the original file descriptor if it's not standard output
-        if (cmd->stdout_fd != STDOUT_FILENO)
-            close(cmd->stdout_fd);
+        close(cmd->stdout_fd);
     }
 }
 
@@ -43,6 +39,9 @@ pid_t fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descrip
     pid_t pid = fork();
     if (pid == 0) // Child process
     {
+        // Debug statement
+        // printf("Debug: In child process, cmd->valid = %s\n", cmd->valid ? "true" : "false");
+
         if (!cmd->valid)
         {
             // Command is invalid due to redirection failure; exit with code 1
@@ -54,6 +53,7 @@ pid_t fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descrip
         close_pipes(num_pipes, pipe_descriptors);
         // Apply file redirections
         handle_file_redirections(cmd);
+
         // Execute the command
         int status = 0;
         if (is_built_in(cmd->cmd_name))
@@ -70,7 +70,7 @@ pid_t fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descrip
     else if (pid < 0) // Error handling for fork failure
     {
         perror("fork");
-        exit(EXIT_FORK_FAILED);
+        exit(EXIT_FAILURE);
     }
     return pid;  // Return the PID of the forked child process
 }
@@ -90,6 +90,13 @@ int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
 
     while (current_cmd)
     {
+        if (!current_cmd->valid)
+        {
+            status = 1;             // Set status to indicate failure
+            shell->exit_status = 1; // Set shell's exit status
+            // Optionally, print an error message or debug statement
+            break;
+        }
         pid_t pid = fork_and_execute_command(shell, current_cmd, pipe_descriptors, cmd_index, num_pipes);
         if (pid < 0)
         {
@@ -119,31 +126,44 @@ int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
     // Close all pipe descriptors in the parent process
     close_pipes(num_pipes, pipe_descriptors);
 
-    // Wait for the last child process to complete
-    int child_status;
-    if (waitpid(last_pid, &child_status, 0) == -1)
+    // Only wait for child processes if any were forked
+    if (last_pid != -1)
     {
-        perror("waitpid");
-        status = 1;
+        // Wait for the last child process to complete
+        int child_status;
+        if (waitpid(last_pid, &child_status, 0) == -1)
+        {
+            perror("waitpid");
+            status = 1;
+        }
+        else
+        {
+            if (WIFEXITED(child_status))
+            {
+                status = WEXITSTATUS(child_status);
+                // Debug statement
+                // printf("Debug: Last child exited with status %d\n", status);
+            }
+            else if (WIFSIGNALED(child_status))
+            {
+                status = 128 + WTERMSIG(child_status);
+                // Debug statement
+                // printf("Debug: Last child terminated by signal %d\n", WTERMSIG(child_status));
+            }
+        }
+
+        // Wait for all other child processes
+        while (wait(NULL) > 0)
+            ;
+
+        // Set shell->exit_status to the exit status of the last command
+        shell->exit_status = status;
     }
     else
     {
-        if (WIFEXITED(child_status))
-        {
-            status = WEXITSTATUS(child_status);
-        }
-        else if (WIFSIGNALED(child_status))
-        {
-            status = 128 + WTERMSIG(child_status);
-        }
+        // No child processes were forked; shell->exit_status is already set
+        // status remains as set before breaking the loop
     }
 
-    // Wait for all other child processes
-    while (wait(NULL) > 0)
-        ;
-
-    // Set shell->exit_status to the exit status of the last command
-    shell->exit_status = status;
-
-    return status;  // Return the exit status of the last command
+    return status;  // Return the exit status
 }

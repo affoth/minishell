@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 17:20:42 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:16:45 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int execute_command(t_shell *shell, t_command *cmd)
 {
-    setup_child_signals();
+    /* setup_child_signals();
     pid_t pid = fork();
     if (pid == 0)
-    {
+    { */
         // Child process
         int flags_count = 0;
         while (cmd->flags && cmd->flags[flags_count])
@@ -76,8 +76,8 @@ int execute_command(t_shell *shell, t_command *cmd)
         execve(path, args, shell->env);
         perror("execve");
         exit(EXIT_EXECVE_FAILED);
-    }
-    else if (pid < 0)
+}
+    /* else if (pid < 0)
     {
         perror("fork");
         return 1; // Return failure status
@@ -104,6 +104,6 @@ int execute_command(t_shell *shell, t_command *cmd)
         {
             return 1; // Default to 1 for other cases
         }
-    }
-}
+    } */
+
 
