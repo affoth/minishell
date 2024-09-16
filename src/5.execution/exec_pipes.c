@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 15:07:11 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/16 15:04:13 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
     if (pid == 0) // Child process
     {
         setup_redirections(cmd_index, num_pipes, pipe_descriptors);
-        
+
         // Close all pipe descriptors
         close_pipes(num_pipes, pipe_descriptors);
 
