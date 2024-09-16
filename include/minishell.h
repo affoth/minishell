@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/15 13:10:55 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 15:23:55 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int exec_built_ins(t_shell *shell, t_command *cmd);
 int built_in_cd(t_shell *shell);
 int built_in_pwd(void);
 int built_in_env(t_shell *shell);
-int built_in_echo(t_shell *shell);
+int built_in_echo(t_shell *shell, t_command *cmd);
 int ft_env_len(char **env);
 char *find_variable(t_gc *gc, const char *arg);
 int find_var_in_env(char **env, const char *var_name);

@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:00:49 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/14 18:11:22 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 15:06:56 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,14 @@ void create_pipes(int num_pipes, int *pipe_descriptors)
         }
         i++;
     }
-	/// Debugging
+	/* /// Debugging
 	printf("Pipes created\n");
 	int j = 0;
 	while (j < 2 * num_pipes)
 	{
 		printf("Pipe %d: %d\n", j, pipe_descriptors[j]);
 		j++;
-	}
+	} */
 }
 
 // Close all pipe descriptors

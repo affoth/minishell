@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/15 17:28:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/16 15:09:28 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes)
 {
-	//debug
+	/* //debug
 	printf("pipe_descriptors: ");
 	for (int i = 0; i < 2 * num_pipes; i++)
 	{
 		printf("%d ", pipe_descriptors[i]);
-	}
+	} */
 
 
 	setup_child_signals();
@@ -27,9 +27,8 @@ int fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descripto
     if (pid == 0) // Child process
     {
         setup_redirections(cmd_index, num_pipes, pipe_descriptors);
-
         // Close all pipe descriptors
-        // close_pipes(num_pipes, pipe_descriptors);
+        close_pipes(num_pipes, pipe_descriptors);
 
         // Execute the command
         int status;
@@ -69,7 +68,6 @@ int execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
         {
             status = 1;  // If forking fails, set status to non-zero
         }
-
         // Close pipe ends not needed anymore
         if (cmd_index > 0)
         {
