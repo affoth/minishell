@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:51:53 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 23:15:03 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 20:02:10 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ int built_in_cd(t_shell *shell)
     char *oldpwd = NULL;
     char *newpwd = NULL;
 
-    // Ensure shell and command list are not NULL
-    if (!shell || !shell->cmds_head) {
-        ft_putstr_fd("cd: internal error\n", STDERR_FILENO);
+	// Ensure shell and command list are not NULL
+    if (shell->cmds_head->args && shell->cmds_head->args[1])
+	{
+        ft_putstr_fd(" too many arguments\n", STDERR_FILENO);
         return 1; // Error code
     }
 

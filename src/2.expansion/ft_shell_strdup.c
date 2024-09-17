@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell_strdup.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:20:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/02 13:29:55 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 20:22:04 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../include/minishell.h"
 
@@ -31,7 +30,7 @@ char	*ft_shell_strdup(t_gc *gc, const char *s1)
 	return (dest);
 }
 
-char *ft_shell_strndup(t_gc *gc, const char *s1, size_t n)
+char	*ft_shell_strndup(t_gc *gc, const char *s1, size_t n)
 {
 	char	*dest;
 	size_t	i;
@@ -74,10 +73,11 @@ char	*ft_shell_strjoin(t_gc *gc, char *s1, char *s2)
 }
 
 // Helper function to extract a substring from a string
-char *ft_shell_substr(t_gc *gc, char const *s, unsigned int start, size_t len)
+char	*ft_shell_substr(t_gc *gc, char const *s,
+unsigned int start, size_t len)
 {
-	char *sub;
-	size_t i;
+	char	*sub;
+	size_t	i;
 
 	if (!s)
 		return (NULL);
