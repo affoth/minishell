@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 20:29:29 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 20:45:21 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ size_t	calculate_expanded_length(t_shell *shell, char *input, int exit_status)
 			i++;
 		}
 	}
-	free(exit_status_str); // Free the allocated memory for the exit status string
-	return len;
+	free(exit_status_str);
+	return (len);
 }
 
-char *expand_string(t_shell *shell, char *input, int exit_status)
+char	*expand_string(t_shell *shell, char *input, int exit_status)
 {
 	char *result;
 	char *env;
