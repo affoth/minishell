@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 18:09:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/08/27 15:56:30 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:21:03 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int syntax_checker(t_arg *head)
     }
 
     // Perform operator-specific syntax checks
-    if (pipe_syntax(head) || redirection_syntax(head) || word_syntax(head))
+    if (pipe_syntax(head) || redirection_syntax(head))
     {
         return 1;
     }

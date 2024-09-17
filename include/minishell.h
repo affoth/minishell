@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:06:17 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 23:14:51 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,7 @@ char **add_env_var(t_gc *gc, char *arg, char **env, int env_len);
 char **change_or_add_env_var(t_gc *gc, char *arg, char **env);
 int built_in_export(t_shell *shell);
 int built_in_unset(t_shell *shell);
+char *strip_quotes(t_gc *gc, const char *str);
 int built_in_exit(t_shell *shell);
 
 // Function prototypes for executing commands

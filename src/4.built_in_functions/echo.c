@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:51:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 15:33:37 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:19:38 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 // Function to check for initial -n flags in the flags array
 bool check_initial_n_flag(char **flags)
 {

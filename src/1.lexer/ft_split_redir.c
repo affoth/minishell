@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:35:01 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 20:00:01 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 23:19:22 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* Function to remove quotes from a string.
 It removes both single and double quotes while keeping the content inside intact.
  */
-static char	*strip_quotes(t_gc *gc, const char *str)
+static char	*strip_quotes_static(t_gc *gc, const char *str)
 {
 	char	*result;
 	size_t	i;
@@ -86,7 +86,7 @@ static void	ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t 
 			if (i > start)
 			{
 				token = ft_shell_strndup(gc, s + start, i - start);
-				array[*index] = strip_quotes(gc, token);
+				array[*index] = strip_quotes_static(gc, token);
 				(*index)++;
 			}
 			if (s[i] == '<' || s[i] == '>')
@@ -121,7 +121,7 @@ static void	ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t 
 			if (i > start)
 			{
 				token = ft_shell_strndup(gc, s + start, i - start);
-				array[*index] = strip_quotes(gc, token);
+				array[*index] = strip_quotes_static(gc, token);
 				(*index)++;
 			}
 			start = i + 1;
@@ -131,7 +131,7 @@ static void	ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t 
 	if (i > start)
 	{
 		token = ft_shell_strndup(gc, s + start, i - start);
-		array[*index] = strip_quotes(gc, token);
+		array[*index] = strip_quotes_static(gc, token);
 		(*index)++;
 	}
 }

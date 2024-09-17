@@ -3,52 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_ins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 22:33:05 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:19:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 // Function to check if a command is a built-in
 int is_built_in(char *arg)
 {
     if (ft_strcmp(arg, "cd") == 0)
-        return 1;
+        return (1);
     if (ft_strcmp(arg, "echo") == 0)
-        return 1;
+        return (1);
     if (ft_strcmp(arg, "pwd") == 0)
-        return 1;
+        return (1);
     if (ft_strcmp(arg, "env") == 0)
-        return 1;
+        return (1);
     if (ft_strcmp(arg, "export") == 0)
-        return 1;
+        return (1);
     if (ft_strcmp(arg, "unset") == 0)
-        return 1;
+        return (1);
     if (ft_strcmp(arg, "exit") == 0)
-        return 1;
-    return 0;
+        return (1);
+    return (0);
 }
 int exec_built_ins(t_shell *shell, t_command *cmd)
 {
-    char *cmd_name;
-    int status;
-
+    char    *cmd_name;
+    int     status;
     status = 0;
-
     if (cmd == NULL || cmd->cmd_name == NULL)
-    {
-        return 1;
-    }
-
+        return (1);
     cmd_name = cmd->cmd_name;
-
-    // Print debug info
-    //printf("Executing built-in command: %s\n", cmd_name);
-
-    // Execute the built-in command and capture the status
     if (ft_strcmp(cmd_name, "cd") == 0)
         status = built_in_cd(shell);
     else if (ft_strcmp(cmd_name, "echo") == 0)
@@ -64,9 +53,6 @@ int exec_built_ins(t_shell *shell, t_command *cmd)
     else if (ft_strcmp(cmd_name, "exit") == 0)
         status = built_in_exit(shell);
     else
-    {
-        return 1; // Command not found
-    }
-
-    return status;
+        return (1);
+    return (status);
 }
