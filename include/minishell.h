@@ -6,11 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/09/17 15:01:56 by afoth            ###   ########.fr       */
-=======
-/*   Updated: 2024/09/16 22:51:26 by afoth            ###   ########.fr       */
->>>>>>> 793b9257825b20b88f3657be13dd3895c5c44d26
+/*   Updated: 2024/09/17 23:06:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +41,13 @@
 # include <termios.h>    // POSIX Terminal I/O Library
 
 // Define exit status codes
-#define EXIT_COMMAND_NOT_FOUND 127
-#define EXIT_PERMISSION_DENIED 126
-#define EXIT_INVALID_COMMAND 2
-#define EXIT_FORK_FAILED 1
-#define EXIT_EXECVE_FAILED 1
-#define EXIT_FAILURE 1
-#define EXIT_SUCCESS 0
+# define EXIT_COMMAND_NOT_FOUND 127
+# define EXIT_PERMISSION_DENIED 126
+# define EXIT_INVALID_COMMAND 2
+# define EXIT_FORK_FAILED 1
+# define EXIT_EXECVE_FAILED 1
+# define EXIT_FAILURE 1
+# define EXIT_SUCCESS 0
 
 extern char		**environ;
 
@@ -61,80 +57,80 @@ typedef struct s_shell t_shell;
 // TokenType enum
 typedef enum TokenType
 {
-    WORD,                // Generic word (command or argument)
-    FLAGS,                // Command flag (e.g., -l)
-    REDIRECTION_OUT,     // >
-    REDIRECTION_IN,      // <
-    REDIRECTION_APPEND,  // >>
-    HEREDOC,             // <<
-    PIPE,                // |
-    DOUBLE_QUOTED_STRING, // Double-quoted string
-    SINGLE_QUOTED_STRING, // Single-quoted string
-    ENV_VARIABLE,        // Environment variable (like $HOME)
-    END                  // End of input
-} TokenType;
+	WORD,
+	FLAGS,
+	REDIRECTION_OUT,
+	REDIRECTION_IN,
+	REDIRECTION_APPEND,
+	HEREDOC,
+	PIPE,
+	DOUBLE_QUOTED_STRING,
+	SINGLE_QUOTED_STRING,
+	ENV_VARIABLE,
+	END
+}	TokenType;
 
 // Argument struct
 typedef struct s_arg
 {
-    char *arg;
-    TokenType type;
-    struct s_arg *prev;
-    struct s_arg *next;
+	char *arg;
+	TokenType type;
+	struct s_arg *prev;
+	struct s_arg *next;
 	bool open;
 } t_arg;
 
 // Command struct
 typedef struct s_command
 {
-    char *cmd_name;          // Command name (e.g., "ls")
-    char **flags;         // Command flags (e.g., "-l")
-    char **args;          // Command arguments (e.g., "file.txt")
-    struct s_command *next;  // Next command in the pipeline
-    int stdin_fd;            // File descriptor for stdin redirection
-    int stdout_fd;           // File descriptor for stdout redirection
-    bool append_mode;        // Flag for append mode (1 for >>, 0 for >)
-    bool valid; // Indicates if the command should be executed
+	char *cmd_name;          // Command name (e.g., "ls")
+	char **flags;         // Command flags (e.g., "-l")
+	char **args;          // Command arguments (e.g., "file.txt")
+	struct s_command *next;  // Next command in the pipeline
+	int stdin_fd;            // File descriptor for stdin redirection
+	int stdout_fd;           // File descriptor for stdout redirection
+	bool append_mode;        // Flag for append mode (1 for >>, 0 for >)
+	bool valid; // Indicates if the command should be executed
 
 } t_command;
 
 // Token struct
 typedef struct {
-    char *arg;
-    TokenType type;
+	char *arg;
+	TokenType type;
 } Token;
 
 // Garbage collector struct
 typedef struct s_garbage
 {
-    void *ptr;
-    struct s_garbage *next;
+	void *ptr;
+	struct s_garbage *next;
 } t_garbage;
 
 // Garbage collector struct with shell pointer
 typedef struct s_gc
 {
-    t_garbage *head;
-    t_shell *shell;  // Pointer to the shell struct
+	t_garbage *head;
+	t_shell *shell;  // Pointer to the shell struct
 } t_gc;
 
 // Main shell struct
 typedef struct s_shell
 {
-    t_gc gc;                // Garbage collector
-    char **env;             // Environment variables
-    t_command *cmds_head;   // Head of the commands list
-    int exit_status;        // Exit status of the shell
+	t_gc gc;                // Garbage collector
+	char **env;             // Environment variables
+	t_command *cmds_head;   // Head of the commands list
+	int exit_status;        // Exit status of the shell
 } t_shell;
 
 
 // Struct for signal handling
 /* typedef struct s_sigaction
 {
-    void (*sa_handler)(int);        // Pointer to the signal handler function
-    //void (*sa_sigaction)(int, siginfo_t *, void *);  // Alternative signal handler with more info
-    sigset_t sa_mask;               // Set of signals to be blocked during handler execution
-    //int sa_flags;                   // Flags to modify signal handling behavior
+	void (*sa_handler)(int);        // Pointer to the signal handler function
+	//void (*sa_sigaction)(int, siginfo_t *, void *);  // Alternative signal handler with more info
+	sigset_t sa_mask;               // Set of signals to be blocked during handler execution
+	//int sa_flags;                   // Flags to modify signal handling behavior
 }t_sigaction; */
 //work in progress
 void handle_signal(int sig);

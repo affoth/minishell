@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 20:45:21 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 20:50:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,23 +97,26 @@ size_t	calculate_expanded_length(t_shell *shell, char *input, int exit_status)
 	return (len);
 }
 
+// Calculate the required length for the result string
+// Check if the next character is a valid variable name or end of string
+
 char	*expand_string(t_shell *shell, char *input, int exit_status)
 {
-	char *result;
-	char *env;
-	char *expanded;
-	size_t i;
-	size_t j;
-	size_t len;
+	char	*result;
+	char	*env;
+	char	*expanded;
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	size_t	start;
+
 
 	if (!input)
-		return NULL;
-
-	// Calculate the required length for the result string
+		return (NULL);
 	len = calculate_expanded_length(shell, input, exit_status);
 	result = (char *)ft_gc_malloc(&shell->gc, (sizeof(char) * (len + 1)));
 	if (!result)
-		return NULL;
+		return (NULL);
 
 	i = 0;
 	j = 0;
@@ -121,38 +124,33 @@ char	*expand_string(t_shell *shell, char *input, int exit_status)
 	{
 		if (input[i] == '$' && check_if_in_single_quote(input, i) == 0)
 		{
-			size_t start = i + 1;
-
-			// Check for $? or environment variable
+			start = i + 1;
 			if (input[start] == '?')
 			{
-				// Handle $?
 				expanded = ft_itoa(exit_status);
 				if (expanded)
 				{
 					ft_strlcpy(result + j, expanded, len - j + 1);
 					j += ft_strlen(expanded);
-					i += 2; // Skip "$?"
+					i += 2;
 					free(expanded);
 				}
 			}
 			else
 			{
-				// Check if the next character is a valid variable name or end of string
 				while (input[start] && (isalnum(input[start]) || input[start] == '_'))
 					start++;
 
 				if (start == i + 1)
 				{
-					// No variable name after $, so treat it as a literal $
 					result[j++] = '$';
 					i++;
 				}
 				else
 				{
-					// Handle environment variable
-					env = ft_shell_substr(&shell->gc, input, (i + 1), (start - i - 1));
-					expanded = ft_expand_env(shell, env); // Fetch from custom environment
+					env = ft_shell_substr(&shell->gc, input, \
+					(i + 1), (start - i - 1));
+					expanded = ft_expand_env(shell, env);
 					ft_strlcpy(result + j, expanded, len - j + 1);
 					j += ft_strlen(expanded);
 					i = start;
@@ -167,5 +165,5 @@ char	*expand_string(t_shell *shell, char *input, int exit_status)
 		}
 	}
 	result[j] = '\0';
-	return result;
+	return (result);
 }

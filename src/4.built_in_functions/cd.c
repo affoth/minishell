@@ -6,77 +6,79 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:51:53 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 20:02:10 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 23:10:18 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+int set_oldpwd(char **oldpwd)
+{
+	*oldpwd = getcwd(NULL, 0);
+	if (!(*oldpwd))
+	{
+		perror("getcwd");
+		return (1);
+	}
+	return (0);
+}
+char    *get_target_dir(t_shell *shell)
+{
+	int     index;
+	if (shell->cmds_head->args && shell->cmds_head->args[0])
+		return (shell->cmds_head->args[0]);
+	index = find_var_in_env(shell->env, "HOME");
+	if (index != -1)
+		return (ft_strchr(shell->env[index], '=') + 1);
+	ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
+	return (NULL);
+}
+int change_directory(char *target_dir)
+{
+	if (access(target_dir, F_OK) != 0)
+	{
+		ft_putstr_fd("cd: No such file or directory\n", STDERR_FILENO);
+		return (1);
+	}
+	if (chdir(target_dir) != 0)
+	{
+		perror("cd");
+		return (1);
+	}
+	return (0);
+}
+int update_env_vars(t_shell *shell, char *oldpwd, char *newpwd)
+{
+	shell->env = change_or_add_env_var(&shell->gc,
+			ft_strjoin("OLDPWD=", oldpwd), shell->env);
+	shell->env = change_or_add_env_var(&shell->gc,
+			ft_strjoin("PWD=", newpwd), shell->env);
+	return (0);
+}
 int built_in_cd(t_shell *shell)
 {
-    char *target_dir = NULL;
-    char *oldpwd = NULL;
-    char *newpwd = NULL;
-
-	// Ensure shell and command list are not NULL
-    if (shell->cmds_head->args && shell->cmds_head->args[1])
+	char    *target_dir;
+	char    *oldpwd;
+	char    *newpwd;
+	if (shell->cmds_head->args && shell->cmds_head->args[1])
 	{
-        ft_putstr_fd(" too many arguments\n", STDERR_FILENO);
-        return 1; // Error code
-    }
-
-    // Get the current working directory and save it as OLDPWD
-    oldpwd = getcwd(NULL, 0);
-    if (!oldpwd) {
-        perror("getcwd");
-        return 1; // Error code
-    }
-
-    // Determine the target directory
-    if (shell->cmds_head->args && shell->cmds_head->args[0]) {
-        target_dir = shell->cmds_head->args[0];
-    } else {
-        // Retrieve HOME from the shell's environment
-        int index = find_var_in_env(shell->env, "HOME");
-        if (index != -1) {
-            target_dir = strchr(shell->env[index], '=') + 1;
-        } else {
-            ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
-            free(oldpwd);
-            return 1; // Error code
-        }
-    }
-
-    // Check if the target directory is valid
-    if (access(target_dir, F_OK) != 0) {
-        ft_putstr_fd("cd: No such file or directory\n", STDERR_FILENO);
-        free(oldpwd);
-        return 1; // Error code
-    }
-
-    // Change to the target directory
-    if (chdir(target_dir) != 0) {
-        perror("cd");
-        free(oldpwd);
-        return 1; // Error code
-    }
-
-    // Get the new working directory
-    newpwd = getcwd(NULL, 0);
-    if (!newpwd) {
-        perror("getcwd");
-        free(oldpwd);
-        return 1; // Error code
-    }
-
-    // Update OLDPWD in the environment
-    shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("OLDPWD=", oldpwd), shell->env);
-
-    // Update PWD in the environment
-    shell->env = change_or_add_env_var(&shell->gc, ft_strjoin("PWD=", newpwd), shell->env);
-
-    free(oldpwd);
-    free(newpwd);
-
-    return 0; // Success code
+		ft_putstr_fd("too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
+	if (set_oldpwd(&oldpwd) != 0)
+		return (1);
+	target_dir = get_target_dir(shell);
+	if (!target_dir)
+	{
+		free(oldpwd);
+		return (1);
+	}
+	if (change_directory(target_dir) != 0)
+	{
+		free(oldpwd);
+		return (1);
+	}
+	newpwd = getcwd(NULL, 0);
+	update_env_vars(shell, oldpwd, newpwd);
+	return (0);
 }
