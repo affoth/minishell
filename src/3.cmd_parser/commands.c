@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 16:24:29 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 16:35:45 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,13 +339,14 @@ t_command *create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_he
 			}
 			if (open == false)
 			{
+                current_cmd->valid = false;
 				while (current_arg)
 				{
 					if (current_arg->type == PIPE)
-					{
-						current_arg = current_arg->next;
-						break;
-					}
+                    {
+                        current_arg = current_arg->next;
+                        break;
+                    }
 					current_arg = current_arg->next;
 				}
 			}

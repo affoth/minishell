@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:58:43 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 22:27:24 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:32:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int execute_command_without_pipes(t_shell *shell, t_command *cmd)
     int saved_stdout = dup(STDOUT_FILENO); // Save original stdout
     int status = 0;
 
+    if (!cmd->valid)
+    {
+        return 1; // Command found but not executable
+    }
+    
     // Handle stdin redirection
     if (cmd->stdin_fd != STDIN_FILENO)
     {
