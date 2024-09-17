@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_no_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:58:43 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 16:32:16 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 19:19:20 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int execute_command_without_pipes(t_shell *shell, t_command *cmd)
     {
         return 1; // Command found but not executable
     }
-    
+
     // Handle stdin redirection
     if (cmd->stdin_fd != STDIN_FILENO)
     {

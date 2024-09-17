@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 16:41:59 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 19:17:40 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,10 @@ bool check_files(t_arg *current_arg)
 		{
 			if (!access(temp->next->arg, F_OK))
 			{
-				return false;
+				if (access(temp->next->arg, W_OK ))
+				{
+					return false;
+				}
 			}
 		}
 		temp = temp->next;
