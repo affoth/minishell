@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/17 20:36:53 by mokutucu         ###   ########.fr       */
+=======
+/*   Updated: 2024/09/16 22:51:34 by afoth            ###   ########.fr       */
+>>>>>>> 793b9257825b20b88f3657be13dd3895c5c44d26
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +175,7 @@ int main(int argc, char **argv, char **envp)
     t_shell shell;
 
     init_shell(&shell, envp);
+
     execute_shell(&shell); // Main shell execution loop
 
     // Clean up
@@ -178,3 +183,5 @@ int main(int argc, char **argv, char **envp)
 
     return 0;
 }
+
+

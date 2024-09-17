@@ -6,7 +6,11 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/17 15:01:56 by afoth            ###   ########.fr       */
+=======
+/*   Updated: 2024/09/16 22:51:26 by afoth            ###   ########.fr       */
+>>>>>>> 793b9257825b20b88f3657be13dd3895c5c44d26
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +126,21 @@ typedef struct s_shell
     t_command *cmds_head;   // Head of the commands list
     int exit_status;        // Exit status of the shell
 } t_shell;
+
+
+// Struct for signal handling
+/* typedef struct s_sigaction
+{
+    void (*sa_handler)(int);        // Pointer to the signal handler function
+    //void (*sa_sigaction)(int, siginfo_t *, void *);  // Alternative signal handler with more info
+    sigset_t sa_mask;               // Set of signals to be blocked during handler execution
+    //int sa_flags;                   // Flags to modify signal handling behavior
+}t_sigaction; */
+//work in progress
+void handle_signal(int sig);
+void child_handle_signal(int sig);
+void setup_signals(void);
+void setup_child_signals(void);
 
 // Function prototypes for garbage collector
 void ft_gc_init(t_gc *gc, t_shell *shell);
