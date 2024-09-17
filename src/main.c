@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 19:14:02 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 20:36:53 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,11 @@ void execute_shell(t_shell *shell)
         expanded_vars = expand_string(shell, input, shell->exit_status);
         // Tokenize and parse commands
         args_head = tokenizer(shell, expanded_vars);
+        if (syntax_checker(args_head) == 1)
+        {
+            shell->exit_status = 2;
+            continue;
+        }
         pipe_count = count_pipes_argstruct(args_head);
 
         shell->cmds_head = create_and_populate_commands(shell, &shell->gc, args_head, pipe_count);
