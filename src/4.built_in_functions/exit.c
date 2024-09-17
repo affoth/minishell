@@ -6,12 +6,12 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:21:56 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:31:01 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 23:34:28 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-int is_number(const char *str)
+int	is_number(const char *str)
 {
 	if (*str == '-' || *str == '+')
 		str++;
@@ -25,16 +25,19 @@ int is_number(const char *str)
 	}
 	return (1);
 }
-void    exiting_with(t_shell *shell, int code)
+
+void	exiting_with(t_shell *shell, int code)
 {
 	ft_gc_free(&shell->gc);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	exit(code);
 }
-int handle_exit_args(t_shell *shell, char **args)
+
+int	handle_exit_args(t_shell *shell, char **args)
 {
-	int     code;
-	char    *cleaned_arg;
+	int		code;
+	char	*cleaned_arg;
+
 	cleaned_arg = strip_quotes(&shell->gc, args[0]);
 	if (!cleaned_arg)
 		return (1);
@@ -55,10 +58,12 @@ int handle_exit_args(t_shell *shell, char **args)
 	exiting_with(shell, code);
 	return (code);
 }
-int built_in_exit(t_shell *shell)
+
+int	built_in_exit(t_shell *shell)
 {
-	t_command   *cmd;
-	char        **args;
+	t_command	*cmd;
+	char		**args;
+
 	cmd = shell->cmds_head;
 	if (!cmd || !(cmd->args))
 		exiting_with(shell, 0);
