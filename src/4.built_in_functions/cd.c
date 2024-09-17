@@ -6,13 +6,13 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:51:53 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:10:18 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/17 23:24:43 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int set_oldpwd(char **oldpwd)
+int	set_oldpwd(char **oldpwd)
 {
 	*oldpwd = getcwd(NULL, 0);
 	if (!(*oldpwd))
@@ -22,9 +22,10 @@ int set_oldpwd(char **oldpwd)
 	}
 	return (0);
 }
-char    *get_target_dir(t_shell *shell)
+char	*get_target_dir(t_shell *shell)
 {
-	int     index;
+	int	index;
+
 	if (shell->cmds_head->args && shell->cmds_head->args[0])
 		return (shell->cmds_head->args[0]);
 	index = find_var_in_env(shell->env, "HOME");
@@ -33,7 +34,7 @@ char    *get_target_dir(t_shell *shell)
 	ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
 	return (NULL);
 }
-int change_directory(char *target_dir)
+int	change_directory(char *target_dir)
 {
 	if (access(target_dir, F_OK) != 0)
 	{
@@ -47,7 +48,7 @@ int change_directory(char *target_dir)
 	}
 	return (0);
 }
-int update_env_vars(t_shell *shell, char *oldpwd, char *newpwd)
+int	update_env_vars(t_shell *shell, char *oldpwd, char *newpwd)
 {
 	shell->env = change_or_add_env_var(&shell->gc,
 			ft_strjoin("OLDPWD=", oldpwd), shell->env);
@@ -55,11 +56,12 @@ int update_env_vars(t_shell *shell, char *oldpwd, char *newpwd)
 			ft_strjoin("PWD=", newpwd), shell->env);
 	return (0);
 }
-int built_in_cd(t_shell *shell)
+int	built_in_cd(t_shell *shell)
 {
-	char    *target_dir;
-	char    *oldpwd;
-	char    *newpwd;
+	char	*target_dir;
+	char	*oldpwd;
+	char	*newpwd;
+
 	if (shell->cmds_head->args && shell->cmds_head->args[1])
 	{
 		ft_putstr_fd("too many arguments\n", STDERR_FILENO);
