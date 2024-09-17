@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/16 23:15:18 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:24:29 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,20 +248,44 @@ char *strip_redundant_quotes(t_gc *gc, const char *str)
     return result;
 }
 
+bool check_files(t_arg *current_arg)
+{
+	t_arg *temp = current_arg;
+
+	while (temp->type != END && temp->type != PIPE)
+	{
+		if (temp->type == REDIRECTION_OUT || temp->type == REDIRECTION_APPEND)
+		{
+			if (!access(temp->next->arg, F_OK))
+			{
+				return false;
+			}
+		}
+		temp = temp->next;
+	}
+	return true;
+}
+
 t_command *create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_head, int pipe_count) {
     t_command *commands[pipe_count + 1];
     t_command *cmds_head = NULL;
     t_command *last_cmd = NULL;
     t_arg *current_arg = args_head;
+	bool open = true;
     int cmd_index = 0;
 
     // Create command nodes
+
     int i = 0;
-    while (i <= pipe_count) {
+    while (i <= pipe_count)
+	{
         commands[i] = create_command(gc);
-        if (i == 0) {
+        if (i == 0)
+		{
             cmds_head = commands[i];
-        } else {
+        }
+		else
+		{
             last_cmd->next = commands[i];
         }
         last_cmd = commands[i];
@@ -279,12 +303,6 @@ t_command *create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_he
             current_arg = current_arg->next;
             continue;
         }
-
-        // Stop processing if END is encountered
-        if (current_arg->type == END) {
-            break;
-        }
-
         // Handle heredocs
         if (parse_heredoc(shell, current_cmd, current_arg)) {
             current_arg = current_arg->next->next;
@@ -307,12 +325,31 @@ t_command *create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_he
             current_arg = current_arg->next->next;
             continue;
         }
-        if (current_arg->type == REDIRECTION_OUT || current_arg->type == REDIRECTION_APPEND) {
-            if (handle_output_redirection(current_cmd, current_arg) != 0) {
+        if (current_arg->type == REDIRECTION_OUT || current_arg->type == REDIRECTION_APPEND)
+		{
+			open = check_files(current_arg);
+			if (open == true)
+            {
+				if (handle_output_redirection(current_cmd, current_arg) != 0)
+				{
                 // Redirection failed; cmd->valid is already set to false
                 // Optionally, print additional error messages if needed
-            }
-            current_arg = current_arg->next->next;
+            	}
+         	   current_arg = current_arg->next->next;
+			}
+			if (open == false)
+			{
+				while (current_arg)
+				{
+					if (current_arg->type == PIPE)
+					{
+						current_arg = current_arg->next;
+						break;
+					}
+					current_arg = current_arg->next;
+				}
+			}
+
             continue;
         }
 
@@ -322,9 +359,15 @@ t_command *create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_he
         } else {
             add_arg_to_command(current_cmd, current_arg->arg, gc);
         }
-
+        if (current_arg->type == END) {
+            break;
+        }
         current_arg = current_arg->next;
     }
 
     return cmds_head;
 }
+
+
+
+
