@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 15:32:49 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:41:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 17:12:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_env_len(char **env)
 {
-	int env_len;
+	int	env_len;
 
 	env_len = 0;
 	while (env[env_len])
@@ -24,7 +24,7 @@ int	ft_env_len(char **env)
 
 char	*find_variable(t_gc *gc, const char *arg)
 {
-	size_t var_name_len;
+	size_t	var_name_len;
 
 	var_name_len = ft_strchr(arg, '=') - arg;
 	return (ft_shell_strndup(gc, arg, var_name_len));
@@ -37,7 +37,6 @@ int	find_var_in_env(char **env, const char *var_name)
 
 	env_idx = 0;
 	var_name_len = ft_strlen(var_name);
-
 	while (env[env_idx])
 	{
 		if (ft_strncmp
@@ -79,7 +78,6 @@ char	**change_or_add_env_var(t_gc *gc, char *arg, char **env)
 	char	*var_name;
 	int		var_idx;
 	char	**new_env;
-
 
 	env_len = ft_env_len(env);
 	var_name = find_variable(gc, arg);

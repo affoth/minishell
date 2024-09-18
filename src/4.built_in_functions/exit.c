@@ -6,11 +6,12 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:21:56 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:34:28 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 17:12:09 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 int	is_number(const char *str)
 {
 	if (*str == '-' || *str == '+')
@@ -70,12 +71,3 @@ int	built_in_exit(t_shell *shell)
 	args = cmd->args;
 	return (handle_exit_args(shell, args));
 }
-
-
-
-
-
-
-
-
-
