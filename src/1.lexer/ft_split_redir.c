@@ -3,142 +3,102 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:35:01 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:19:22 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 16:41:41 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/* Function to remove quotes from a string.
-It removes both single and double quotes while keeping the content inside intact.
- */
-static char	*strip_quotes_static(t_gc *gc, const char *str)
+static void	handle_quotes(char c, bool *in_quote, char *quote_char)
 {
-	char	*result;
-	size_t	i;
-	size_t	j;
-	bool	in_single_quote;
-	bool	in_double_quote;
-
-	i = 0;
-	j = 0;
-	in_single_quote = false;
-	in_double_quote = false;
-	result = ft_gc_malloc(gc, ft_strlen(str) + 1);
-	if (!result)
-		return (NULL);
-	while (str[i])
+	if (!(*in_quote))
 	{
-		if (str[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (str[i] == '\"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		else
-			result[j++] = str[i];
-		i++;
+		*in_quote = true;
+		*quote_char = c;
 	}
-	result[j] = '\0';
-	return (result);
+	else if (c == *quote_char)
+	{
+		*in_quote = false;
+		*quote_char = 0;
+	}
 }
 
-/*
- * Handles the redirection operators, tokenizes them, and manages quotes.
- */
-// Detect and split redirection operators and pipes
-// Add previous token before the special operator
-// Handle double redirection (<< or >>)
-// "<< " or ">> "
-// Remove quotes
- // Handle single redirection (< or >)
-//DEL ME deleted multiple char *token
-static void	ft_handle_redirection(t_gc *gc, const char *s, char **array, size_t *index)
+static void	handle_token(t_params *params, size_t start, size_t end)
 {
-	size_t	i;
-	bool	in_quote;
-	char	quote_char;
-	size_t	start;
 	char	*token;
 
-	i = 0;
-	in_quote = false;
-	quote_char = 0;
-	start = 0;
+	if (end > start)
+	{
+		token = ft_shell_strndup(params->gc, params->s + start, end - start);
+		params->array[*(params->index)] = strip_quotes_redir_split
+			(params->gc, token);
+		(*(params->index))++;
+	}
+}
+
+static void	handle_special_chars(t_params *params, size_t *i)
+{
+	size_t	len;
+	size_t	j;
+	char	*dst;
+
+	if (params->s[*i] == params->s[*i + 1])
+	{
+		len = 2;
+	}
+	else
+	{
+		len = 1;
+	}
+	dst = ft_gc_malloc(params->gc, len + 1);
+	if (!dst)
+		return ;
+	j = 0;
+	while (j < len)
+	{
+		dst[j] = params->s[*i + j];
+		j++;
+	}
+	dst[len] = '\0';
+	params->array[*(params->index)] = dst;
+	(*(params->index))++;
+	*i += (len - 1);
+}
+
+void	ft_handle_redir(t_gc *gc, const char *s, char **array, size_t *index)
+{
+	t_params	params;
+	size_t		i;
+	size_t		start;
+	bool		in_quote;
+	char		quote_char;
+
+	init_params(&params, gc, s, array);
+	params.index = index;
+	init_variables(&i, &start, &in_quote, &quote_char);
 	while (s[i])
 	{
 		if (s[i] == '\'' || s[i] == '\"')
+			handle_quotes(s[i], &in_quote, &quote_char);
+		if (!in_quote && (s[i] == '<' || s[i] == '>'
+				|| s[i] == '|' || s[i] == ' '))
 		{
-			if (!in_quote)
-			{
-				in_quote = true;
-				quote_char = s[i];
-			}
-			else if (s[i] == quote_char)
-			{
-				in_quote = false;
-				quote_char = 0;
-			}
-		}
-		if ((s[i] == '<' || s[i] == '>' || s[i] == '|') && !in_quote)
-		{
-			if (i > start)
-			{
-				token = ft_shell_strndup(gc, s + start, i - start);
-				array[*index] = strip_quotes_static(gc, token);
-				(*index)++;
-			}
-			if (s[i] == '<' || s[i] == '>')
-			{
-				if (s[i + 1] == s[i])
-				{
-					array[*index] = ft_gc_malloc(gc, 3);
-					strncpy(array[*index], s + i, 2);
-					array[*index][2] = '\0';
-					(*index)++;
-					i++;
-				}
-				else
-				{
-					array[*index] = ft_gc_malloc(gc, 2);
-					strncpy(array[*index], s + i, 1);
-					array[*index][1] = '\0';
-					(*index)++;
-				}
-			}
-			else if (s[i] == '|')
-			{
-				array[*index] = ft_gc_malloc(gc, 2);
-				strncpy(array[*index], s + i, 1);
-				array[*index][1] = '\0';
-				(*index)++;
-			}
-			start = i + 1;
-		}
-		else if (s[i] == ' ' && !in_quote)
-		{
-			if (i > start)
-			{
-				token = ft_shell_strndup(gc, s + start, i - start);
-				array[*index] = strip_quotes_static(gc, token);
-				(*index)++;
-			}
+			handle_token(&params, start, i);
+			if (s[i] != ' ')
+				handle_special_chars(&params, &i);
 			start = i + 1;
 		}
 		i++;
 	}
-	if (i > start)
-	{
-		token = ft_shell_strndup(gc, s + start, i - start);
-		array[*index] = strip_quotes_static(gc, token);
-		(*index)++;
-	}
+	handle_token(&params, start, i);
 }
 
 /*
  * Splits the input string into tokens while handling redirections and quotes.
-  // Add some buffer for additional tokens (like redirection)
+ * Add some buffer for additional tokens (like redirection)
  */
 char	**ft_split_redirections(t_gc *gc, const char *s)
 {
@@ -153,7 +113,7 @@ char	**ft_split_redirections(t_gc *gc, const char *s)
 	array = ft_gc_malloc(gc, num_tokens * sizeof(char *));
 	if (!array)
 		return (NULL);
-	ft_handle_redirection(gc, s, array, &index);
+	ft_handle_redir(gc, s, array, &index);
 	array[index] = NULL;
 	return (array);
 }

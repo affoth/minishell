@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 20:34:18 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 19:30:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Mapping struct for token types that are required by subject pdf
-const	Token typeMap[] =
+const	t_Token typeMap[] =
 {
 	{"|", PIPE},
 	{"\"", DOUBLE_QUOTED_STRING},
@@ -26,7 +26,7 @@ const	Token typeMap[] =
 	{NULL, WORD}
 };
 
-TokenType	get_token_type(const char *arg)
+t_TokenType	get_token_type(const char *arg)
 {
 	int	i;
 
@@ -39,7 +39,6 @@ TokenType	get_token_type(const char *arg)
 		return (REDIRECTION_IN);
 	if (strcmp(arg, ">") == 0)
 		return (REDIRECTION_OUT);
-
 
 	while (typeMap[i].arg != NULL)
 	{
@@ -135,5 +134,6 @@ t_arg	*tokenizer(t_shell *shell, char *input)
 		add_arg_to_list(&shell->gc, &args_head, tokens[i]);
 		i++;
 	}
+	//print_tokens(args_head);
 	return (args_head);
 }

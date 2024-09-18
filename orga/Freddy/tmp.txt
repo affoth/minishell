@@ -1,7 +1,0 @@
-
-tmp = current_arg
-while tmp != NULL || PIPE
-	if tmp->valid false
-		current->arg = false
-
-

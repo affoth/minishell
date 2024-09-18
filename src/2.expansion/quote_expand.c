@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 20:50:17 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 20:42:51 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,12 @@ size_t	calculate_expanded_length(t_shell *shell, char *input, int exit_status)
 		if (input[i] == '$')
 		{
 			start = i + 1;
-			if (input[start] == '?')
+			if (input[start] == '\0')
+			{
+				len++;
+				i++;
+			}
+			else if (input[start] == '?')
 			{
 				len += exit_status_len;
 				i += 2;
@@ -97,27 +102,20 @@ size_t	calculate_expanded_length(t_shell *shell, char *input, int exit_status)
 	return (len);
 }
 
-// Calculate the required length for the result string
-// Check if the next character is a valid variable name or end of string
-
-char	*expand_string(t_shell *shell, char *input, int exit_status)
+char *expand_string(t_shell *shell, char *input, int exit_status)
 {
-	char	*result;
-	char	*env;
-	char	*expanded;
-	size_t	i;
-	size_t	j;
-	size_t	len;
-	size_t	start;
+	char *result;
+	char *env;
+	char *expanded;
+	size_t i;
+	size_t j;
+	size_t len;
+	size_t start;
 
-
-	if (!input)
-		return (NULL);
 	len = calculate_expanded_length(shell, input, exit_status);
 	result = (char *)ft_gc_malloc(&shell->gc, (sizeof(char) * (len + 1)));
 	if (!result)
 		return (NULL);
-
 	i = 0;
 	j = 0;
 	while (input[i])
@@ -125,7 +123,12 @@ char	*expand_string(t_shell *shell, char *input, int exit_status)
 		if (input[i] == '$' && check_if_in_single_quote(input, i) == 0)
 		{
 			start = i + 1;
-			if (input[start] == '?')
+			if (input[start] == '\0')
+			{
+				result[j++] = '$';
+				i++;
+			}
+			else if (input[start] == '?')
 			{
 				expanded = ft_itoa(exit_status);
 				if (expanded)
@@ -140,7 +143,6 @@ char	*expand_string(t_shell *shell, char *input, int exit_status)
 			{
 				while (input[start] && (isalnum(input[start]) || input[start] == '_'))
 					start++;
-
 				if (start == i + 1)
 				{
 					result[j++] = '$';
@@ -148,8 +150,7 @@ char	*expand_string(t_shell *shell, char *input, int exit_status)
 				}
 				else
 				{
-					env = ft_shell_substr(&shell->gc, input, \
-					(i + 1), (start - i - 1));
+					env = ft_shell_substr(&shell->gc, input, (i + 1), (start - i - 1));
 					expanded = ft_expand_env(shell, env);
 					ft_strlcpy(result + j, expanded, len - j + 1);
 					j += ft_strlen(expanded);

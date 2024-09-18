@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:44:32 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 16:20:40 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ int	built_in_export(t_shell *shell)
 				// Invalid format if it starts or ends with '='
 				ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
 				has_errors = 1; // Indicate an error
+				return has_errors; // Return 1 if there were errors, 0 otherwise
 			}
 			else
 			{

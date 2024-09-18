@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 14:24:24 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 18:55:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ typedef enum TokenType
 	SINGLE_QUOTED_STRING,
 	ENV_VARIABLE,
 	END
-}	TokenType;
+}	t_TokenType;
 
 // Argument struct
 typedef struct s_arg
 {
 	char			*arg;
-	TokenType		type;
+	t_TokenType		type;
 	struct s_arg	*prev;
 	struct s_arg	*next;
 	bool			open;
@@ -95,11 +95,11 @@ typedef struct s_command
 }	t_command;
 
 // Token struct
-typedef struct
+typedef struct s_token
 {
 	char		*arg;
-	TokenType	type;
-} Token;
+	t_TokenType	type;
+}	t_Token;
 
 // Garbage collector struct
 typedef struct s_garbage
@@ -115,6 +115,13 @@ typedef struct s_gc
 	t_shell		*shell;
 }	t_gc;
 
+typedef struct s_params
+{
+	t_gc		*gc;
+	const char	*s;
+	char		**array;
+	size_t		*index;
+}	t_params;
 // Main shell struct
 typedef struct s_shell
 {
@@ -153,6 +160,10 @@ void	handle_quote_split(const char *s, size_t i, bool *quote);
 void	skip_quoted_string(const char **s, bool *quote, char *quote_char);
 void	assign(size_t *i, size_t *j, int *index, bool *quote);
 int		ft_quotes_not_closed(const char *line);
+char	*strip_quotes_redir_split(t_gc *gc, const char *str);
+void	init_params(t_params *params, t_gc *gc, const char *s, char **array);
+void	init_variables(size_t *i, size_t *start, bool *in_quote,
+			char *quote_char);
 
 // Expand environment variables
 char	*expand_string(t_shell *shell, char *input, int exit_status);
@@ -161,7 +172,6 @@ char	*expand_string(t_shell *shell, char *input, int exit_status);
 int		syntax_checker(t_arg *head);
 int		pipe_syntax(t_arg *head);
 int		redirection_syntax(t_arg *head);
-int		word_syntax(t_arg *head);
 
 // Function prototypes for command processing
 t_arg	*tokenizer(t_shell *shell, char *input);
@@ -172,12 +182,21 @@ int		count_pipes_argstruct(t_arg *args_head);
 int		count_pipes_cmdstruct(t_command *cmds_head);
 t_command	*create_and_populate_commands(t_shell *shell, t_gc *gc,
 			t_arg *args_head);
+void	add_flag_to_command(t_command *cmd, const char *flag, t_gc *gc);
+void	add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
+int		if_redir(t_arg *current_arg, t_command *current_cmd);
+void	handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc);
+void	handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
 void		print_commands(t_command *cmds_head);
 
 
 // Function prototypes for redirection handling
-int		handle_output_redirection(t_command *cmd, t_arg *arg);
-int		handle_input_redirection(t_command *cmd, t_arg *arg);
+int handle_output_redirection(t_command *cmd, t_arg *arg);
+int handle_output_redirection_truncate(t_command *cmd, t_arg *arg);
+int handle_output_redirection_append(t_command *cmd, t_arg *arg);
+int handle_input_redirection(t_command *cmd, t_arg *arg);
+int handle_input_redirection_file(t_command *cmd, t_arg *arg);
+int handle_input_redirection_heredoc(t_command *cmd);
 bool	parse_heredoc(t_shell *shell, t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
@@ -219,5 +238,13 @@ void	handle_signal(int sig);
 void	child_handle_signal(int sig);
 void	heredoc_signal_handler(int sig);
 void	restore_original_signals(void);
+
+// Main
+char	**init_env(char **envp, t_gc *gc);
+void	init_shell(t_shell *shell, char **envp);
+
+// Debugging
+void	print_cmd_args(char **args, const char *label);
+void	print_commands(t_command *cmds_head);
 
 #endif // MINISHELL_H

@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell_split.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 15:09:29 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 15:32:31 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static void	handle_quotes(char c, bool *in_quote, char *quote_char)
+{
+	if (c == '\'' || c == '\"')
+	{
+		if (!(*in_quote))
+		{
+			*in_quote = true;
+			*quote_char = c;
+		}
+		else if (c == *quote_char)
+		{
+			*in_quote = false;
+			*quote_char = 0;
+		}
+	}
+}
 
 size_t	ft_words(char const *s, char c)
 {
@@ -23,34 +40,15 @@ size_t	ft_words(char const *s, char c)
 	quote_char = 0;
 	while (*s)
 	{
-		if (*s == '\'' || *s == '\"')
-		{
-			if (!in_quote)
-			{
-				in_quote = true;
-				quote_char = *s;
-			}
-			else if (*s == quote_char)
-			{
-				in_quote = false;
-				quote_char = 0;
-			}
-		}
+		handle_quotes(*s, &in_quote, &quote_char);
 		if (*s == c && !in_quote)
-		{
-			while (*s == c)
-				s++;
 			count++;
-		}
-		else
-			s++;
+		s++;
 	}
 	if (in_quote)
 		return (count + 1);
 	return (count);
 }
-
-
 
 static void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
 {
@@ -72,8 +70,6 @@ char	**ft_shell_split(t_gc *gc, const char *s, char c)
 	bool	quote;
 	int		index;
 
-	if (!s)
-		return (NULL);
 	array = ft_gc_malloc(gc, (ft_words(s, c) + 1) * sizeof(char *));
 	if (!array)
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:51:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 15:04:17 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 15:27:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,12 @@ char	*get_path(t_gc *gc, char *cmd)
 	int		i;
 
 	if (!cmd)
-	{
-		printf("in get_path: NO COMMAND FOUND\n");
 		return (NULL);
-	}
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (ft_shell_strdup(gc, cmd));
 	path_env = getenv("PATH");
+	if (!path_env)
+		return (NULL);
 	path_split = ft_shell_split(gc, path_env, ':');
 	i = 0;
 	while (path_split[i])

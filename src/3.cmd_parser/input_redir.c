@@ -1,40 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_no_pipes.c                                    :+:      :+:    :+:   */
+/*   input_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/05 14:58:43 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 20:49:40 by mokutucu         ###   ########.fr       */
+/*   Created: 2024/09/18 16:47:57 by mokutucu          #+#    #+#             */
+/*   Updated: 2024/09/18 18:11:03 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	execute_command_without_pipes(t_shell *shell, t_command *cmd)
+int	handle_input_redirection(t_command *cmd, t_arg *arg)
 {
-	int	saved_stdin;
-	int	saved_stdout;
-	int	status;
-
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	status = 0;
-	if (!cmd || ft_strlen(cmd->cmd_name) == 0)
+	if (arg->type == REDIRECTION_IN)
 	{
-		return (127);
+		return (handle_input_redirection_file(cmd, arg));
 	}
-	if (!cmd->valid)
+	else if (arg->type == HEREDOC)
 	{
+		return (handle_input_redirection_heredoc(cmd));
+	}
+	return (0);
+}
+
+int	handle_input_redirection_file(t_command *cmd, t_arg *arg)
+{
+	int fd;
+
+	if (cmd->stdin_fd != STDIN_FILENO)
+	{
+		close(cmd->stdin_fd);
+	}
+	fd = open(arg->next->arg, O_RDONLY);
+	if (fd < 0)
+	{
+		cmd->valid = false;
 		return (1);
 	}
+	cmd->stdin_fd = fd;
+	return (0);
+}
+
+int	handle_input_redirection_heredoc(t_command *cmd)
+{
 	if (cmd->stdin_fd != STDIN_FILENO)
 	{
 		if (dup2(cmd->stdin_fd, STDIN_FILENO) < 0)
 		{
-			perror("dup2 stdin");
-			return (EXIT_FAILURE);
+			perror("dup2 stdin_fd");
+			exit(EXIT_FAILURE);
 		}
 		close(cmd->stdin_fd);
 	}
@@ -42,27 +58,10 @@ int	execute_command_without_pipes(t_shell *shell, t_command *cmd)
 	{
 		if (dup2(cmd->stdout_fd, STDOUT_FILENO) < 0)
 		{
-			perror("dup2 stdout");
-			return (EXIT_FAILURE);
+			perror("dup2 stdout_fd");
+			exit(EXIT_FAILURE);
 		}
 		close(cmd->stdout_fd);
 	}
-	if (is_built_in(cmd->cmd_name))
-	{
-		status = exec_built_ins(shell, cmd);
-	}
-	else
-	{
-		status = execute_command_no_pipes(shell, cmd);
-		if (status == -1)
-		{
-			status = 126;
-		}
-	}
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdout);
-	dup2(saved_stdin, STDIN_FILENO);
-	close(saved_stdin);
-	return (status);
+	return (0);
 }
-
