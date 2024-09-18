@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:51:04 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:48:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ typedef enum TokenType
 	ENV_VARIABLE,
 	END
 }	t_TokenType;
-
-
 
 // Argument struct
 typedef struct s_arg
@@ -195,7 +193,6 @@ void		handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc);
 void		handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
 void		print_commands(t_command *cmds_head);
 
-
 // Function prototypes for redirection handling
 int			handle_output_redirection(t_command *cmd, t_arg *arg);
 int			handle_output_redirection_truncate(t_command *cmd, t_arg *arg);
@@ -246,8 +243,6 @@ void		close_pipes(int num_pipes, int *pipe_descriptors);
 void		check_if_command_is_valid(t_command *cmd);
 char		**prepare_args(t_shell *shell,
 				t_command *cmd, int flags_count, int args_count);
-
-
 
 // Signal handling
 void		setup_signals(void);

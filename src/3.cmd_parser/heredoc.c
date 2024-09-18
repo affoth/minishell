@@ -3,22 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:47:54 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:34:59 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:51:23 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static volatile sig_atomic_t    g_heredoc_interrupted = 0;
+static volatile sig_atomic_t	g_heredoc_interrupted = 0;
 // Setup signals for heredoc (specifically SIGINT handling)
 // Set SIGINT to custom handler (for Ctrl+C)
 // Ignore SIGQUIT during heredoc
-void    setup_heredoc_signals(void)
+
+void	setup_heredoc_signals(void)
 {
-	struct sigaction    sa;
+	struct sigaction	sa;
+
 	sa.sa_handler = heredoc_signal_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
@@ -35,7 +37,7 @@ void    setup_heredoc_signals(void)
 	}
 }
 
-int  handle_heredoc_interrupt(int pipe_fd[2])
+int	handle_heredoc_interrupt(int pipe_fd[2])
 {
 	g_heredoc_interrupted = 0;
 	close(pipe_fd[1]);
@@ -53,10 +55,13 @@ void	heredoc_signal_handler(int sig)
 		write(1, "\n", 1);
 	}
 }
+
+//g_heredoc_interrupted = 0; (before return)
 int	heredoc(t_shell *shell, const char *delimiter)
 {
 	int		pipe_fd[2];
 	char	*expanded_line;
+
 	setup_heredoc_signals();
 	if (pipe(pipe_fd) == -1)
 	{
@@ -76,10 +81,8 @@ int	heredoc(t_shell *shell, const char *delimiter)
 		write(pipe_fd[1], expanded_line, strlen(expanded_line));
 		write(pipe_fd[1], "\n", 1);
 	}
-	g_heredoc_interrupted = 0;
 	close(pipe_fd[1]);
 	restore_original_signals();
-	printf("%d", pipe_fd[0]);
 	return (pipe_fd[0]);
 }
 

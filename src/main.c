@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:23:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:47:27 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	execute_shell(t_shell *shell)
 		}
 		shell->cmds_head = create_and_populate_commands
 			(shell, &shell->gc, args_head);
-		print_commands(shell->cmds_head);
 		execute_shell_is_piping_needed(shell, args_head);
 		free(input);
 	}
