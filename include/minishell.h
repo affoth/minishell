@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 17:05:55 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 21:07:11 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,8 @@ int			is_valid_identifier(const char *str);
 void		print_export_env(t_gc *gc, char **env);
 void		ft_sort(char **env, int len);
 void		ft_swap(char **a, char **b);
+int			count_flags(t_command *cmd);
+int			count_args(t_command *cmd);
 
 // Function prototypes for executing commands
 int			execute_command_without_pipes(t_shell *shell, t_command *cmds_head);
@@ -207,7 +209,7 @@ int			execute_commands_with_pipes(t_shell *shell, t_command *cmds_head);
 int			execute_command(t_shell *shell, t_command *cmd);
 int			execute_command_no_pipes(t_shell *shell, t_command *cmd);
 int			fork_and_execute_command(t_shell *shell, t_command *cmd,
-				int *pipe_descriptors, int cmd_index, int num_pipes);
+				int *pipe_descriptors, int cmd_index);
 char		*remove_quotes(t_gc *gc, const char *str);
 char		*get_path(t_gc *gc, char *cmd);
 int			count_arguments(char **args);
@@ -216,6 +218,11 @@ void		setup_redirections(int cmd_index, int num_pipes,
 				int *pipe_descriptors);
 void		create_pipes(int num_pipes, int *pipe_descriptors);
 void		close_pipes(int num_pipes, int *pipe_descriptors);
+void		check_if_command_is_valid(t_command *cmd);
+char		**prepare_args(t_shell *shell,
+				t_command *cmd, int flags_count, int args_count);
+
+
 
 // Signal handling
 void		setup_signals(void);
@@ -224,5 +231,10 @@ void		handle_signal(int sig);
 void		child_handle_signal(int sig);
 void		heredoc_signal_handler(int sig);
 void		restore_original_signals(void);
+
+// Error handling
+void		perror_fork(void);
+void		perror_malloc(void);
+void		perror_strdup(void);
 
 #endif // MINISHELL_H
