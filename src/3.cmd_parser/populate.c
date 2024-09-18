@@ -6,11 +6,29 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:04:33 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 17:04:58 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:45:16 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+/*
+ * Counts the number of PIPE tokens in the argument list.
+ */
+int	count_pipes_argstruct(t_arg *args_head)
+{
+	int		pipe_count;
+	t_arg	*current_arg;
+
+	pipe_count = 0;
+	current_arg = args_head;
+	while (current_arg)
+	{
+		if (current_arg->type == PIPE)
+			pipe_count++;
+		current_arg = current_arg->next;
+	}
+	return (pipe_count);
+}
 
 void	add_flag_to_command(t_command *cmd, const char *flag, t_gc *gc)
 {

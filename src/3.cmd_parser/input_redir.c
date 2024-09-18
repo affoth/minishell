@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 16:47:57 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 18:11:03 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:29:57 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	handle_input_redirection(t_command *cmd, t_arg *arg)
 
 int	handle_input_redirection_file(t_command *cmd, t_arg *arg)
 {
-	int fd;
+	int	fd;
 
 	if (cmd->stdin_fd != STDIN_FILENO)
 	{

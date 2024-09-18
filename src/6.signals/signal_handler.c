@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 22:53:56 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 21:27:04 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	setup_child_signals(void)
 		exit(0);
 	}
 }
+
 void	handle_signal(int sig)
 {
 	if (sig == SIGINT)
@@ -73,11 +74,9 @@ void	handle_signal(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
-
 	}
 	else if (sig == SIGPIPE)
 	{
-
 	}
 }
 
@@ -94,7 +93,6 @@ void	child_handle_signal(int sig)
 	}
 	else if (sig == SIGPIPE)
 	{
-
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:17:13 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:41:01 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ typedef enum TokenType
 	END
 }	t_TokenType;
 
+
+
 // Argument struct
 typedef struct s_arg
 {
@@ -99,7 +101,7 @@ typedef struct s_token
 {
 	char		*arg;
 	t_TokenType	type;
-}	t_Token;
+}	t_token;
 
 // Garbage collector struct
 typedef struct s_garbage

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:58:43 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:19:35 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:27:24 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	execute_command_without_pipes(t_shell *shell, t_command *cmd)
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	status = 0;
+	if (!cmd || ft_strlen(cmd->cmd_name) == 0)
+		return (127);
 	if (!cmd->valid)
 		return (1);
 	if (handle_fds(cmd))
@@ -71,9 +73,7 @@ int	execute_command_without_pipes(t_shell *shell, t_command *cmd)
 	{
 		status = execute_command_no_pipes(shell, cmd);
 		if (status == -1)
-		{
 			status = 126;
-		}
 	}
 	if (restore_file_descriptors(saved_stdin, saved_stdout))
 		return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 18:56:30 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:45:35 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,6 @@ t_command	*create_command(t_gc *gc)
 	new_cmd->append_mode = false;
 	new_cmd->valid = true;
 	return (new_cmd);
-}
-
-/*
- * Counts the number of PIPE tokens in the argument list.
- */
-int	count_pipes_argstruct(t_arg *args_head)
-{
-	int		pipe_count;
-	t_arg	*current_arg;
-
-	pipe_count = 0;
-	current_arg = args_head;
-	while (current_arg)
-	{
-		if (current_arg->type == PIPE)
-			pipe_count++;
-		current_arg = current_arg->next;
-	}
-	return (pipe_count);
 }
 
 /*
@@ -94,7 +75,8 @@ static void	link_commands(t_command **commands, int pipe_count)
 	}
 }
 
-static t_command *process_arguments(t_shell *shell, t_command *cmds_head, t_arg *args_head, t_gc *gc)
+static t_command	*process_arguments(t_shell *shell, t_command *cmds_head,
+	t_arg *args_head, t_gc *gc)
 {
 	t_command	*current_cmd;
 	t_arg		*current_arg;
@@ -107,10 +89,11 @@ static t_command *process_arguments(t_shell *shell, t_command *cmds_head, t_arg 
 		if (current_arg && current_arg->type == PIPE)
 			current_cmd = current_cmd->next;
 	}
-	return cmds_head;
+	return (cmds_head);
 }
 
-t_command	*create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_head)
+t_command	*create_and_populate_commands(t_shell *shell,
+	t_gc *gc, t_arg *args_head)
 {
 	int			pipe_count;
 	t_command	**commands;

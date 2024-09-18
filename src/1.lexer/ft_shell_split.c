@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 15:32:31 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:42:34 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,3 @@ char	**ft_shell_split(t_gc *gc, const char *s, char c)
 	array[j] = NULL;
 	return (array);
 }
-
-

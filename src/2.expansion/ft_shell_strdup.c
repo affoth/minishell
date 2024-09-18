@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:20:34 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 16:37:42 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:31:47 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ unsigned int start, size_t len)
 		return (NULL);
 	if (start >= ft_strlen(s))
 		return (ft_shell_strdup(gc, ""));
-	if (!(sub = (char *)ft_gc_malloc(gc, (sizeof(char) * (len + 1)))))
+	sub = (char *)ft_gc_malloc(gc, (sizeof(char) * (len + 1)));
+	if (!(sub))
 		return (NULL);
 	i = 0;
 	while (i < len && s[start + i])

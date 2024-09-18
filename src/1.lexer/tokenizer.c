@@ -6,29 +6,21 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 19:30:16 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:42:14 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Mapping struct for token types that are required by subject pdf
-const	t_Token typeMap[] =
-{
-	{"|", PIPE},
-	{"\"", DOUBLE_QUOTED_STRING},
-	{"'", SINGLE_QUOTED_STRING},
-	{"$", ENV_VARIABLE},
-	{"<<", HEREDOC},
-	{">>", REDIRECTION_APPEND},
-	{"<", REDIRECTION_IN},
-	{">", REDIRECTION_OUT},
-	{NULL, WORD}
-};
 
 t_TokenType	get_token_type(const char *arg)
 {
-	int	i;
+	int				i;
+	const t_token	typemap[] = {
+	{"|", PIPE}, {"\"", DOUBLE_QUOTED_STRING}, {"'", SINGLE_QUOTED_STRING},
+	{"$", ENV_VARIABLE}, {"<<", HEREDOC}, {">>", REDIRECTION_APPEND},
+	{"<", REDIRECTION_IN},	{">", REDIRECTION_OUT}, {NULL, WORD}};
 
 	i = 0;
 	if (strcmp(arg, "<<") == 0)
@@ -39,11 +31,10 @@ t_TokenType	get_token_type(const char *arg)
 		return (REDIRECTION_IN);
 	if (strcmp(arg, ">") == 0)
 		return (REDIRECTION_OUT);
-
-	while (typeMap[i].arg != NULL)
+	while (typemap[i].arg != NULL)
 	{
-		if (strcmp(arg, typeMap[i].arg) == 0)
-			return (typeMap[i].type);
+		if (strcmp(arg, typemap[i].arg) == 0)
+			return (typemap[i].type);
 		i++;
 	}
 	if (arg[0] == '-' && arg[1] != '\0' && isalpha((unsigned char)arg[1]))
@@ -82,7 +73,7 @@ void	add_arg_to_list(t_gc *gc, t_arg **head, const char *arg)
 	if (*head == NULL)
 	{
 		*head = new_node;
-		return;
+		return ;
 	}
 	current_node = *head;
 	while (current_node->next != NULL)
@@ -134,6 +125,5 @@ t_arg	*tokenizer(t_shell *shell, char *input)
 		add_arg_to_list(&shell->gc, &args_head, tokens[i]);
 		i++;
 	}
-	//print_tokens(args_head);
 	return (args_head);
 }
