@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:22:48 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/05/27 16:25:55 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 02:02:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-    size_t			i;
-    unsigned char	*b1;
-    unsigned char	*b2;
+	size_t			i;
+	unsigned char	*b1;
+	unsigned char	*b2;
 
-    b1 = (unsigned char *) s1;
-    b2 = (unsigned char *) s2;
-    i = 0;
-    while (b1[i] != '\0' || b2[i] != '\0')
-    {
-        if (b1[i] != b2[i])
-            return (b1[i] - b2[i]);
-        i++;
-    }
-    return (0);
+	b1 = (unsigned char *) s1;
+	b2 = (unsigned char *) s2;
+	i = 0;
+	while (b1[i] != '\0' || b2[i] != '\0')
+	{
+		if (b1[i] != b2[i])
+			return (b1[i] - b2[i]);
+		i++;
+	}
+	return (0);
 }
