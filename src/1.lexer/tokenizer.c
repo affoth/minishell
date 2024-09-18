@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:42:14 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 22:45:15 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_arg	*create_arg_node(t_gc *gc, const char *arg)
 		perror("Memory allocation failed");
 		exit(EXIT_FAILURE);
 	}
-	node->arg = strdup(arg);
+	node->arg = ft_shell_strdup(gc, arg);
 	if (node->arg == NULL)
 	{
 		perror("Memory allocation failed");
