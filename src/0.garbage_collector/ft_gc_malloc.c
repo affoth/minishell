@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:50:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 14:00:07 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 21:49:38 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	*ft_gc_malloc(t_gc *gc, size_t size)
 void	*ft_gc_realloc(t_gc *gc, void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr;
+	size_t	copy_size;
 
 	if (new_size == 0)
 	{
@@ -68,7 +69,11 @@ void	*ft_gc_realloc(t_gc *gc, void *ptr, size_t old_size, size_t new_size)
 	new_ptr = ft_gc_malloc(gc, new_size);
 	if (!new_ptr)
 		return (NULL);
-	ft_memcpy(new_ptr, ptr, old_size < new_size ? old_size : new_size);
+	if (old_size < new_size)
+		copy_size = old_size;
+	else
+		copy_size = new_size;
+	ft_memcpy(new_ptr, ptr, copy_size);
 	free(ptr);
 	return (new_ptr);
 }

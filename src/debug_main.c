@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:13:58 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 15:14:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:51:29 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	print_commands(t_command *cmds_head)
 		printf("Command:\n");
 		printf("  stdin_fd: %d\n", cmd->stdin_fd);
 		printf("  stdout_fd: %d\n", cmd->stdout_fd);
-		printf("  Append mode: %s\n", cmd->append_mode ? "true" : "false");
+		if (cmd->append_mode)
+			printf("  Append mode: true\n");
+		else
+			printf("  Append mode: false\n");
 		printf("  Command name: %s\n", cmd->cmd_name);
 		print_cmd_args(cmd->flags, "Flags");
 		print_cmd_args(cmd->args, "Args");

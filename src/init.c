@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:16:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 15:16:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:47:48 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ char	**init_env(char **envp, t_gc *gc)
 		i++;
 	}
 	env_copy[env_len] = NULL;
-
 	return (env_copy);
 }
 
