@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 13:59:08 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:24:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void	set_command_name(t_command *cmd, const char *name, t_gc *gc);
 int		count_pipes_argstruct(t_arg *args_head);
 int		count_pipes_cmdstruct(t_command *cmds_head);
 t_command	*create_and_populate_commands(t_shell *shell, t_gc *gc,
-			t_arg *args_head, int pipe_count);
+			t_arg *args_head);
 void		print_commands(t_command *cmds_head);
 
 

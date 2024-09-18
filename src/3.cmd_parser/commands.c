@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 02:00:24 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 14:24:01 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,15 +282,15 @@ bool	check_files(t_arg *current_arg)
 	return (true);
 }
 
-t_command	*create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_head, int pipe_count)
+t_command	*create_and_populate_commands(t_shell *shell, t_gc *gc, t_arg *args_head)
 {
+	int	pipe_count = count_pipes_argstruct(args_head);
 	t_command *commands[pipe_count + 1];
 	t_command *cmds_head = NULL;
 	t_command *last_cmd = NULL;
 	t_arg *current_arg = args_head;
 	bool open = true;
 	int cmd_index = 0;
-
 	// Create command nodes
 
 	int i = 0;

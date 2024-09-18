@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:02:49 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 15:09:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	**init_env(char **envp, t_gc *gc)
 	return (env_copy);
 }
 
-char	*get_input()
+char	*get_input(void)
 {
-	char *line;
+	char	*line;
 
 	line = readline("minishell$ ");
 	if (line == NULL)
@@ -90,8 +90,6 @@ void	print_commands(t_command *cmds_head)
 	t_command	*cmd;
 
 	cmd = cmds_head;
-
-
 	while (cmd)
 	{
 		printf("Command:\n");
@@ -109,7 +107,7 @@ void	print_commands(t_command *cmds_head)
 // Function to check if piping is needed
 int	needs_piping(t_command *cmds_head)
 {
-	t_command *current_cmd;
+	t_command	*current_cmd;
 
 	current_cmd = cmds_head;
 	while (current_cmd)
@@ -123,6 +121,19 @@ int	needs_piping(t_command *cmds_head)
 	return (0);
 }
 
+void	execute_shell_is_piping_needed(t_shell *shell, t_arg *args_head)
+{
+	int	pipe_count;
+
+	pipe_count = count_pipes_argstruct(args_head);
+	if (needs_piping(shell->cmds_head))
+		shell->exit_status = execute_commands_with_pipes
+			(shell, shell->cmds_head);
+	else
+		shell->exit_status = execute_command_without_pipes
+			(shell, shell->cmds_head);
+}
+
 // Main loop for shell
 //print_commands(shell->cmds_head);
 void	execute_shell(t_shell *shell)
@@ -130,7 +141,6 @@ void	execute_shell(t_shell *shell)
 	char	*input;
 	char	*expanded_vars;
 	t_arg	*args_head;
-	int		pipe_count;
 
 	while (1)
 	{
@@ -148,26 +158,21 @@ void	execute_shell(t_shell *shell)
 			shell->exit_status = 2;
 			continue ;
 		}
-		pipe_count = count_pipes_argstruct(args_head);
 		shell->cmds_head = create_and_populate_commands
-			(shell, &shell->gc, args_head, pipe_count);
-		if (needs_piping(shell->cmds_head))
-			shell->exit_status = execute_commands_with_pipes
-				(shell, shell->cmds_head);
-		else
-			shell->exit_status = execute_command_without_pipes
-				(shell, shell->cmds_head);
+			(shell, &shell->gc, args_head);
+		execute_shell_is_piping_needed(shell, args_head);
 		free(input);
 	}
 }
 
- // Main shell execution loop
+
+// Main shell execution loop
 int	main(int argc, char **argv, char **envp)
 {
-	(void)argc;
-	(void)argv;
 	t_shell	shell;
 
+	(void)argc;
+	(void)argv;
 	init_shell(&shell, envp);
 	execute_shell(&shell);
 	ft_gc_free(&shell.gc);
