@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_syntax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 18:55:31 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:07:26 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 22:25:06 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int pipe_syntax(t_arg *head)
+int	pipe_syntax(t_arg *head)
 {
-	t_arg *tmp;
+	t_arg	*tmp;
 
 	tmp = head;
 	while (tmp)
@@ -23,12 +23,15 @@ int pipe_syntax(t_arg *head)
 		{
 			if (!tmp->next || !tmp->prev)
 			{
-				write(STDERR_FILENO, "Syntax error: pipe '|' cannot be at the beginning or end of the command\n", 72);
+				write (STDERR_FILENO,
+					"Syntax error: pipe '|' cannot be"
+					"at the beginning or end of the command\n", 72);
 				return (1);
 			}
 			if (tmp->next->type == PIPE || tmp->prev->type == PIPE)
 			{
-				write(STDERR_FILENO, "Syntax error: consecutive pipes '||' are not allowed\n", 54);
+				write (STDERR_FILENO, "Syntax error:"
+					" consecutive pipes '||' are not allowed\n", 54);
 				return (1);
 			}
 		}
