@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:50:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 19:31:25 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:00:07 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	*ft_gc_malloc(t_gc *gc, size_t size)
 // Allocate new memory
 // Copy old data to new memory
 // Free old memory
-
 void	*ft_gc_realloc(t_gc *gc, void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr;
