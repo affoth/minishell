@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:41:01 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 22:39:31 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,12 +163,17 @@ void		handle_quote_split(const char *s, size_t i, bool *quote);
 void		skip_quoted_string(const char **s, bool *quote, char *quote_char);
 void		assign(size_t *i, size_t *j, int *index, bool *quote);
 int			ft_quotes_not_closed(const char *line);
-char	*strip_quotes_redir_split(t_gc *gc, const char *str);
-void	init_params(t_params *params, t_gc *gc, const char *s, char **array);
-void	init_variables(size_t *i, size_t *start, bool *in_quote,
-			char *quote_char);
+char		*strip_quotes_redir_split(t_gc *gc, const char *str);
+void		init_params(t_params *params, t_gc *gc,
+				const char *s, char **array);
+void		init_variables(size_t *i, size_t *start, bool *in_quote,
+				char *quote_char);
 
 // Expand environment variables
+char		*ft_expand_env(t_shell *shell, char *env);
+int			check_if_in_single_quote(char *input, size_t i);
+size_t		calculate_expanded_length(t_shell *shell,
+				char *input, int exit_status);
 char		*expand_string(t_shell *shell, char *input, int exit_status);
 
 // Syntax analysis
@@ -185,22 +190,22 @@ int			count_pipes_argstruct(t_arg *args_head);
 int			count_pipes_cmdstruct(t_command *cmds_head);
 t_command	*create_and_populate_commands(t_shell *shell, t_gc *gc,
 				t_arg *args_head);
-void	add_flag_to_command(t_command *cmd, const char *flag, t_gc *gc);
-void	add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
-int		if_redir(t_arg *current_arg, t_command *current_cmd);
-void	handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc);
-void	handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
+void		add_flag_to_command(t_command *cmd, const char *flag, t_gc *gc);
+void		add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
+int			if_redir(t_arg *current_arg, t_command *current_cmd);
+void		handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc);
+void		handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
 void		print_commands(t_command *cmds_head);
 
 
 // Function prototypes for redirection handling
-int handle_output_redirection(t_command *cmd, t_arg *arg);
-int handle_output_redirection_truncate(t_command *cmd, t_arg *arg);
-int handle_output_redirection_append(t_command *cmd, t_arg *arg);
-int handle_input_redirection(t_command *cmd, t_arg *arg);
-int handle_input_redirection_file(t_command *cmd, t_arg *arg);
-int handle_input_redirection_heredoc(t_command *cmd);
-bool	parse_heredoc(t_shell *shell, t_command *cmd, t_arg *arg);
+int			handle_output_redirection(t_command *cmd, t_arg *arg);
+int			handle_output_redirection_truncate(t_command *cmd, t_arg *arg);
+int			handle_output_redirection_append(t_command *cmd, t_arg *arg);
+int			handle_input_redirection(t_command *cmd, t_arg *arg);
+int			handle_input_redirection_file(t_command *cmd, t_arg *arg);
+int			handle_input_redirection_heredoc(t_command *cmd);
+bool		parse_heredoc(t_shell *shell, t_command *cmd, t_arg *arg);
 
 // Function prototypes for built-in commands
 int			is_built_in(char *cmd);
@@ -260,11 +265,11 @@ void		perror_malloc(void);
 void		perror_strdup(void);
 
 // Main
-char	**init_env(char **envp, t_gc *gc);
-void	init_shell(t_shell *shell, char **envp);
+char		**init_env(char **envp, t_gc *gc);
+void		init_shell(t_shell *shell, char **envp);
 
 // Debugging
-void	print_cmd_args(char **args, const char *label);
-void	print_commands(t_command *cmds_head);
+void		print_cmd_args(char **args, const char *label);
+void		print_commands(t_command *cmds_head);
 
 #endif // MINISHELL_H
