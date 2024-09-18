@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_string.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 22:31:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:11:24 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 01:06:19 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	handle_env_var(t_shell *shell, t_expand_context *ctx)
 	expanded = ft_expand_env(ctx->shell, env);
 	ft_strlcpy(ctx->result + ctx->j, expanded, ctx->len - ctx->j + 1);
 	ctx->j += ft_strlen(expanded);
-	ctx->i = start + strlen(env);
+	ctx->i = start + ft_strlen(env);
 	free(env);
 	free(expanded);
 }

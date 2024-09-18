@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 18:17:05 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/03 16:35:05 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 01:11:49 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,6 @@ int					print_digit(long nbr, int base, int yesoryes);
 int					print_unsigned(unsigned int num);
 int					print_ptr(long nbr);
 int					print_pointer(va_list ap);
+char				*ft_strncpy(char *dst, const char *src, size_t n);
 
 #endif

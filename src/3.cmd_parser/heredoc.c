@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:47:54 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:51:23 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 00:59:18 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ int	heredoc(t_shell *shell, const char *delimiter)
 			return (handle_heredoc_interrupt(pipe_fd));
 		if (expanded_line == NULL)
 			break ;
-		if (strcmp(expanded_line, delimiter) == 0)
+		if (ft_strcmp(expanded_line, delimiter) == 0)
 			break ;
-		write(pipe_fd[1], expanded_line, strlen(expanded_line));
+		write(pipe_fd[1], expanded_line, ft_strlen(expanded_line));
 		write(pipe_fd[1], "\n", 1);
 	}
 	close(pipe_fd[1]);

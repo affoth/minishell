@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:51:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:19:53 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:59:30 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*remove_quotes(t_gc *gc, const char *str)
 	int		i;
 	int		j;
 
-	result = (char *)ft_gc_malloc(gc, (strlen(str) + 1));
+	result = (char *)ft_gc_malloc(gc, (ft_strlen(str) + 1));
 	if (!result)
 	{
 		perror("malloc");

@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:45:15 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 00:58:08 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ t_TokenType	get_token_type(const char *arg)
 	{"<", REDIRECTION_IN},	{">", REDIRECTION_OUT}, {NULL, WORD}};
 
 	i = 0;
-	if (strcmp(arg, "<<") == 0)
+	if (ft_strcmp(arg, "<<") == 0)
 		return (HEREDOC);
-	if (strcmp(arg, ">>") == 0)
+	if (ft_strcmp(arg, ">>") == 0)
 		return (REDIRECTION_APPEND);
-	if (strcmp(arg, "<") == 0)
+	if (ft_strcmp(arg, "<") == 0)
 		return (REDIRECTION_IN);
-	if (strcmp(arg, ">") == 0)
+	if (ft_strcmp(arg, ">") == 0)
 		return (REDIRECTION_OUT);
 	while (typemap[i].arg != NULL)
 	{
-		if (strcmp(arg, typemap[i].arg) == 0)
+		if (ft_strcmp(arg, typemap[i].arg) == 0)
 			return (typemap[i].type);
 		i++;
 	}

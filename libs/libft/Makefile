@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
+#    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/16 16:08:54 by mokutucu          #+#    #+#              #
-#    Updated: 2024/05/31 19:49:30 by mokutucu         ###   ########.fr        #
+#    Updated: 2024/09/19 01:13:31 by afoth            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS			=	ft_isalnum.c ft_isprint.c ft_memcmp.c  ft_substr.c \
 					ft_putendl_fd.c ft_putnbr_fd.c ft_printf.c print_util1.c print_util2.c\
 					get_next_line.c get_next_line_utils.c ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c\
 					ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c\
-					ft_lstmap.c
+					ft_lstmap.c ft_strncpy.c
 
 OBJS			= $(SRCS:.c=.o)
 

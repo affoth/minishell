@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:42:09 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:57:46 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_expand_env(t_shell *shell, char *env)
 	index = find_var_in_env(shell->env, env);
 	if (index != -1)
 	{
-		value = strchr(shell->env[index], '=') + 1;
+		value = ft_strchr(shell->env[index], '=') + 1;
 		return (ft_shell_strdup(&shell->gc, value));
 	}
 	else

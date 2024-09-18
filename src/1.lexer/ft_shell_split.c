@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell_split.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:42:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 01:12:41 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ size_t	ft_words(char const *s, char c)
 	return (count);
 }
 
-static void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
+void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
 {
 	char	*word;
 
 	word = ft_gc_malloc(gc, end - start + 1);
 	if (!word)
 		return (NULL);
-	strncpy(word, s + start, end - start);
+	ft_strncpy(word, s + start, end - start);
 	word[end - start] = '\0';
 	return (word);
 }
