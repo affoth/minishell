@@ -1,0 +1,14 @@
+file
+file.txt
+include
+libs
+Makefile
+minishell
+minishell_tester
+new.txt
+obj
+orga
+qqq
+README.md
+src
+wet

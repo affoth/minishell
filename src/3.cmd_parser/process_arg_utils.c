@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:54:02 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 18:54:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:30:20 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 int	if_redir(t_arg *current_arg, t_command *current_cmd)
 {
-	if (current_arg->type == REDIRECTION_IN)
-	{
-		if (handle_input_redirection(current_cmd, current_arg) != 0)
-		{
-		}
-		return (0);
-	}
 	if (current_arg->type == REDIRECTION_OUT
 		|| current_arg->type == REDIRECTION_APPEND)
 	{
 		if (handle_output_redirection(current_cmd, current_arg) != 0)
+		{
+		}
+		return (0);
+	}
+	if (current_arg->type == REDIRECTION_IN)
+	{
+		if (handle_input_redirection(current_cmd, current_arg) != 0)
 		{
 		}
 		return (0);
