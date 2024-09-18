@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:51:53 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:24:43 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 15:41:37 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	set_oldpwd(char **oldpwd)
 	}
 	return (0);
 }
+
 char	*get_target_dir(t_shell *shell)
 {
 	int	index;
@@ -34,6 +35,7 @@ char	*get_target_dir(t_shell *shell)
 	ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
 	return (NULL);
 }
+
 int	change_directory(char *target_dir)
 {
 	if (access(target_dir, F_OK) != 0)
@@ -48,6 +50,7 @@ int	change_directory(char *target_dir)
 	}
 	return (0);
 }
+
 int	update_env_vars(t_shell *shell, char *oldpwd, char *newpwd)
 {
 	shell->env = change_or_add_env_var(&shell->gc,
@@ -56,6 +59,7 @@ int	update_env_vars(t_shell *shell, char *oldpwd, char *newpwd)
 			ft_strjoin("PWD=", newpwd), shell->env);
 	return (0);
 }
+
 int	built_in_cd(t_shell *shell)
 {
 	char	*target_dir;

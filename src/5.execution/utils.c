@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:00:49 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 22:51:28 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 21:10:14 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	count_arguments(char **args)
 	int	count;
 
 	count = 0;
-
 	while (args[count])
 		count++;
 	return (count);

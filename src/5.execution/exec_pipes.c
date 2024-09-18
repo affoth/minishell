@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 22:04:47 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 21:08:42 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,19 @@ void	handle_file_redirections(t_command *cmd)
 }
 
 // If this command is invalid but part of a pipeline, don't exit the pipeline.
-			// Just ensure that the command does not execute anything.
-pid_t	fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descriptors, int cmd_index, int num_pipes)
+// Just ensure that the command does not execute anything.
+pid_t	fork_and_execute_command(t_shell *shell,
+	t_command *cmd, int *pipe_descriptors, int cmd_index)
 {
 	pid_t	pid;
 	int		status;
+	int		num_pipes;
 
-
+	num_pipes = count_pipes_cmdstruct(shell->cmds_head);
 	pid = fork();
 	if (pid == 0)
 	{
-		if (!cmd->valid)
-		{
-			if (cmd->next != NULL)
-			{
-				exit(0);
-			}
-			exit(1);
-		}
+		check_if_command_is_valid(cmd);
 		setup_redirections(cmd_index, num_pipes, pipe_descriptors);
 		close_pipes(num_pipes, pipe_descriptors);
 		handle_file_redirections(cmd);
@@ -64,50 +59,14 @@ pid_t	fork_and_execute_command(t_shell *shell, t_command *cmd, int *pipe_descrip
 		exit(status);
 	}
 	else if (pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
+		perror_fork();
 	return (pid);
 }
 
-int	execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
+int	wait_for_last_child(pid_t last_pid, int status)
 {
-	int			num_pipes;
-	int			status;
-	t_command	*current_cmd;
-	int			cmd_index;
-	pid_t		last_pid;
-	pid_t		pid;
-	int			child_status;
+	int		child_status;
 
-
-
-	num_pipes = count_pipes_cmdstruct(cmds_head);
-	int	pipe_descriptors[2 * num_pipes];
-	status = 0;
-	setup_child_signals();
-	create_pipes(num_pipes, pipe_descriptors);
-	current_cmd = cmds_head;
-	cmd_index = 0;
-	last_pid = -1;
-
-	while (current_cmd)
-	{
-		pid = fork_and_execute_command
-			(shell, current_cmd, pipe_descriptors, cmd_index, num_pipes);
-		if (pid < 0)
-			status = 1;
-		if (current_cmd->next == NULL)
-			last_pid = pid;
-		if (cmd_index > 0)
-			close(pipe_descriptors[(cmd_index - 1) * 2]);
-		if (current_cmd->next)
-			close(pipe_descriptors[cmd_index * 2 + 1]);
-		current_cmd = current_cmd->next;
-		cmd_index++;
-	}
-	close_pipes(num_pipes, pipe_descriptors);
 	if (waitpid(last_pid, &child_status, 0) == -1)
 	{
 		perror("waitpid");
@@ -120,9 +79,59 @@ int	execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
 		else if (WIFSIGNALED(child_status))
 			status = 128 + WTERMSIG(child_status);
 	}
-
 	while (wait(NULL) > 0)
 		;
+	return (status);
+}
+
+int	execute_commands_loop(t_shell *shell, pid_t *last_pid,
+	int status, int *pipe_descriptors)
+{
+	t_command	*current_cmd;
+	pid_t		pid;
+	int			cmd_index;
+
+	cmd_index = 0;
+	current_cmd = shell->cmds_head;
+	while (current_cmd)
+	{
+		pid = fork_and_execute_command
+			(shell, current_cmd, pipe_descriptors, cmd_index);
+		if (pid < 0)
+			status = 1;
+		if (current_cmd->next == NULL)
+			*last_pid = pid;
+		if (cmd_index > 0)
+			close(pipe_descriptors[(cmd_index - 1) * 2]);
+		if (current_cmd->next)
+			close(pipe_descriptors[cmd_index * 2 + 1]);
+		current_cmd = current_cmd->next;
+		cmd_index++;
+	}
+	return (status);
+}
+
+int	execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
+{
+	int			num_pipes;
+	int			status;
+	pid_t		last_pid;
+	int			*pipe_descriptors;
+
+	num_pipes = count_pipes_cmdstruct(cmds_head);
+	pipe_descriptors = malloc(sizeof(int) * (2 * num_pipes));
+	if (!pipe_descriptors)
+	{
+		perror("malloc");
+		return (EXIT_FAILURE);
+	}
+	status = 0;
+	setup_child_signals();
+	create_pipes(num_pipes, pipe_descriptors);
+	last_pid = -1;
+	status = execute_commands_loop(shell, &last_pid, status, pipe_descriptors);
+	close_pipes(num_pipes, pipe_descriptors);
+	status = wait_for_last_child(last_pid, status);
 	shell->exit_status = status;
 	return (status);
 }

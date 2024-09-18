@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:05:32 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:46:52 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 17:12:19 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ int	built_in_pwd(t_shell *shell)
 	free(current_dir);
 	return (PWD_SUCCESS);
 }
-

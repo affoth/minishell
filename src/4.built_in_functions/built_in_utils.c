@@ -6,11 +6,12 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:09:18 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/17 23:23:10 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 16:02:30 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 size_t	process_quotes(char *result, const char *str, size_t i, size_t *j)
 {
 	char	quote;
@@ -22,6 +23,7 @@ size_t	process_quotes(char *result, const char *str, size_t i, size_t *j)
 		i++;
 	return (i);
 }
+
 char	*strip_quotes(t_gc *gc, const char *str)
 {
 	size_t	i;

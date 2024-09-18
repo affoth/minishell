@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:51:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 15:27:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:19:53 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,3 @@ char	*get_path(t_gc *gc, char *cmd)
 	}
 	return (NULL);
 }
-

@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 12:51:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/17 23:28:40 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 15:42:02 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ bool	check_initial_n_flag(char **flags)
 	int		i;
 	bool	suppress_newline;
 
-	if (!flags) return false;
+	if (!flags)
+		return (false);
 	i = 0;
 	suppress_newline = false;
 	while (flags[i])
@@ -66,7 +67,7 @@ int	built_in_echo(t_shell *shell, t_command *cmd)
 	if (!cmd)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		return 0;
+		return (0);
 	}
 	suppress_newline = check_initial_n_flag(cmd->flags);
 	print_echo_arguments(&shell->gc, cmd->args, suppress_newline);
