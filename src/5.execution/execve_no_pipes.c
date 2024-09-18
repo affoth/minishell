@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_no_pipes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:09:08 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/18 23:08:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	**prepare_args(t_shell *shell,
 	while (j < args_count)
 	{
 		args[flags_count + 1 + j] = remove_quotes
-			(&shell->gc, strdup(cmd->args[j]));
+			(&shell->gc, ft_shell_strdup(&shell->gc, cmd->args[j]));
 		if (!args[flags_count + 1 + j])
 			perror_strdup();
 		j++;

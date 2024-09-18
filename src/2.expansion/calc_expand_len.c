@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:41:07 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:10:21 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ size_t	calculate_expanded_length(t_shell *shell, char *input,
 
 	len = 0;
 	i = 0;
+	if (!input)
+		return (0);
 	while (input[i])
 	{
 		if (input[i] == '$')

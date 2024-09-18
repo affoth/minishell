@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:39:31 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/18 22:51:04 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,8 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
-extern char		**environ;
-
 // Forward declaration of t_shell for gc
-typedef struct s_shell t_shell;
+typedef struct s_shell	t_shell;
 
 // TokenType enum
 typedef enum TokenType

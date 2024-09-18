@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 22:31:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:35:39 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 00:11:24 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ char	*expand_string(t_shell *shell, char *input, int exit_status)
 {
 	t_expand_context	ctx;
 
+	if (!input)
+		return (NULL);
 	ctx.shell = shell;
 	ctx.input = input;
 	ctx.exit_status = exit_status;
@@ -104,7 +106,6 @@ char	*expand_string(t_shell *shell, char *input, int exit_status)
 		(&shell->gc, (sizeof(char) * (ctx.len + 1)));
 	if (!ctx.result)
 		return (NULL);
-
 	process_characters(shell, &ctx);
 	ctx.result[ctx.j] = '\0';
 	return (ctx.result);
