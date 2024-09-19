@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_signals.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:39:26 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/19 14:41:21 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 20:06:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void	setup_heredoc_signals(void)
 
 int	handle_heredoc_interrupt(t_shell *shell, int pipe_fd[2], char *line)
 {
+	(void)shell;
+	g_sig = 0;
 	free(line);
-	g_heredoc_interrupted = 0;
 	close(pipe_fd[1]);
 	close(pipe_fd[0]);
 	restore_original_signals();
-	ft_gc_free(&shell->gc);
 	return (-1);
 }
 
@@ -48,7 +48,7 @@ void	heredoc_signal_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_heredoc_interrupted = 1;
-		write(1, "\n", 1);
+		g_sig = sig;
+		ft_putstr_fd("\n", STDERR_FILENO);
 	}
 }

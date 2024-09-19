@@ -6,11 +6,13 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 21:18:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 21:23:30 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	g_sig = 0;
 
 char	*get_input(void)
 {
@@ -48,45 +50,46 @@ int	needs_piping(t_command *cmds_head)
 	return (0);
 }
 
-void	execute_shell_is_piping_needed(t_shell *shell)
-{
-	if (needs_piping(shell->cmds_head))
-		shell->exit_status = execute_commands_with_pipes
-			(shell, shell->cmds_head);
-	else
-		shell->exit_status = execute_command_without_pipes
-			(shell, shell->cmds_head);
-}
-
 // Main loop for shell
 //print_commands(shell->cmds_head);
-void	execute_shell(t_shell *shell)
+static int	prepare_execution(t_shell *shell, char **expanded_vars)
 {
 	char	*input;
+
+	input = get_input();
+	if (!input)
+		return (0);
+	*expanded_vars = expand_string(shell, input, shell->exit_status);
+	shell->args_head = tokenizer(shell, *expanded_vars);
+	if (syntax_checker(shell->args_head) == 1)
+	{
+		exit_status_and_free(shell, *expanded_vars, 2);
+		free(input);
+		return (0);
+	}
+	shell->cmds_head = create_and_populate_commands
+		(shell, &shell->gc, shell->args_head);
+	if (!shell->cmds_head)
+	{
+		exit_status_and_free(shell, *expanded_vars, 1);
+		free(input);
+		return (0);
+	}
+	free(input);
+	return (1);
+}
+
+void	execute_shell(t_shell *shell)
+{
 	char	*expanded_vars;
-	t_arg	*args_head;
 
 	while (1)
 	{
-		input = get_input();
-		if (!input)
-		{
-			shell->exit_status = 0;
-			free(input);
+		setup_signals();
+		if (prepare_execution(shell, &expanded_vars) == 0)
 			continue ;
-		}
-		expanded_vars = expand_string(shell, input, shell->exit_status);
-		args_head = tokenizer(shell, expanded_vars);
-		if (syntax_checker(args_head) == 1)
-		{
-			shell->exit_status = 2;
-			free(input);
-			continue ;
-		}
-		shell->cmds_head = create_and_populate_commands
-			(shell, &shell->gc, args_head);
 		execute_shell_is_piping_needed(shell);
-		free(input);
+		free(expanded_vars);
 	}
 }
 

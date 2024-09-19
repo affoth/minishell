@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 21:13:01 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 21:24:21 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 typedef struct s_shell			t_shell;
 
 // Global variable to check if heredoc was interrupted
-static volatile sig_atomic_t	g_heredoc_interrupted = 0;
+extern int						g_sig;
 
 // TokenType enum
 typedef enum TokenType
@@ -137,6 +137,7 @@ typedef struct s_params
 // Main shell struct
 typedef struct s_shell
 {
+	t_arg		*args_head;
 	t_gc		gc;
 	char		**env;
 	t_command	*cmds_head;
@@ -152,6 +153,7 @@ void		setup_heredoc_signals(void);
 void		heredoc_signal_handler(int sig);
 int			handle_heredoc_interrupt(t_shell *shell,
 				int pipe_fd[2], char *line);
+void		restore_original_signals(void);
 
 // Function prototypes for garbage collector
 void		ft_gc_init(t_gc *gc, t_shell *shell);
@@ -208,7 +210,7 @@ void		add_flag_to_command(t_command *cmd, const char *flag, t_gc *gc);
 void		add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
 int			if_redir(t_arg *current_arg, t_command *current_cmd);
 void		handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc);
-void		handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
+int			handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
 void		print_commands(t_command *cmds_head);
 
 // Function prototypes for redirection handling
@@ -262,14 +264,6 @@ void		check_if_command_is_valid(t_command *cmd);
 char		**prepare_args(t_shell *shell,
 				t_command *cmd, int flags_count, int args_count);
 
-// Signal handling
-void		setup_signals(void);
-void		setup_child_signals(void);
-void		handle_signal(int sig);
-void		child_handle_signal(int sig);
-void		heredoc_signal_handler(int sig);
-void		restore_original_signals(void);
-
 // Error handling
 void		perror_fork(void);
 void		perror_malloc(void);
@@ -279,6 +273,9 @@ int			perror_pipe(void);
 // Main
 char		**init_env(char **envp, t_gc *gc);
 void		init_shell(t_shell *shell, char **envp);
+void		set_sig_exit(t_shell *shell, int sig);
+void		execute_shell_is_piping_needed(t_shell *shell);
+void		exit_status_and_free(t_shell *shell, char *line, int status);
 
 // Debugging
 void		print_cmd_args(char **args, const char *label);

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:45:35 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:43:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ static t_command	*process_arguments(t_shell *shell, t_command *cmds_head,
 	current_arg = args_head;
 	while (current_arg)
 	{
-		handle_arg(shell, current_cmd, &current_arg, gc);
+		if (handle_arg(shell, current_cmd, &current_arg, gc) == 1)
+			return (NULL);
 		if (current_arg && current_arg->type == PIPE)
 			current_cmd = current_cmd->next;
 	}
@@ -105,6 +106,7 @@ t_command	*create_and_populate_commands(t_shell *shell,
 		return (NULL);
 	link_commands(commands, pipe_count);
 	cmds_head = commands[0];
-	process_arguments(shell, cmds_head, args_head, gc);
+	if (process_arguments(shell, cmds_head, args_head, gc) == NULL)
+		return (NULL);
 	return (cmds_head);
 }

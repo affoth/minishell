@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:16:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 18:00:18 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 20:14:11 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,34 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->env = init_env(envp, &shell->gc);
 	shell->cmds_head = NULL;
 	shell->exit_status = 0;
-	setup_signals();
+}
+
+void	set_sig_exit(t_shell *shell, int sig)
+{
+	if (sig == SIGINT)
+	{
+		shell->exit_status = 130;
+	}
+	else if (sig == SIGQUIT)
+	{
+		shell->exit_status = 131;
+	}
+}
+
+void	execute_shell_is_piping_needed(t_shell *shell)
+{
+	if (needs_piping(shell->cmds_head))
+		shell->exit_status = execute_commands_with_pipes
+			(shell, shell->cmds_head);
+	else
+		shell->exit_status = execute_command_without_pipes
+			(shell, shell->cmds_head);
+	if (g_sig != 0)
+		set_sig_exit(shell, g_sig);
+}
+
+void	exit_status_and_free(t_shell *shell, char *line, int status)
+{
+	shell->exit_status = status;
+	free(line);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_shell_split.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 01:12:41 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 20:19:10 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	**ft_shell_split(t_gc *gc, const char *s, char c)
 	bool	quote;
 	int		index;
 
-	array = ft_gc_malloc(gc, (ft_words(s, c) + 1) * sizeof(char *));
+	array = ft_gc_malloc(gc, ((ft_words(s, c) + 1) * sizeof(char *)));
 	if (!array)
 		return (NULL);
 	assign(&i, &j, &index, &quote);

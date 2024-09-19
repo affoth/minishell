@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 21:06:45 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 21:21:13 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ int	execute_command_no_pipes(t_shell *shell, t_command *cmd)
 {
 	pid_t	pid;
 
-	setup_child_signals();
 	pid = fork();
 	if (pid == 0)
 	{
+		setup_child_signals();
 		execute_child_process(shell, cmd);
 	}
 	else if (pid < 0)
