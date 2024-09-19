@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand_string.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 22:31:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 01:06:19 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 03:04:42 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-typedef struct s_expand_context
-{
-	t_shell	*shell;
-	char	*input;
-	int		exit_status;
-	size_t	len;
-	size_t	i;
-	size_t	j;
-	char	*result;
-}	t_expand_context;
 
 static void	handle_exit_status(int exit_status, char *result, size_t *j)
 {

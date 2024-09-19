@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:48:05 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 03:03:54 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,17 @@ typedef struct s_gc
 	t_garbage	*head;
 	t_shell		*shell;
 }	t_gc;
+
+typedef struct s_expand_context
+{
+	t_shell	*shell;
+	char	*input;
+	int		exit_status;
+	size_t	len;
+	size_t	i;
+	size_t	j;
+	char	*result;
+}	t_expand_context;
 
 typedef struct s_params
 {
