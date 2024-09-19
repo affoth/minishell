@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:54:02 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:30:20 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 18:13:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,28 @@ void	handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc)
 	}
 }
 
-void	handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc)
+int	check_heredoc(t_shell *shell, t_command *cmd, t_arg *arg)
+{
+	int	state;
+
+	if (arg->type != HEREDOC)
+		return (0);
+	state = parse_heredoc(shell, cmd, arg);
+	if (state == false)
+		return (1);
+	arg = arg->next->next;
+	return (0);
+}
+
+int	handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc)
 {
 	if ((*arg)->type == PIPE)
 	{
 		*arg = (*arg)->next;
 		cmd = cmd->next;
 	}
-	else if (parse_heredoc(shell, cmd, *arg))
-		*arg = (*arg)->next->next;
+	else if (check_heredoc(shell, cmd, *arg) == 1)
+		return (1);
 	else if (cmd->cmd_name == NULL && (*arg)->type == WORD)
 	{
 		set_command_name(cmd, (*arg)->arg, gc);
@@ -65,4 +78,5 @@ void	handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc)
 		handle_arguments(cmd, *arg, gc);
 		*arg = (*arg)->next;
 	}
+	return (0);
 }

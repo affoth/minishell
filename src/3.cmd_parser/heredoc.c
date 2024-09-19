@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:47:54 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 14:41:18 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 18:11:41 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	heredoc(t_shell *shell, const char *delimiter)
 	while (1)
 	{
 		line = readline("heredoc>");
-		if (g_heredoc_interrupted)
+		if (g_sig == SIGINT)
 			return (handle_heredoc_interrupt(shell, pipe_fd, line));
 		if (line == NULL)
 			break ;
@@ -69,5 +69,5 @@ bool	parse_heredoc(t_shell *shell, t_command *cmd, t_arg *arg)
 		cmd->stdin_fd = fd;
 		return (true);
 	}
-	return (false);
+	return (true);
 }

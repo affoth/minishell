@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 14:42:46 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 17:59:24 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 typedef struct s_shell			t_shell;
 
 // Global variable to check if heredoc was interrupted
-static volatile sig_atomic_t	g_heredoc_interrupted = 0;
+extern int	g_sig;
 
 // TokenType enum
 typedef enum TokenType
@@ -208,7 +208,7 @@ void		add_flag_to_command(t_command *cmd, const char *flag, t_gc *gc);
 void		add_arg_to_command(t_command *cmd, const char *arg, t_gc *gc);
 int			if_redir(t_arg *current_arg, t_command *current_cmd);
 void		handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc);
-void		handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
+int			handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc);
 void		print_commands(t_command *cmds_head);
 
 // Function prototypes for redirection handling

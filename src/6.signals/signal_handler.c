@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:27:04 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:52:44 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	child_handle_signal(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
-		printf("Quit (core dumped)\n");
 		exit(0);
 	}
 	else if (sig == SIGPIPE)
