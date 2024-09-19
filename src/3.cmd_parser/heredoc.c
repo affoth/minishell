@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:47:54 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:59:18 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 03:50:28 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,13 @@ void	setup_heredoc_signals(void)
 	}
 }
 
-int	handle_heredoc_interrupt(int pipe_fd[2])
+int	handle_heredoc_interrupt(t_shell *shell, int pipe_fd[2])
 {
 	g_heredoc_interrupted = 0;
 	close(pipe_fd[1]);
 	close(pipe_fd[0]);
 	restore_original_signals();
+	ft_gc_free(&shell->gc);
 	return (-1);
 }
 
@@ -56,11 +57,11 @@ void	heredoc_signal_handler(int sig)
 	}
 }
 
-//g_heredoc_interrupted = 0; (before return)
-int	heredoc(t_shell *shell, const char *delimiter)
+int heredoc(t_shell *shell, const char *delimiter)
 {
-	int		pipe_fd[2];
-	char	*expanded_line;
+	int pipe_fd[2];
+	char *expanded_line;
+	char *line;
 
 	setup_heredoc_signals();
 	if (pipe(pipe_fd) == -1)
@@ -71,15 +72,26 @@ int	heredoc(t_shell *shell, const char *delimiter)
 	}
 	while (1)
 	{
-		expanded_line = expand_string(shell, readline("heredoc>"), 0);
+		line = readline("heredoc>");
 		if (g_heredoc_interrupted)
-			return (handle_heredoc_interrupt(pipe_fd));
+		{
+			free(line);
+			return (handle_heredoc_interrupt(shell, pipe_fd));
+		}
+		if (line == NULL)
+			break;
+		expanded_line = expand_string(shell, line, 0);
+		free(line);
 		if (expanded_line == NULL)
-			break ;
+			break;
 		if (ft_strcmp(expanded_line, delimiter) == 0)
-			break ;
+		{
+			free(expanded_line);
+			break;
+		}
 		write(pipe_fd[1], expanded_line, ft_strlen(expanded_line));
 		write(pipe_fd[1], "\n", 1);
+		free(expanded_line);
 	}
 	close(pipe_fd[1]);
 	restore_original_signals();

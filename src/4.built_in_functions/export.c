@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:18:55 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 03:10:34 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 // Export built-in command
 int	handle_invalid_export(int has_errors)
 {
+	(void)has_errors;
 	ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
-	has_errors = 1;
 	return (1);
 }
 

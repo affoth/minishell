@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:47:27 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 03:42:31 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,8 @@ int	needs_piping(t_command *cmds_head)
 	return (0);
 }
 
-void	execute_shell_is_piping_needed(t_shell *shell, t_arg *args_head)
+void	execute_shell_is_piping_needed(t_shell *shell)
 {
-	int	pipe_count;
-
-	pipe_count = count_pipes_argstruct(args_head);
 	if (needs_piping(shell->cmds_head))
 		shell->exit_status = execute_commands_with_pipes
 			(shell, shell->cmds_head);
@@ -87,7 +84,7 @@ void	execute_shell(t_shell *shell)
 		}
 		shell->cmds_head = create_and_populate_commands
 			(shell, &shell->gc, args_head);
-		execute_shell_is_piping_needed(shell, args_head);
+		execute_shell_is_piping_needed(shell);
 		free(input);
 	}
 }

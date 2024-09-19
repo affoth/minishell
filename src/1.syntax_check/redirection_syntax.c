@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_syntax.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:28 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:31:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 03:19:40 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,6 @@ int	redirection_output_syntax_check(t_arg *tmp)
 	{
 		printf("redirection output error:"
 			" no valid file name after redirection `%s'\n", tmp->arg);
-		return (1);
-	}
-	if (tmp->prev->type != WORD && tmp->prev->type != DOUBLE_QUOTED_STRING)
-	{
-		printf("redirection output error:"
-			" no argument before redirection `%s'\n", tmp->arg);
 		return (1);
 	}
 	return (0);
