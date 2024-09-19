@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 17:58:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:43:26 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static t_command	*process_arguments(t_shell *shell, t_command *cmds_head,
 	current_arg = args_head;
 	while (current_arg)
 	{
-		if(handle_arg(shell, current_cmd, &current_arg, gc) == 1)
+		if (handle_arg(shell, current_cmd, &current_arg, gc) == 1)
 			return (NULL);
 		if (current_arg && current_arg->type == PIPE)
 			current_cmd = current_cmd->next;

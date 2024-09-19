@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 19:30:13 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:42:58 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,13 @@ char	*ft_expand_env(t_shell *shell, char *env)
 
 int	check_if_in_single_quote(char *input, size_t i)
 {
-	int in_single_quote = 0;
-	int in_double_quote = 0;
-	size_t j = 0;
+	int		in_single_quote;
+	int		in_double_quote;
+	size_t	j;
 
+	in_single_quote = 0;
+	in_double_quote = 0;
+	j = 0;
 	while (j < i)
 	{
 		if (input[j] == '\'' && !in_double_quote)
@@ -47,6 +50,5 @@ int	check_if_in_single_quote(char *input, size_t i)
 			in_double_quote = !in_double_quote;
 		j++;
 	}
-	return in_single_quote;
+	return (in_single_quote);
 }
-

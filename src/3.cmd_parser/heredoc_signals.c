@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:39:26 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/19 18:52:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 20:06:55 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	setup_heredoc_signals(void)
 int	handle_heredoc_interrupt(t_shell *shell, int pipe_fd[2], char *line)
 {
 	(void)shell;
+	g_sig = 0;
 	free(line);
 	close(pipe_fd[1]);
 	close(pipe_fd[0]);
