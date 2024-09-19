@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:10:57 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 16:48:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	execute_command(t_shell *shell, t_command *cmd)
 	flags_count = count_flags(cmd);
 	args_count = count_args(cmd);
 	args = prepare_args(shell, cmd, flags_count, args_count);
-	path = get_path(&shell->gc, args[0]);
+	path = get_path(shell, args[0]);
 	if (!path)
 	{
 		fprintf(stderr, "Command not found: %s\n", args[0]);

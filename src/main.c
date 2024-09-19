@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 03:42:31 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:38:04 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	execute_shell(t_shell *shell)
 		args_head = tokenizer(shell, expanded_vars);
 		if (syntax_checker(args_head) == 1)
 		{
-			shell->exit_status = 1;
+			shell->exit_status = 2;
 			continue ;
 		}
 		shell->cmds_head = create_and_populate_commands

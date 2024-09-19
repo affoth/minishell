@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_no_pipes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 23:08:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:48:33 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	execute_child_process(t_shell *shell, t_command *cmd)
 	flags_count = count_flags(cmd);
 	args_count = count_args(cmd);
 	args = prepare_args(shell, cmd, flags_count, args_count);
-	path = get_path(&shell->gc, args[0]);
+	path = get_path(shell, args[0]);
 	if (!path)
 	{
 		fprintf(stderr, "Command not found: %s\n", args[0]);

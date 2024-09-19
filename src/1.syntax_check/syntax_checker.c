@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 18:09:04 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 22:31:01 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 16:21:02 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	syntax_checker(t_arg *head)
 	{
 		return (1);
 	}
-	if (pipe_syntax(head) || redirection_syntax(head))
+	if (pipe_syntax(head))
 	{
 		return (1);
 	}
