@@ -6,59 +6,58 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:28 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 18:58:14 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 21:18:50 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// Function to check if a character is valid in a filename
-int	is_valid_char(char c)
+// Helper function to print error messages to STDERR
+void	write_error(const char *msg, const char *arg)
 {
-	if (ft_isalnum(c) || c == '.' || c == '-' || c == '_')
+	write(2, msg, strlen(msg));
+	if (arg)
 	{
-		return (1);
+		write(2, arg, strlen(arg));
 	}
-	return (0);
+	write(2, "\n", 1);
 }
 
-//check flag!!
 int	redirection_input_syntax_check(t_arg *tmp)
 {
 	if (!tmp->next || !tmp->prev)
 	{
-		printf("redirection input error:"
-			" no arguments before or after redirection `%s'\n", tmp->arg);
+		write_error("redirection input error:"
+			" no arguments before or after redirection", tmp->arg);
 		return (1);
 	}
 	if (tmp->next->type != WORD && tmp->next->type != DOUBLE_QUOTED_STRING)
 	{
-		printf("redirection input error:"
-			" no valid file name after redirection `%s'\n", tmp->arg);
+		write_error("redirection input error:"
+			" no valid file name after redirection", tmp->arg);
 		return (1);
 	}
 	if (tmp->prev->type != WORD)
 	{
-		printf("redirection input error:"
-			" no valid argument before redirection `%s'\n", tmp->arg);
+		write_error("redirection input error:"
+			" no valid argument before redirection", tmp->arg);
 		return (1);
 	}
 	return (0);
 }
 
-//check flag!!
 int	redirection_output_syntax_check(t_arg *tmp)
 {
 	if (!tmp->next)
 	{
-		printf("redirection output error:"
-			" no arguments before redirection `%s'\n", tmp->arg);
+		write_error("redirection output error:"
+			" no arguments before redirection", tmp->arg);
 		return (1);
 	}
 	if (tmp->next->type != WORD)
 	{
-		printf("redirection output error:"
-			" no valid file name after redirection `%s'\n", tmp->arg);
+		write_error("redirection output error:"
+			" no valid file name after redirection", tmp->arg);
 		return (1);
 	}
 	return (0);
@@ -70,15 +69,15 @@ int	redirection_heredoc_syntax_check(t_arg *tmp)
 	{
 		if (tmp->next->type != WORD)
 		{
-			ft_printf("redirection error:"
-				" no valid file name after redirection `%s'\n", tmp->arg);
+			write_error("redirection error:"
+				" no valid file name after redirection", tmp->arg);
 			return (1);
 		}
 	}
 	if (!tmp->prev && !tmp->next)
 	{
-		ft_printf("redirection error:"
-			" no valid argument before or after redirection `%s'\n", tmp->arg);
+		write_error("redirection error:"
+			" no valid argument before or after redirection", tmp->arg);
 		return (1);
 	}
 	return (0);

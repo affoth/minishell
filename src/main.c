@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 19:33:39 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 21:18:05 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_input(void)
 	line = readline("minishell$ ");
 	if (line == NULL)
 	{
-		printf("exit\n");
+		write(2, "exit\n", 5);
 		exit(0);
 	}
 	if (*line == '\0')
