@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 16:44:37 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:24:49 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,5 @@ int	execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
 	close_pipes(num_pipes, pipe_descriptors);
 	status = wait_for_last_child(last_pid, status);
 	shell->exit_status = status;
-	restore_original_signals();
 	return (status);
 }

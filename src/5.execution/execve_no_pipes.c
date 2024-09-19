@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 16:51:31 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 18:47:10 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int	execute_command_no_pipes(t_shell *shell, t_command *cmd)
 {
 	pid_t	pid;
 
-	setup_child_signals();
 	pid = fork();
 	if (pid == 0)
 	{
@@ -106,6 +105,5 @@ int	execute_command_no_pipes(t_shell *shell, t_command *cmd)
 		perror("fork");
 		return (1);
 	}
-	restore_original_signals();
 	return (handle_parent_process(pid));
 }

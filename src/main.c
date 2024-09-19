@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 18:10:27 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:22:08 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,18 @@ int	needs_piping(t_command *cmds_head)
 	return (0);
 }
 
+void	set_sig_exit(t_shell *shell, int sig)
+{
+	if (sig == SIGINT)
+	{
+		shell->exit_status = 130;
+	}
+	else if (sig == SIGQUIT)
+	{
+		shell->exit_status = 131;
+	}
+}
+
 void	execute_shell_is_piping_needed(t_shell *shell)
 {
 	if (needs_piping(shell->cmds_head))
@@ -58,7 +70,11 @@ void	execute_shell_is_piping_needed(t_shell *shell)
 	else
 		shell->exit_status = execute_command_without_pipes
 			(shell, shell->cmds_head);
+	if (g_sig != 0)
+			set_sig_exit(shell, g_sig);
 }
+
+
 
 // Main loop for shell
 //print_commands(shell->cmds_head);
@@ -70,7 +86,7 @@ void	execute_shell(t_shell *shell)
 
 	while (1)
 	{
-
+		setup_signals();
 		input = get_input();
 		if (!input)
 		{

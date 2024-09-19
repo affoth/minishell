@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:39:26 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/19 18:03:30 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 18:52:56 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ void	heredoc_signal_handler(int sig)
 	if (sig == SIGINT)
 	{
 		g_sig = sig;
-		write(1, "\n", 1);
+		ft_putstr_fd("\n", STDERR_FILENO);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 16:52:44 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 18:58:05 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	handle_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_sig = sig;
 		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -74,9 +75,11 @@ void	handle_signal(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
+		g_sig = sig;
 	}
 	else if (sig == SIGPIPE)
 	{
+		g_sig = sig;
 	}
 }
 
@@ -84,14 +87,17 @@ void	child_handle_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_sig = sig;
 		return ;
 	}
 	else if (sig == SIGQUIT)
 	{
-		exit(0);
+		g_sig = sig;
+		return ;
 	}
 	else if (sig == SIGPIPE)
 	{
+		g_sig = sig;
 	}
 }
 

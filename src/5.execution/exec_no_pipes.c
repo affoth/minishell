@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:58:43 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 16:51:19 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 18:42:09 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	execute_command_without_pipes(t_shell *shell, t_command *cmd)
 		status = exec_built_ins(shell, cmd);
 	else
 	{
+		setup_child_signals();
 		status = execute_command_no_pipes(shell, cmd);
 		if (status == -1)
 			status = 126;

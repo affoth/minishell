@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:16:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:47:48 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 18:49:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,4 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->env = init_env(envp, &shell->gc);
 	shell->cmds_head = NULL;
 	shell->exit_status = 0;
-	setup_signals();
 }
