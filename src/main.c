@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 16:38:04 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 19:33:39 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	execute_shell(t_shell *shell)
 		if (syntax_checker(args_head) == 1)
 		{
 			shell->exit_status = 2;
+			free(input);
 			continue ;
 		}
 		shell->cmds_head = create_and_populate_commands
