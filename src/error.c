@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:49:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/18 19:35:00 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 14:18:57 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,11 @@ void	perror_strdup(void)
 {
 	perror("strdup");
 	exit(EXIT_FAILURE);
+}
+
+int	perror_pipe(void)
+{
+	perror("pipe");
+	restore_original_signals();
+	return (-1);
 }

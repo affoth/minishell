@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 03:03:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 14:42:46 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@
 # define EXIT_SUCCESS 0
 
 // Forward declaration of t_shell for gc
-typedef struct s_shell	t_shell;
+typedef struct s_shell			t_shell;
+
+// Global variable to check if heredoc was interrupted
+static volatile sig_atomic_t	g_heredoc_interrupted = 0;
 
 // TokenType enum
 typedef enum TokenType
@@ -145,6 +148,10 @@ void		handle_signal(int sig);
 void		child_handle_signal(int sig);
 void		setup_signals(void);
 void		setup_child_signals(void);
+void		setup_heredoc_signals(void);
+void		heredoc_signal_handler(int sig);
+int			handle_heredoc_interrupt(t_shell *shell,
+				int pipe_fd[2], char *line);
 
 // Function prototypes for garbage collector
 void		ft_gc_init(t_gc *gc, t_shell *shell);
@@ -267,6 +274,7 @@ void		restore_original_signals(void);
 void		perror_fork(void);
 void		perror_malloc(void);
 void		perror_strdup(void);
+int			perror_pipe(void);
 
 // Main
 char		**init_env(char **envp, t_gc *gc);
