@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 19:22:08 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 19:40:59 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	execute_shell(t_shell *shell)
 		if (syntax_checker(args_head) == 1)
 		{
 			shell->exit_status = 2;
+			free(input);
 			continue ;
 		}
 		shell->cmds_head = create_and_populate_commands(shell, &shell->gc, args_head);

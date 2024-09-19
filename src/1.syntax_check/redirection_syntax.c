@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_syntax.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:28 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 03:19:40 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 18:58:14 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ int	redirection_input_syntax_check(t_arg *tmp)
 //check flag!!
 int	redirection_output_syntax_check(t_arg *tmp)
 {
-	if (!tmp->next || !tmp->prev)
+	if (!tmp->next)
 	{
 		printf("redirection output error:"
-			" no arguments before or after redirection `%s'\n", tmp->arg);
+			" no arguments before redirection `%s'\n", tmp->arg);
 		return (1);
 	}
 	if (tmp->next->type != WORD)
@@ -66,10 +66,19 @@ int	redirection_output_syntax_check(t_arg *tmp)
 
 int	redirection_heredoc_syntax_check(t_arg *tmp)
 {
-	if (tmp->next->type != WORD)
+	if (tmp->next)
+	{
+		if (tmp->next->type != WORD)
+		{
+			ft_printf("redirection error:"
+				" no valid file name after redirection `%s'\n", tmp->arg);
+			return (1);
+		}
+	}
+	if (!tmp->prev && !tmp->next)
 	{
 		ft_printf("redirection error:"
-			" no valid file name after redirection `%s'\n", tmp->arg);
+			" no valid argument before or after redirection `%s'\n", tmp->arg);
 		return (1);
 	}
 	return (0);

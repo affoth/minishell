@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:51:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:59:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 17:01:09 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,28 @@ char	*remove_quotes(t_gc *gc, const char *str)
 	return (result);
 }
 
+char	*ft_getenv(t_shell *shell, const char *name)
+{
+	char	**environ;
+	int		i;
+	size_t	len;
+
+	i = 0;
+	len = strlen(name);
+	environ = shell->env;
+	while (environ[i] != NULL)
+	{
+		if (ft_strncmp(environ[i], name, len) == 0 && environ[i][len] == '=')
+		{
+			return (&environ[i][len + 1]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 // Get path for execve
-char	*get_path(t_gc *gc, char *cmd)
+char	*get_path(t_shell *shell, char *cmd)
 {
 	char	*path;
 	char	*path_env;
@@ -50,16 +70,16 @@ char	*get_path(t_gc *gc, char *cmd)
 	if (!cmd)
 		return (NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
-		return (ft_shell_strdup(gc, cmd));
-	path_env = getenv("PATH");
+		return (ft_shell_strdup(&shell->gc, cmd));
+	path_env = ft_getenv(shell, "PATH");
 	if (!path_env)
 		return (NULL);
-	path_split = ft_shell_split(gc, path_env, ':');
+	path_split = ft_shell_split(&shell->gc, path_env, ':');
 	i = 0;
 	while (path_split[i])
 	{
-		path = ft_shell_strjoin(gc, path_split[i], "/");
-		path = ft_shell_strjoin(gc, path, cmd);
+		path = ft_shell_strjoin(&shell->gc, path_split[i], "/");
+		path = ft_shell_strjoin(&shell->gc, path, cmd);
 		if (access(path, F_OK | X_OK) == 0)
 			return (path);
 		i++;
