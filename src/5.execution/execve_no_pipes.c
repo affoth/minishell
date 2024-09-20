@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 21:21:13 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 14:32:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ int	handle_parent_process(pid_t pid)
 
 	if (waitpid(pid, &status, 0) == -1)
 	{
-		perror("waitpid");
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -69,6 +68,23 @@ char	**prepare_args(t_shell *shell,
 	return (args);
 }
 
+int	is_directory(char *arg)
+{
+	DIR *dir;
+
+	dir = opendir(arg);
+	if (dir != NULL)
+	{
+		closedir(dir);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putendl_fd(": Is a directory", STDERR_FILENO);
+		return (1);  // It's a directory
+	}
+	return (0);
+}
+
+
 void	execute_child_process(t_shell *shell, t_command *cmd)
 {
 	int		flags_count;
@@ -79,6 +95,8 @@ void	execute_child_process(t_shell *shell, t_command *cmd)
 	flags_count = count_flags(cmd);
 	args_count = count_args(cmd);
 	args = prepare_args(shell, cmd, flags_count, args_count);
+	if (is_directory(args[0]) == 1)
+		exit(EXIT_PERMISSION_DENIED);
 	path = get_path(shell, args[0]);
 	if (!path)
 	{
