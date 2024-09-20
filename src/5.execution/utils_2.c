@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 19:25:51 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/18 21:11:16 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 14:46:20 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,19 @@ int	count_args(t_command *cmd)
 	while (cmd->args && cmd->args[args_count])
 		args_count++;
 	return (args_count);
+}
+
+int	handle_parent_process(pid_t pid)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0) == -1)
+	{
+		return (EXIT_FAILURE);
+	}
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
 }

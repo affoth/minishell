@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:49:06 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/19 22:11:54 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:31:34 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,15 @@ int	perror_pipe(void)
 {
 	perror("pipe");
 	return (-1);
+}
+
+// Helper function to print error messages to STDERR
+void	write_error(const char *msg, const char *arg)
+{
+	write(2, msg, strlen(msg));
+	if (arg)
+	{
+		write(2, arg, strlen(arg));
+	}
+	write(2, "\n", 1);
 }

@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 14:32:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 16:31:09 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,12 +264,14 @@ void		close_pipes(int num_pipes, int *pipe_descriptors);
 void		check_if_command_is_valid(t_command *cmd);
 char		**prepare_args(t_shell *shell,
 				t_command *cmd, int flags_count, int args_count);
+int			handle_parent_process(pid_t pid);
 
 // Error handling
 void		perror_fork(void);
 void		perror_malloc(void);
 void		perror_strdup(void);
 int			perror_pipe(void);
+void		write_error(const char *msg, const char *arg);
 
 // Main
 char		**init_env(char **envp, t_gc *gc);

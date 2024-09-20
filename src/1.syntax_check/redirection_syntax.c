@@ -6,22 +6,11 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:28 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 21:18:50 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 16:31:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// Helper function to print error messages to STDERR
-void	write_error(const char *msg, const char *arg)
-{
-	write(2, msg, strlen(msg));
-	if (arg)
-	{
-		write(2, arg, strlen(arg));
-	}
-	write(2, "\n", 1);
-}
 
 int	redirection_input_syntax_check(t_arg *tmp)
 {
