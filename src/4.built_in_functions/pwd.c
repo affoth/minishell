@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:05:32 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 17:12:19 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 20:32:31 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	built_in_pwd(t_shell *shell)
 	index = find_var_in_env(shell->env, "PWD");
 	if (index != -1)
 		shell->env = change_or_add_env_var
-			(&shell->gc, ft_strjoin("PWD=", current_dir), shell->env);
+			(&shell->gc, ft_shell_strjoin
+				(&shell->gc, "PWD=", current_dir), shell->env);
 	free(current_dir);
 	return (PWD_SUCCESS);
 }

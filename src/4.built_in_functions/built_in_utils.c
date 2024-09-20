@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:09:18 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/18 16:02:30 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 20:34:04 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,20 @@ char	*strip_quotes(t_gc *gc, const char *str)
 	}
 	result[j] = '\0';
 	return (result);
+}
+
+char	*ft_getcwd(t_gc *gc)
+{
+	char	*cwd;
+	char	*cwd_cpy;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("getcwd");
+		return (NULL);
+	}
+	cwd_cpy = ft_shell_strdup(gc, cwd);
+	free(cwd);
+	return (cwd_cpy);
 }

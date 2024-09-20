@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_signals.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:39:26 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/19 22:08:58 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:25:57 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	setup_heredoc_signals(void)
 
 int	handle_heredoc_interrupt(t_shell *shell, int pipe_fd[2], char *line)
 {
-	(void)shell;
+	shell->exit_status = 130;
 	g_sig = 0;
 	free(line);
 	close(pipe_fd[1]);

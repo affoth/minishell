@@ -6,15 +6,15 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:51:53 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 15:41:37 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 20:33:51 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	set_oldpwd(char **oldpwd)
+int	set_oldpwd(t_gc *gc, char **oldpwd)
 {
-	*oldpwd = getcwd(NULL, 0);
+	*oldpwd = ft_getcwd(gc);
 	if (!(*oldpwd))
 	{
 		perror("getcwd");
@@ -54,9 +54,9 @@ int	change_directory(char *target_dir)
 int	update_env_vars(t_shell *shell, char *oldpwd, char *newpwd)
 {
 	shell->env = change_or_add_env_var(&shell->gc,
-			ft_strjoin("OLDPWD=", oldpwd), shell->env);
+			ft_shell_strjoin(&shell->gc, "OLDPWD=", oldpwd), shell->env);
 	shell->env = change_or_add_env_var(&shell->gc,
-			ft_strjoin("PWD=", newpwd), shell->env);
+			ft_shell_strjoin(&shell->gc, "PWD=", newpwd), shell->env);
 	return (0);
 }
 
@@ -71,7 +71,7 @@ int	built_in_cd(t_shell *shell)
 		ft_putstr_fd("too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
-	if (set_oldpwd(&oldpwd) != 0)
+	if (set_oldpwd(&shell->gc, &oldpwd) != 0)
 		return (1);
 	target_dir = get_target_dir(shell);
 	if (!target_dir)
@@ -84,7 +84,7 @@ int	built_in_cd(t_shell *shell)
 		free(oldpwd);
 		return (1);
 	}
-	newpwd = getcwd(NULL, 0);
+	newpwd = ft_getcwd(&shell->gc);
 	update_env_vars(shell, oldpwd, newpwd);
 	return (0);
 }

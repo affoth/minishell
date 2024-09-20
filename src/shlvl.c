@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:54:25 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:44:28 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 18:27:44 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	update_shlvl(t_shell *shell)
 	else
 		shlvl = 1;
 	new_shlvl = ft_itoa(shlvl);
-	shlvl_env_var = ft_strjoin("SHLVL=", new_shlvl);
+	shell->origin_lvl = shlvl;
+	shlvl_env_var = ft_shell_strjoin(&shell->gc, "SHLVL=", new_shlvl);
 	shell->env = change_or_add_env_var(&shell->gc, shlvl_env_var, shell->env);
 	free(new_shlvl);
-	free(shlvl_env_var);
 }

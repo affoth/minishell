@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 21:01:17 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:07:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_TokenType	get_token_type(const char *arg)
 	const t_token	typemap[] = {
 	{"|", PIPE}, {"\"", DOUBLE_QUOTED_STRING}, {"'", SINGLE_QUOTED_STRING},
 	{"$", ENV_VARIABLE}, {"<<", HEREDOC}, {">>", REDIRECTION_APPEND},
-	{"<", REDIRECTION_IN},	{">", REDIRECTION_OUT}, {NULL, WORD}};
+	{"<", REDIRECTION_IN},	{">", REDIRECTION_OUT}, {"||", OR}, {NULL, WORD}};
 
 	i = 0;
 	if (ft_strcmp(arg, "<<") == 0)

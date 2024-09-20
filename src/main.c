@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:59:26 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 18:40:32 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void	execute_shell(t_shell *shell)
 		if (prepare_execution(shell, &expanded_vars) == 0)
 			continue ;
 		execute_shell_is_piping_needed(shell);
-		free(expanded_vars);
 	}
 }
 

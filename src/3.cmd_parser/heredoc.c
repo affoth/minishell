@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:47:54 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 22:09:12 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:16:58 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool	parse_heredoc(t_shell *shell, t_command *cmd, t_arg *arg)
 		fd = heredoc(shell, delimiter);
 		if (fd < 0)
 		{
-			perror("heredoc");
+			perror("heredoc interrupted");
 			return (false);
 		}
 		cmd->stdin_fd = fd;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_string.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 22:31:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 19:30:53 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:30:37 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	*extract_env_var(t_shell *shell, char *input, size_t start)
 	return (ft_shell_substr(&shell->gc, input, start, end - start));
 }
 
+//free(expanded);
 static void	handle_env_var(t_shell *shell, t_expand_context *ctx)
 {
 	size_t	start;
@@ -48,7 +49,6 @@ static void	handle_env_var(t_shell *shell, t_expand_context *ctx)
 	ctx->j += ft_strlen(expanded);
 	ctx->i = start + ft_strlen(env);
 	free(env);
-	free(expanded);
 }
 
 static void	process_characters(t_shell *shell, t_expand_context *ctx)

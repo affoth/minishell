@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:46:26 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:36:00 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef enum TokenType
 	REDIRECTION_APPEND,
 	HEREDOC,
 	PIPE,
+	OR,
 	DOUBLE_QUOTED_STRING,
 	SINGLE_QUOTED_STRING,
 	ENV_VARIABLE,
@@ -137,6 +138,7 @@ typedef struct s_params
 // Main shell struct
 typedef struct s_shell
 {
+	int			origin_lvl;
 	t_arg		*args_head;
 	t_gc		gc;
 	char		**env;
@@ -196,6 +198,7 @@ char		*expand_string(t_shell *shell, char *input, int exit_status);
 int			syntax_checker(t_arg *head);
 int			pipe_syntax(t_arg *head);
 int			redirection_syntax(t_arg *head);
+int			or_syntax(t_arg *head);
 
 // Function prototypes for command processing
 t_arg		*tokenizer(t_shell *shell, char *input);
@@ -244,6 +247,7 @@ void		ft_sort(char **env, int len);
 void		ft_swap(char **a, char **b);
 int			count_flags(t_command *cmd);
 int			count_args(t_command *cmd);
+char		*ft_getcwd(t_gc *gc);
 
 // Function prototypes for executing commands
 int			execute_command_without_pipes(t_shell *shell, t_command *cmds_head);

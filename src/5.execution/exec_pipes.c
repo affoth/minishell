@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:42:08 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 18:01:52 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	execute_commands_with_pipes(t_shell *shell, t_command *cmds_head)
 	int			*pipe_descriptors;
 
 	num_pipes = count_pipes_cmdstruct(cmds_head);
-	pipe_descriptors = malloc(sizeof(int) * (2 * num_pipes));
+	pipe_descriptors = ft_gc_malloc(&shell->gc, sizeof(int) * (2 * num_pipes));
 	if (!pipe_descriptors)
 	{
 		perror("malloc");

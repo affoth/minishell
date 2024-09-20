@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:16:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 15:39:56 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:35:06 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,11 @@ void	execute_shell_is_piping_needed(t_shell *shell)
 		set_sig_exit(shell, g_sig);
 }
 
+//free(line);
 void	exit_status_and_free(t_shell *shell, char *line, int status)
 {
+	(void)line;
+	if (shell->exit_status == 130)
+		status = 130;
 	shell->exit_status = status;
-	free(line);
 }

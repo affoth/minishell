@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+         #
+#    By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/13 15:07:05 by mokutucu          #+#    #+#              #
-#    Updated: 2024/09/20 16:48:59 by mokutucu         ###   ########.fr        #
+#    Updated: 2024/09/20 20:05:53 by afoth            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRCS    = src/error.c src/debug_main.c src/init.c src/main.c src/shlvl.c \
 		  src/1.lexer/ft_shell_split.c src/1.lexer/ft_split_redir.c \
 		  src/1.lexer/lexer_utils.c src/1.lexer/split_redir_utils.c \
 		  src/1.lexer/tokenizer.c src/1.syntax_check/pipe_syntax.c \
-		  src/1.syntax_check/syntax_checker.c src/1.syntax_check/redirection_syntax.c \
+		  src/1.syntax_check/syntax_checker.c src/1.syntax_check/redirection_syntax.c src/1.syntax_check/or_syntax.c\
 		  src/2.expansion/ft_shell_strdup.c src/2.expansion/calc_expand_len.c \
 		  src/2.expansion/expand_env.c src/2.expansion/expand_string.c \
 		  src/3.cmd_parser/commands.c src/3.cmd_parser/output_redir.c \

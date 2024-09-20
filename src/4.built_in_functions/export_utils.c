@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 15:32:49 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 17:59:33 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 18:33:19 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,11 @@ char	**change_or_add_env_var(t_gc *gc, char *arg, char **env)
 	var_idx = find_var_in_env(env, var_name);
 	if (var_idx != -1)
 	{
-		free(env[var_idx]);
 		env[var_idx] = ft_shell_strdup(gc, arg);
 	}
 	else
 	{
 		new_env = add_env_var(gc, arg, env, env_len);
-		free(env);
 		env = new_env;
 	}
 	return (env);

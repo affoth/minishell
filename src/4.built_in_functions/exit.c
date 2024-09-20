@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:21:56 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 17:12:09 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/20 20:29:49 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,12 @@ int	is_number(const char *str)
 
 void	exiting_with(t_shell *shell, int code)
 {
-	ft_gc_free(&shell->gc);
+	if (ft_atoi(ft_getenv(shell, "SHLVL")) == shell->origin_lvl)
+	{
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
+		ft_gc_free(&shell->gc);
+		exit(code);
+	}
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	exit(code);
 }
