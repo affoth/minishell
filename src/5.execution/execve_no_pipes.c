@@ -6,26 +6,11 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:45:02 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:47:22 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	handle_parent_process(pid_t pid)
-{
-	int	status;
-
-	if (waitpid(pid, &status, 0) == -1)
-	{
-		return (EXIT_FAILURE);
-	}
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
-}
 
 void	fill_flags(t_shell *shell, t_command *cmd, char **args, int flags_count)
 {
@@ -70,7 +55,7 @@ char	**prepare_args(t_shell *shell,
 
 int	is_directory(char *arg)
 {
-	DIR *dir;
+	DIR	*dir;
 
 	dir = opendir(arg);
 	if (dir != NULL)
@@ -79,11 +64,10 @@ int	is_directory(char *arg)
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putendl_fd(": Is a directory", STDERR_FILENO);
-		return (1);  // It's a directory
+		return (1);
 	}
 	return (0);
 }
-
 
 void	execute_child_process(t_shell *shell, t_command *cmd)
 {
@@ -100,6 +84,9 @@ void	execute_child_process(t_shell *shell, t_command *cmd)
 	path = get_path(shell, args[0]);
 	if (!path)
 	{
+		write(2, "command not found", 17);
+		write(2, args[0], ft_strlen(args[0]));
+		write(2, "\n", 1);
 		exit(EXIT_COMMAND_NOT_FOUND);
 	}
 	execve(path, args, shell->env);

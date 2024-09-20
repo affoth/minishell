@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:44:00 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:47:45 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	execute_command(t_shell *shell, t_command *cmd)
 		exit(EXIT_PERMISSION_DENIED);
 	if (!path)
 	{
-		fprintf(stderr, "Command not found: %s\n", args[0]);
+		write_error("Command not found: ", args[0]);
 		exit(EXIT_COMMAND_NOT_FOUND);
 	}
 	execve(path, args, shell->env);

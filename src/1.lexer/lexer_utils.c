@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 20:53:40 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/18 16:04:58 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 21:03:22 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_quotes_not_closed(const char *line)
 	}
 	if (in_single_quote || in_double_quote)
 	{
-		ft_printf("Error: Quotes not closed\n");
+		write(2, "minishell: syntax error: quotes not closed\n", 42);
 		return (1);
 	}
 	return (0);
