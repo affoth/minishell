@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 23:45:33 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 14:31:04 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	execute_command(t_shell *shell, t_command *cmd)
 	args_count = count_args(cmd);
 	args = prepare_args(shell, cmd, flags_count, args_count);
 	path = get_path(shell, args[0]);
+	if (is_directory(args[0]) == 1)
+		exit(EXIT_PERMISSION_DENIED);
 	if (!path)
 	{
 		fprintf(stderr, "Command not found: %s\n", args[0]);
