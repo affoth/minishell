@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 21:40:31 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:22:13 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,6 @@ void		setup_heredoc_signals(void);
 void		heredoc_signal_handler(int sig);
 int			handle_heredoc_interrupt(t_shell *shell,
 				int pipe_fd[2], char *line);
-void		restore_original_signals(void);
 
 // Function prototypes for garbage collector
 void		ft_gc_init(t_gc *gc, t_shell *shell);
@@ -187,6 +186,7 @@ void		init_variables(size_t *i, size_t *start, bool *in_quote,
 
 // Expand environment variables
 char		*ft_expand_env(t_shell *shell, char *env);
+char		*ft_getenv(t_shell *shell, const char *name);
 int			check_if_in_single_quote(char *input, size_t i);
 size_t		calculate_expanded_length(t_shell *shell,
 				char *input, int exit_status);
@@ -274,6 +274,7 @@ int			perror_pipe(void);
 // Main
 char		**init_env(char **envp, t_gc *gc);
 void		init_shell(t_shell *shell, char **envp);
+void		update_shlvl(t_shell *shell);
 void		set_sig_exit(t_shell *shell, int sig);
 void		execute_shell_is_piping_needed(t_shell *shell);
 void		exit_status_and_free(t_shell *shell, char *line, int status);

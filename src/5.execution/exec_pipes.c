@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:59:22 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 19:24:49 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:42:08 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ pid_t	fork_and_execute_command(t_shell *shell,
 	pid = fork();
 	if (pid == 0)
 	{
-		setup_child_signals();
 		check_if_command_is_valid(cmd);
 		setup_redirections(cmd_index, num_pipes, pipe_descriptors);
 		close_pipes(num_pipes, pipe_descriptors);

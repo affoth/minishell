@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 02:06:46 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:45:02 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,10 @@ int	execute_command_no_pipes(t_shell *shell, t_command *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		setup_child_signals();
+		if (strcmp(cmd->cmd_name, "./minishell") == 0)
+			setup_signals();
+		else
+			setup_child_signals();
 		execute_child_process(shell, cmd);
 	}
 	else if (pid < 0)

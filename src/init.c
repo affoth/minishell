@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:16:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 20:14:11 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 15:39:56 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->env = init_env(envp, &shell->gc);
 	shell->cmds_head = NULL;
 	shell->exit_status = 0;
+	update_shlvl(shell);
 }
 
 void	set_sig_exit(t_shell *shell, int sig)
