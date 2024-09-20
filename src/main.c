@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:48:21 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:55:10 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_input(void)
 	line = readline("minishell$ ");
 	if (line == NULL)
 	{
-		write(2, "exit\n", 5);
+		write(1, "exit\n", 5);
 		exit(0);
 	}
 	if (*line == '\0')
