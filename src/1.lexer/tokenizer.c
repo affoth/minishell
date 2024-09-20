@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:46 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:58:08 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/19 21:01:17 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void	print_tokens(t_arg *head)
 
 // Split the input string into tokens
 //DEBUG print_tokens(args_head);
-
 t_arg	*tokenizer(t_shell *shell, char *input)
 {
 	size_t	i;

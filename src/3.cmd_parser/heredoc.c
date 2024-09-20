@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:47:54 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 18:11:41 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 22:09:12 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	heredoc(t_shell *shell, const char *delimiter)
 		free(expanded_line);
 	}
 	close(pipe_fd[1]);
-	restore_original_signals();
 	return (pipe_fd[0]);
 }
 

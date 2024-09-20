@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 16:47:57 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:41:09 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 21:18:22 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	handle_input_redirection_file(t_command *cmd, t_arg *arg)
 	fd = open(arg->next->arg, O_RDONLY);
 	if (fd < 0)
 	{
+		perror("open input file");
 		cmd->valid = false;
 		return (1);
 	}

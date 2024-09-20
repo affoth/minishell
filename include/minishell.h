@@ -6,7 +6,7 @@
 /*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 20:14:24 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/19 21:40:31 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,7 @@ int			fork_and_execute_command(t_shell *shell, t_command *cmd,
 				int *pipe_descriptors, int cmd_index);
 char		*remove_quotes(t_gc *gc, const char *str);
 char		*get_path(t_shell *shell, char *cmd);
+int			is_directory(char *path);
 int			count_arguments(char **args);
 int			needs_piping(t_command *cmds_head);
 void		setup_redirections(int cmd_index, int num_pipes,
