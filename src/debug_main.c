@@ -6,11 +6,23 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:13:58 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 21:51:29 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 16:05:57 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	print_tokens(t_arg *head)
+{
+	t_arg	*current;
+
+	current = head;
+	while (current)
+	{
+		printf("arg: %s, type: %d\n", current->arg, current->type);
+		current = current->next;
+	}
+}
 
 void	print_cmd_args(char **args, const char *label)
 {

@@ -6,7 +6,11 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 23:47:54 by mokutucu          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/21 18:46:11 by afoth            ###   ########.fr       */
+=======
+/*   Updated: 2024/09/21 15:47:08 by afoth            ###   ########.fr       */
+>>>>>>> 9133e6968902d1243bd25ca601f17eeb5578c339
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +49,14 @@ void	write_heredoc(t_shell *shell, int pipe_fd[2], char *delimiter)
 		if (line == NULL || delimiter_found(line, delimiter) == 0)
 		{
 			if (line == NULL)
+<<<<<<< HEAD
 			{
 				ft_putstr_fd("warning: here-document delimited", 2);
 				exit_heredoc();
 			}
+=======
+				ft_putstr_fd("warning: here-document delimited", 2);
+>>>>>>> 9133e6968902d1243bd25ca601f17eeb5578c339
 			else
 			{
 				free(line);

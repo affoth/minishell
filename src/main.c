@@ -6,7 +6,11 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/21 18:28:43 by afoth            ###   ########.fr       */
+=======
+/*   Updated: 2024/09/21 17:39:31 by mokutucu         ###   ########.fr       */
+>>>>>>> 9133e6968902d1243bd25ca601f17eeb5578c339
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +29,11 @@ char	*get_input(t_shell *shell)
 		exit(0);
 	}
 	if (*line == '\0')
+	{
+		free(line);
+		return (NULL);
+	}
+	if (ft_quotes_not_closed(line))
 	{
 		free(line);
 		return (NULL);

@@ -6,7 +6,11 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/21 18:01:29 by afoth            ###   ########.fr       */
+=======
+/*   Updated: 2024/09/21 15:46:30 by afoth            ###   ########.fr       */
+>>>>>>> 9133e6968902d1243bd25ca601f17eeb5578c339
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +88,7 @@ void	execute_child_process(t_shell *shell, t_command *cmd)
 	path = get_path(shell, args[0]);
 	if (!path)
 	{
+		free(path);
 		write(2, "command not found", 17);
 		write(2, args[0], ft_strlen(args[0]));
 		write(2, "\n", 1);

@@ -6,7 +6,11 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/21 18:45:26 by afoth            ###   ########.fr       */
+=======
+/*   Updated: 2024/09/21 14:02:52 by afoth            ###   ########.fr       */
+>>>>>>> 9133e6968902d1243bd25ca601f17eeb5578c339
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +31,11 @@ int	execute_command(t_shell *shell, t_command *cmd)
 		exit(EXIT_PERMISSION_DENIED);
 	if (path == NULL || execve(path, args, shell->env) == -1)
 	{
+<<<<<<< HEAD
+=======
+		if (path && ft_strncmp(path, args[0], ft_strlen(args[0])))
+			free(path);
+>>>>>>> 9133e6968902d1243bd25ca601f17eeb5578c339
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(args[0], STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
