@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:51:53 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 20:33:51 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 18:47:29 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,10 @@ int	built_in_cd(t_shell *shell)
 	target_dir = get_target_dir(shell);
 	if (!target_dir)
 	{
-		free(oldpwd);
 		return (1);
 	}
 	if (change_directory(target_dir) != 0)
 	{
-		free(oldpwd);
 		return (1);
 	}
 	newpwd = ft_getcwd(&shell->gc);

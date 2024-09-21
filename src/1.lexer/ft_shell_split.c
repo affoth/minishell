@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:07:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 20:35:16 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 16:57:14 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	*ft_allocate(t_gc *gc, const char *s, int start, int end)
 	return (word);
 }
 
-//DELTE  ME CHECKWITHTESTER OTHERWISE BACK TO s, c + 1
 char	**ft_shell_split(t_gc *gc, const char *s, char c)
 {
 	char	**array;

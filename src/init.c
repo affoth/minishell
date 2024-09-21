@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:16:07 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 20:35:06 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 11:25:57 by mokutucu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	set_sig_exit(t_shell *shell, int sig)
 
 void	execute_shell_is_piping_needed(t_shell *shell)
 {
+	handle_signals("NONO_SIGNALO");
 	if (needs_piping(shell->cmds_head))
 		shell->exit_status = execute_commands_with_pipes
 			(shell, shell->cmds_head);

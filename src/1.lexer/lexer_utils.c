@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 20:53:40 by afoth             #+#    #+#             */
-/*   Updated: 2024/09/19 21:03:22 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 18:10:17 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,15 @@ int	ft_quotes_not_closed(const char *line)
 	}
 	if (in_single_quote || in_double_quote)
 	{
-		write(2, "minishell: syntax error: quotes not closed\n", 42);
+		write(2, "minishell: syntax error: quotes not closed\n", 44);
 		return (1);
 	}
 	return (0);
+}
+
+t_arg	*tokenizer_error(t_shell *shell, char *input)
+{
+	write(STDERR_FILENO, input, ft_strlen(input));
+	shell->exit_status = 1;
+	return (NULL);
 }

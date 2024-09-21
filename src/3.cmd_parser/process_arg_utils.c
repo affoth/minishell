@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:54:02 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 20:22:14 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 14:04:27 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	if_redir(t_arg *current_arg, t_command *current_cmd)
 {
+	if (current_arg == NULL)
+		return (1);
 	if (current_arg->type == REDIRECTION_OUT
 		|| current_arg->type == REDIRECTION_APPEND)
 	{
@@ -44,16 +46,28 @@ void	handle_arguments(t_command *cmd, t_arg *arg, t_gc *gc)
 	}
 }
 
-int	check_heredoc(t_shell *shell, t_command *cmd, t_arg *arg)
+int	check_heredoc(t_shell *shell, t_command **cmd, t_arg **arg)
 {
 	int	state;
 
-	if (arg->type != HEREDOC)
-		return (0);
-	state = parse_heredoc(shell, cmd, arg);
-	if (state == false)
+	state = 0;
+	if (*arg == NULL || (*arg)->type != HEREDOC)
 		return (1);
-	arg = arg->next->next;
+	state = parse_heredoc(shell, *cmd, arg);
+	if (state == 1)
+	{
+		return (1);
+	}
+	if (state == 0)
+	{
+		*arg = (*arg)->next->next;
+		return (0);
+	}
+	if (state == -2)
+	{
+		*arg = (*arg)->next->next;
+		(*arg)->type = END;
+	}
 	return (0);
 }
 
@@ -64,19 +78,32 @@ int	handle_arg(t_shell *shell, t_command *cmd, t_arg **arg, t_gc *gc)
 		*arg = (*arg)->next;
 		cmd = cmd->next;
 	}
-	else if (check_heredoc(shell, cmd, *arg) == 1)
-		return (1);
+	else if (check_heredoc(shell, &cmd, arg) == 0)
+	{
+		return (0);
+	}
 	else if (cmd->cmd_name == NULL && (*arg)->type == WORD)
 	{
 		set_command_name(cmd, (*arg)->arg, gc);
 		*arg = (*arg)->next;
 	}
 	else if (if_redir(*arg, cmd) == 0)
+	{
 		*arg = (*arg)->next->next;
+	}
 	else
 	{
 		handle_arguments(cmd, *arg, gc);
 		*arg = (*arg)->next;
 	}
 	return (0);
+}
+
+int	delimiter_found(char *line, const char *delimiter)
+{
+	if (ft_strcmp(line, delimiter) == 0)
+	{
+		return (0);
+	}
+	return (1);
 }

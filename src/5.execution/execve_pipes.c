@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_pipes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 14:16:51 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:47:45 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:45:26 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int	execute_command(t_shell *shell, t_command *cmd)
 	path = get_path(shell, args[0]);
 	if (is_directory(args[0]) == 1)
 		exit(EXIT_PERMISSION_DENIED);
-	if (!path)
+	if (path == NULL || execve(path, args, shell->env) == -1)
 	{
-		write_error("Command not found: ", args[0]);
-		exit(EXIT_COMMAND_NOT_FOUND);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(args[0], STDERR_FILENO);
+		ft_putendl_fd(": command not found", STDERR_FILENO);
+		return (EXIT_COMMAND_NOT_FOUND);
 	}
-	execve(path, args, shell->env);
-	perror("execve");
-	exit(EXIT_EXECVE_FAILED);
+	return (EXIT_SUCCESS);
 }

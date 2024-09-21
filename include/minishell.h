@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:36:35 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 20:36:00 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 16:08:03 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 // Forward declaration of t_shell for gc
 typedef struct s_shell			t_shell;
 
-// Global variable to check if heredoc was interrupted
+// global variable for signal handling
 extern int						g_sig;
 
 // TokenType enum
@@ -147,14 +147,7 @@ typedef struct s_shell
 }	t_shell;
 
 //signal handling
-void		handle_signal(int sig);
-void		child_handle_signal(int sig);
-void		setup_signals(void);
-void		setup_child_signals(void);
-void		setup_heredoc_signals(void);
-void		heredoc_signal_handler(int sig);
-int			handle_heredoc_interrupt(t_shell *shell,
-				int pipe_fd[2], char *line);
+void		handle_signals(char *mode);
 
 // Function prototypes for garbage collector
 void		ft_gc_init(t_gc *gc, t_shell *shell);
@@ -223,7 +216,8 @@ int			handle_output_redirection_append(t_command *cmd, t_arg *arg);
 int			handle_input_redirection(t_command *cmd, t_arg *arg);
 int			handle_input_redirection_file(t_command *cmd, t_arg *arg);
 int			handle_input_redirection_heredoc(t_command *cmd);
-bool		parse_heredoc(t_shell *shell, t_command *cmd, t_arg *arg);
+int			parse_heredoc(t_shell *shell, t_command *cmd, t_arg **arg);
+int			delimiter_found(char *line, const char *delimiter);
 
 // Function prototypes for built-in commands
 int			is_built_in(char *cmd);
@@ -276,6 +270,7 @@ void		perror_malloc(void);
 void		perror_strdup(void);
 int			perror_pipe(void);
 void		write_error(const char *msg, const char *arg);
+t_arg		*tokenizer_error(t_shell *shell, char *input);
 
 // Main
 char		**init_env(char **envp, t_gc *gc);

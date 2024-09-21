@@ -3,80 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:00:16 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:48:03 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 13:21:52 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	setup_signals(void)
+void	re_prompt(int sig)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = handle_signal;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		return ;
-	}
-	sa.sa_handler = SIG_IGN;
-	if (sigaction(SIGQUIT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		return ;
-	}
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	(void) sig;
 }
 
-void	setup_child_signals(void)
+void	child_sigint(int sig)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = child_handle_signal;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		exit(1);
-	}
-	if (sigaction(SIGQUIT, &sa, NULL) == -1)
-	{
-		perror("sigaction");
-		exit(1);
-	}
+	write(STDERR_FILENO, "\n", 1);
+	g_sig = SIGINT;
+	(void) sig;
 }
 
-void	handle_signal(int sig)
+void	quit_child(int sig)
 {
-	if (sig == SIGINT)
-	{
-		g_sig = sig;
-		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-	else if (sig == SIGQUIT)
-	{
-		g_sig = sig;
-	}
+	write(STDERR_FILENO, "Quit\n", 5);
+	g_sig = SIGQUIT;
+	(void) sig;
 }
 
-void	child_handle_signal(int sig)
+void	heredoc_sigint(int sig)
 {
-	if (sig == SIGINT)
+	g_sig = SIGINT;
+	write(STDERR_FILENO, "\n", 1);
+	exit(130);
+	(void) sig;
+}
+
+void	handle_signals(char *mode)
+{
+	g_sig = 0;
+	if (ft_strcmp(mode, "NONO_SIGNALO") == 0)
 	{
-		g_sig = sig;
-		return ;
+		signal(SIGINT, child_sigint);
+		signal(SIGQUIT, quit_child);
 	}
-	else if (sig == SIGQUIT)
+	else if (ft_strcmp(mode, "interactive") == 0)
 	{
-		g_sig = sig;
-		return ;
+		signal(SIGINT, re_prompt);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (ft_strcmp(mode, "heredoc") == 0)
+	{
+		signal(SIGINT, heredoc_sigint);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:59:47 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 19:43:26 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 13:25:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	link_commands(t_command **commands, int pipe_count)
 	}
 }
 
-static t_command	*process_arguments(t_shell *shell, t_command *cmds_head,
+static int	process_arguments(t_shell *shell, t_command *cmds_head,
 	t_arg *args_head, t_gc *gc)
 {
 	t_command	*current_cmd;
@@ -83,14 +83,14 @@ static t_command	*process_arguments(t_shell *shell, t_command *cmds_head,
 
 	current_cmd = cmds_head;
 	current_arg = args_head;
-	while (current_arg)
+	while (current_arg->type != END)
 	{
 		if (handle_arg(shell, current_cmd, &current_arg, gc) == 1)
-			return (NULL);
+			return (1);
 		if (current_arg && current_arg->type == PIPE)
 			current_cmd = current_cmd->next;
 	}
-	return (cmds_head);
+	return (0);
 }
 
 t_command	*create_and_populate_commands(t_shell *shell,
@@ -106,7 +106,7 @@ t_command	*create_and_populate_commands(t_shell *shell,
 		return (NULL);
 	link_commands(commands, pipe_count);
 	cmds_head = commands[0];
-	if (process_arguments(shell, cmds_head, args_head, gc) == NULL)
+	if (process_arguments(shell, cmds_head, args_head, gc) == 1)
 		return (NULL);
 	return (cmds_head);
 }

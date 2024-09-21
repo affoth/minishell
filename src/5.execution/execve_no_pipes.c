@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve_no_pipes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 22:26:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:47:22 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:01:29 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,10 @@ int	execute_command_no_pipes(t_shell *shell, t_command *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (strcmp(cmd->cmd_name, "./minishell") == 0)
-			setup_signals();
+		if (ft_strcmp(cmd->cmd_name, "./minishell") == 0)
+			handle_signals("interactive");
 		else
-			setup_child_signals();
+			handle_signals("noninteractive");
 		execute_child_process(shell, cmd);
 	}
 	else if (pid < 0)

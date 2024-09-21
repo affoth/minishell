@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:27:20 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 03:10:34 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:46:00 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	equal_sign_found(t_shell *shell, char *arg, int has_errors, t_gc *gc)
 			shell->env = change_or_add_env_var(gc, arg, shell->env);
 		else
 			has_errors = handle_invalid_export(has_errors);
-		free(var_name);
 	}
 	return (has_errors);
 }
@@ -50,7 +49,6 @@ int	equal_sign_not_found(t_shell *shell, char *arg, int has_errors, t_gc *gc)
 		export_arg = ft_shell_strjoin(gc, arg, "=");
 		export_arg = ft_shell_strjoin(gc, export_arg, "");
 		shell->env = change_or_add_env_var(gc, export_arg, shell->env);
-		free(export_arg);
 	}
 	else
 		has_errors = handle_invalid_export(has_errors);

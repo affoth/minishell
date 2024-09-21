@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:35:01 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/18 16:41:41 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 16:46:23 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char	**ft_split_redirections(t_gc *gc, const char *s)
 	index = 0;
 	if (!s)
 		return (NULL);
-	num_tokens = ft_words(s, ' ') + 10;
+	num_tokens = ft_words(s, ' ') + 420;
 	array = ft_gc_malloc(gc, num_tokens * sizeof(char *));
 	if (!array)
 		return (NULL);

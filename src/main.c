@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:58:44 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 18:40:32 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:28:43 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	g_sig = 0;
+int	g_sig;
 
-char	*get_input(void)
+char	*get_input(t_shell *shell)
 {
 	char	*line;
 
@@ -30,6 +30,12 @@ char	*get_input(void)
 		return (NULL);
 	}
 	add_history(line);
+	if (ft_quotes_not_closed(line))
+	{
+		shell->exit_status = 2;
+		free(line);
+		return (NULL);
+	}
 	return (line);
 }
 
@@ -56,9 +62,11 @@ static int	prepare_execution(t_shell *shell, char **expanded_vars)
 {
 	char	*input;
 
-	input = get_input();
+	input = get_input(shell);
 	if (!input)
+	{
 		return (0);
+	}
 	*expanded_vars = expand_string(shell, input, shell->exit_status);
 	shell->args_head = tokenizer(shell, *expanded_vars);
 	if (syntax_checker(shell->args_head) == 1)
@@ -85,10 +93,11 @@ void	execute_shell(t_shell *shell)
 
 	while (1)
 	{
-		setup_signals();
+		handle_signals("interactive");
 		if (prepare_execution(shell, &expanded_vars) == 0)
 			continue ;
-		execute_shell_is_piping_needed(shell);
+		if (g_sig != SIGINT)
+			execute_shell_is_piping_needed(shell);
 	}
 }
 

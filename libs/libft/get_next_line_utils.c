@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 18:01:36 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/07/01 16:22:45 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:37:24 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 char	*gft_substr(char const *s, unsigned int start, size_t len)
 {
-	size_t	strlen;
+	size_t	string_len;
 	size_t	size;
 	size_t	i;
 	char	*ptr;
 
-	strlen = ft_strlen(s);
+	string_len = ft_strlen(s);
 	i = 0;
-	if (start >= strlen || s[0] == 0)
+	if (start >= string_len || s[0] == 0)
 		size = 0;
 	else
-		size = strlen - start;
+		size = string_len - start;
 	if (len >= size)
 		ptr = (char *)malloc((size + 1) * sizeof(char));
 	else

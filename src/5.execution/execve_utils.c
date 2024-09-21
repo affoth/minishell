@@ -6,7 +6,7 @@
 /*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:51:15 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/20 16:28:43 by afoth            ###   ########.fr       */
+/*   Updated: 2024/09/21 18:30:36 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*ft_getenv(t_shell *shell, const char *name)
 	size_t	len;
 
 	i = 0;
-	len = strlen(name);
+	len = ft_strlen(name);
 	environ = shell->env;
 	while (environ[i] != NULL)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calc_expand_len.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokutucu <mokutucu@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: afoth <afoth@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:59 by mokutucu          #+#    #+#             */
-/*   Updated: 2024/09/19 00:10:21 by mokutucu         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:47:52 by afoth            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ static size_t	calculate_env_var_length(t_shell *shell, char *input, size_t *i)
 	env = ft_shell_substr(&shell->gc, input, (*i + 1), (start - *i - 1));
 	expanded = ft_expand_env(shell, env);
 	length = ft_strlen(expanded);
-	free(env);
-	free(expanded);
 	*i = start;
 	return (length);
 }
